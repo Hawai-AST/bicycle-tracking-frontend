@@ -23,3 +23,5 @@ hs_err_pid*
 /testdb.h2.db
 
 .sbtserver/
+
+project/play-fork-run.sbt
