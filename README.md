@@ -1,5 +1,5 @@
 # bicycle-tracking
-An application which tracks bycicle gps data for customers
+An application which tracks bicycle gps data for customers
 
 # Running and developing
 To run the application for the first time and getting ready for development you have to run this command once:
