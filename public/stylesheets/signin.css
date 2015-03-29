@@ -1,0 +1,52 @@
+#signin_box {
+    float: left;
+    width: 400px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    border-color: #C0C0C0;
+    margin: 10px;
+    margin-right: 20px;
+    padding: 20px;
+    background-color: #EAEAEA;
+}
+
+#hint {
+    color: darkred;
+    font-size: 12px;
+}
+
+input {
+    padding:5px; border:2px solid #C0C0C0;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    width: 55%;
+    margin-left: 30px;
+}
+
+input:focus {
+    border-color:#A5C7FE;
+}
+
+input[type=submit] {
+    padding:5px 15px; background:#C0C0C0; border:0 none;
+    cursor:pointer;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    float: right;
+    width: 25%;
+    margin-right: 8%;
+}
+
+input[type=submit]:hover {
+    background-color: #A5C7FE;
+}
+
+label {
+    float: left;
+    width: 23%;
+    margin-top: 4px;
+}
+
+h2 {
+    font-size: 18px;
+}
