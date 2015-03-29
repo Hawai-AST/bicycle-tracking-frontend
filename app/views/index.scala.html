@@ -1,14 +1,9 @@
-@(form: play.data.Form[Bar])
+@()
 
-@main("Welcome to Play 2.0") {
+@main(" - Startseite") {
 
-    <script src="@routes.Assets.at("javascripts/index.js")" type="text/javascript"></script>
+    <h1>Willkommen!</h1>
 
-    <ul id="bars"></ul>
-
-    @helper.form(action = routes.Application.addBar) {
-        @helper.inputText(form("name"))
-        <input type="submit"/>
-    }
+    <p>Herzlichst willkommen zu dieser überaus bescheidenen Homepage der BAI4 SE2 SS15 Gruppe.</p>
 
 }
