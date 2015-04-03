@@ -9,7 +9,7 @@
         @helper.form(action = routes.Application.authenticate) {
             @helper.inputText(loginForm("email"), '_label -> "E-Mail:")
             @helper.inputPassword(loginForm("password"), '_label -> "Passwort:")
-            <input type="submit"/>
+            <input type="submit" value="Einloggen"/>
         }
     </div>
 
@@ -29,7 +29,7 @@
             @helper.inputPassword(loginForm("passwordCheck"), '_label -> "*Passwort wiederholen:")
             <br/>
             <p id="hint">* Pflichtangabe</p>
-            <input type="submit"/>
+            <input type="submit" value="Registrieren"/>
         }
     </div>
 
