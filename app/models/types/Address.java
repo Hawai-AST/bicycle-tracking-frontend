@@ -1,10 +1,10 @@
 package models.types;
 
 public class Address {
-    private String street;
-    private String streetNo;
-    private String city;
-    private String postcode;
-    private String country;
-    private String state;
+    public String street;
+    public String houseNumber;
+    public String city;
+    public String state;
+    public String postcode;
+    public String country;
 }

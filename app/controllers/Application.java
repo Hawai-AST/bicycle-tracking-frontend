@@ -4,18 +4,26 @@ package controllers;
 // TODO store sessions
 
 
+import com.fasterxml.jackson.databind.JsonNode;
 import models.Login;
 import models.Registration;
 import org.springframework.stereotype.Controller;
 import play.data.Form;
+import play.libs.F;
+import play.libs.Json;
+import play.libs.ws.WS;
 import play.mvc.Result;
 import views.html.index;
 import views.html.signin;
 
+import static play.mvc.Controller.session;
+import static play.mvc.Results.internalServerError;
 import static play.mvc.Results.ok;
 
 @Controller
 public class Application {
+
+    final String clientId = "DEV-101";
 
     public Result index() { return ok(index.render()); }
 
@@ -34,11 +42,31 @@ public class Application {
         return ok(registration.toJson());
     }
 
-    public Result authenticate() {
+    public F.Promise<Result> authenticate() {
         Form<Login> form = Form.form(Login.class).bindFromRequest();
         Login login = form.get();
 
-        return ok(login.toJson());
-    }
+        //
+        JsonNode json = Json.newObject()
+                .put("grant-type", "password")
+                .put("email", login.email)
+                .put("code",  login.password);
 
+        return WS
+                .url("http//localhost:8080/api/v1/login")
+                .setHeader("Client-Id", clientId)
+                .setContentType("application/json")
+                .post(json)
+                .map(actualResponse -> {
+                    if (actualResponse.getStatus() == 200) {
+                        JsonNode jsonResponse = actualResponse.asJson();
+                        session("email", jsonResponse.get("email").asText());
+                        session("token", jsonResponse.get("token").asText());
+                        return ok(actualResponse.asJson());
+                    }
+
+                    return internalServerError();
+                })
+                ;
+    }
 }

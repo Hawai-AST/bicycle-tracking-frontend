@@ -9,8 +9,6 @@ public class Global extends GlobalSettings {
 
     private ApplicationContext ctx;
 
-    public final String clientId = "1337";
-
     @Override
     public void onStart(Application app) {
         ctx = new AnnotationConfigApplicationContext(AppConfig.class, DataConfig.class);
