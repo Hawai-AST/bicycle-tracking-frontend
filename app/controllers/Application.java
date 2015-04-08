@@ -58,6 +58,11 @@ public class Application {
         session("email", jsonResponse.get("email").asText());
         session("token", jsonResponse.get("token").asText());
 
-        return ok(jsonResponse);
+        return ok(jsonResponse
+                        + "\n\n"
+                        + "SK-email: " + session("email")
+                        + "\n"
+                        + "SK-token: " + session("token")
+        );
     }
 }
