@@ -53,7 +53,7 @@ public class Application {
                 .put("code",  login.password);
 
         return WS
-                .url("http//localhost:8080/api/v1/login")
+                .url("http://localhost:8080/api/v1/login")
                 .setHeader("Client-Id", clientId)
                 .setContentType("application/json")
                 .post(json)
