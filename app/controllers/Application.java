@@ -1,9 +1,5 @@
 package controllers;
 
-// TODO REST implementation --> communicate with backend
-// TODO store sessions
-
-
 import com.fasterxml.jackson.databind.JsonNode;
 import models.Login;
 import models.Registration;
@@ -12,12 +8,12 @@ import play.data.Form;
 import play.libs.F;
 import play.libs.Json;
 import play.libs.ws.WS;
+import play.libs.ws.WSResponse;
 import play.mvc.Result;
 import views.html.index;
 import views.html.signin;
 
 import static play.mvc.Controller.session;
-import static play.mvc.Results.internalServerError;
 import static play.mvc.Results.ok;
 
 @Controller
@@ -42,31 +38,26 @@ public class Application {
         return ok(registration.toJson());
     }
 
-    public F.Promise<Result> authenticate() {
+    public Result authenticate() {
         Form<Login> form = Form.form(Login.class).bindFromRequest();
         Login login = form.get();
 
-        //
         JsonNode json = Json.newObject()
                 .put("grant-type", "password")
                 .put("email", login.email)
-                .put("code",  login.password);
+                .put("code", login.password);
 
-        return WS
-                .url("http://localhost:8080/api/v1/login")
+        F.Promise<JsonNode> jsonPromise = WS.url("http://localhost:8080/api/v1/login")
                 .setHeader("Client-Id", clientId)
                 .setContentType("application/json")
                 .post(json)
-                .map(actualResponse -> {
-                    if (actualResponse.getStatus() == 200) {
-                        JsonNode jsonResponse = actualResponse.asJson();
-                        session("email", jsonResponse.get("email").asText());
-                        session("token", jsonResponse.get("token").asText());
-                        return ok(actualResponse.asJson());
-                    }
+                .map(WSResponse::asJson);
 
-                    return internalServerError();
-                })
-                ;
+        // 'unwrap' JSON node from promise to obtain reponse content
+        JsonNode jsonResponse = jsonPromise.get(10000);
+        session("email", jsonResponse.get("email").asText());
+        session("token", jsonResponse.get("token").asText());
+
+        return ok(jsonResponse);
     }
 }
