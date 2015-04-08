@@ -1,0 +1,36 @@
+@(title: String, loginForm : Form[Login] , registrationForm : Form[Registration])
+
+@main(" - " + title) {
+
+    <h1>@title</h1>
+
+    <div id="signin_box">
+        <h3>Login</h3>
+        @helper.form(action = routes.Application.authenticate) {
+            @helper.inputText(loginForm("email"), '_label -> "E-Mail:")
+            @helper.inputPassword(loginForm("password"), '_label -> "Passwort:")
+            <input type="submit" value="Einloggen"/>
+        }
+    </div>
+
+    <div id="signin_box">
+        <h3>Als neuer Kunde registrieren</h3>
+        @helper.form(action = routes.Application.register) {
+            @helper.inputText(loginForm("firstName"), '_label -> "*Vorname:")
+            @helper.inputText(loginForm("lastName"), '_label -> "*Nachname:")
+            @helper.inputDate(loginForm("birthate"), '_label -> "*Geburtsdatum:")
+            @helper.inputText(loginForm("gender"), '_label -> "Geschlecht:")
+            @helper.inputText(loginForm("addrStreet"), '_label -> "*Straße:")
+            @helper.inputText(loginForm("addrStreetNo"), '_label -> "*Hausnummer:")
+            @helper.inputText(loginForm("addrZipCode"), '_label -> "*PLZ:")
+            @helper.inputText(loginForm("addrLocation"), '_label -> "*Ort:")
+            @helper.inputText(loginForm("email"), '_label -> "*E-Mail:")
+            @helper.inputPassword(loginForm("password"), '_label -> "*Passwort:")
+            @helper.inputPassword(loginForm("passwordCheck"), '_label -> "*Passwort wiederholen:")
+            <br/>
+            <p id="hint">* Pflichtangabe</p>
+            <input type="submit" value="Registrieren"/>
+        }
+    </div>
+
+}
