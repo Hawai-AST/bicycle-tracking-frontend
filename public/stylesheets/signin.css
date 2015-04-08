@@ -4,8 +4,7 @@
     -webkit-border-radius: 5px;
     border-radius: 5px;
     border-color: #C0C0C0;
-    margin: 10px;
-    margin-right: 20px;
+    margin: 10px 20px 10px 10px;
     padding: 20px;
     background-color: #EAEAEA;
 }
@@ -24,17 +23,19 @@ input {
 }
 
 input:focus {
-    border-color:#A5C7FE;
+    border-color: #A5C7FE;
 }
 
 input[type=submit] {
-    padding:5px 15px; background:#C0C0C0; border:0 none;
-    cursor:pointer;
+    padding: 5px 15px; background: #C0C0C0; border:0 none;
+    cursor: pointer;
     -webkit-border-radius: 5px;
     border-radius: 5px;
     float: right;
     width: 25%;
     margin-right: 8%;
+    transition: background-color 0.4s;
+    transition-timing-function: ease-out;
 }
 
 input[type=submit]:hover {
