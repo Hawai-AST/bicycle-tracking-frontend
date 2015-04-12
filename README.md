@@ -1,4 +1,4 @@
-# bicycle-tracking
+# bicycle-tracking ![build status](https://travis-ci.org/Hawai-AST/bicycle-tracking-frontend.svg?branch=master)
 An application which tracks bicycle GPS data in order to provide services for customers
 
 # Running and developing
