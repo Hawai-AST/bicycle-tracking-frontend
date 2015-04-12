@@ -14,6 +14,7 @@ import play.libs.Json;
 import play.libs.ws.WS;
 import play.mvc.Result;
 import views.html.index;
+import views.html.maptest;
 import views.html.signin;
 
 import static play.mvc.Results.ok;
@@ -76,4 +77,6 @@ public class Application {
 //                })
 //                ;
     }
+
+    public Result maptest() { return ok(maptest.render()); }
 }
