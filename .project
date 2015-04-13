@@ -1,5 +1,5 @@
 <projectDescription>
-  <name>play-java-spring</name>
+  <name>bicycle-tracking</name>
   <buildSpec>
     <buildCommand>
       <name>org.eclipse.jdt.core.javabuilder</name>

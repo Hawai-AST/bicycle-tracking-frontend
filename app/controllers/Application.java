@@ -11,6 +11,7 @@ import play.libs.ws.WS;
 import play.libs.ws.WSResponse;
 import play.mvc.Result;
 import views.html.index;
+import views.html.maptest;
 import views.html.signin;
 
 import static play.mvc.Controller.session;
@@ -65,4 +66,6 @@ public class Application {
                         + "SK-token: " + session("token")
         );
     }
+
+    public Result maptest() { return ok(maptest.render()); }
 }

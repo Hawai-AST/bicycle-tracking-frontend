@@ -18,7 +18,7 @@ body {
     padding: 10px;
 }
 
-a {
+#nav a {
     text-decoration: none;
     color: black;
     font-family: sans-serif;
