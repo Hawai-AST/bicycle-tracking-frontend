@@ -20,6 +20,7 @@ import static play.mvc.Results.ok;
 @Controller
 public class Application {
 
+    // ID needed for access to the backend API
     final String clientId = "DEV-101";
 
     public Result index() { return ok(index.render()); }
@@ -36,19 +37,26 @@ public class Application {
         Form<Registration> form = Form.form(Registration.class).bindFromRequest();
         Registration registration = form.get();
 
+        // TODO create json request for registration (and perform a login?)
+        // TODO refactor technical login code maybe to allow passing in login credentials after registration
+
         return ok(registration.toJson());
     }
 
     public Result authenticate() {
+        final String loginURL = "http://localhost:8080/api/v1/login";
+
         Form<Login> form = Form.form(Login.class).bindFromRequest();
         Login login = form.get();
 
+        // TODO maybe create a utility method for creating json requests to refactor stnadard code
         JsonNode json = Json.newObject()
                 .put("grant-type", "password")
                 .put("email", login.email)
                 .put("code", login.password);
 
-        F.Promise<JsonNode> jsonPromise = WS.url("http://localhost:8080/api/v1/login")
+        // todo dito
+        F.Promise<JsonNode> jsonPromise = WS.url(loginURL)
                 .setHeader("Client-Id", clientId)
                 .setContentType("application/json")
                 .post(json)
