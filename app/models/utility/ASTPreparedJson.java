@@ -6,7 +6,7 @@ import play.libs.ws.WS;
 import play.libs.ws.WSRequestHolder;
 import play.libs.ws.WSResponse;
 
-public class ASTPreparedJson {
+public class ASTPreparedJson implements PreparedJson {
 
     private WSRequestHolder wsRequestHolder;
 
@@ -23,6 +23,7 @@ public class ASTPreparedJson {
      * @param url The url to invoke later
      * @return Modified wsRequestHolder
      */
+    @Override
     public WSRequestHolder url(String url) {
         wsRequestHolder = WS.url(url);
         return wsRequestHolder;
@@ -35,6 +36,7 @@ public class ASTPreparedJson {
      * @param value Value of the key
      * @return Modified wsRequestHolder
      */
+    @Override
     public WSRequestHolder setHeader(String name, String value) {
         return wsRequestHolder.setHeader(name, value);
     }
@@ -45,6 +47,7 @@ public class ASTPreparedJson {
      * @param contentType Content type of the request
      * @return Modified wsRequestHolder
      */
+    @Override
     public WSRequestHolder setContentType(String contentType) {
         return wsRequestHolder.setContentType(contentType);
     }
@@ -55,6 +58,7 @@ public class ASTPreparedJson {
      * @param body Body of JSON node to post
      * @return Promised response from post call
      */
+    @Override
     public F.Promise<JsonNode> post(JsonNode body) {
         return wsRequestHolder.post(body).map(WSResponse::asJson);
     }
@@ -64,6 +68,7 @@ public class ASTPreparedJson {
      *
      * @return Promised response from get call
      */
+    @Override
     public F.Promise<WSResponse> get() {
         return wsRequestHolder.get();
     }
