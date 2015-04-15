@@ -1,4 +1,4 @@
-package models.types;
+package models.utility.value;
 
 public class Address {
     public String street;
