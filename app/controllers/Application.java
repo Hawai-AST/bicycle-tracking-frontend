@@ -1,27 +1,25 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import controllers.util.ASTPreparedJson;
 import models.Login;
 import models.Registration;
 import org.springframework.stereotype.Controller;
 import play.data.Form;
 import play.libs.F;
 import play.libs.Json;
-import play.libs.ws.WS;
-import play.libs.ws.WSResponse;
 import play.mvc.Result;
 import views.html.index;
 import views.html.maptest;
 import views.html.signin;
+
+import java.util.Iterator;
 
 import static play.mvc.Controller.session;
 import static play.mvc.Results.ok;
 
 @Controller
 public class Application {
-
-    // ID needed for access to the backend API
-    final String clientId = "DEV-101";
 
     public Result index() {
         return ok(index.render());
@@ -47,27 +45,22 @@ public class Application {
 
     public Result authenticate() {
         final String loginURL = "http://localhost:8080/api/v1/login";
+        final int responseTimeoutInMs = 10000;
 
         Form<Login> form = Form.form(Login.class).bindFromRequest();
         Login login = form.get();
 
-        // TODO maybe create a utility method for creating json requests to refactor stnadard code
+        // TODO maybe create a utility method for creating json requests to refactor standard code
         JsonNode json = Json.newObject()
                 .put("grant-type", "password")
                 .put("email", login.email)
                 .put("code", login.password);
 
-        // todo dito
-        F.Promise<JsonNode> jsonPromise = WS.url(loginURL)
-                .setHeader("Client-Id", clientId)
-                .setContentType("application/json")
-                .post(json)
-                .map(WSResponse::asJson);
+        F.Promise<JsonNode> jsonPromise = new ASTPreparedJson(loginURL).post(json);
 
         // 'unwrap' JSON node from promise to obtain response content
-        JsonNode jsonResponse = jsonPromise.get(10000);
-        session("email", jsonResponse.get("email").asText());
-        session("token", jsonResponse.get("token").asText());
+        JsonNode jsonResponse = jsonPromise.get(responseTimeoutInMs);
+        storeValuesInSessionFrom(jsonResponse);
 
         return ok(jsonResponse);
 
@@ -81,5 +74,14 @@ public class Application {
 
     public Result maptest() {
         return ok(maptest.render());
+    }
+
+    private void storeValuesInSessionFrom(JsonNode jsonNode) {
+        Iterator<String> nodeIt = jsonNode.fieldNames();
+
+        while (nodeIt.hasNext()) {
+            String field = nodeIt.next();
+            session(field, jsonNode.get(field).asText());
+        }
     }
 }
