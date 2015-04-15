@@ -14,7 +14,7 @@
     font-size: 12px;
 }
 
-input {
+input, select {
     padding:5px; border:2px solid #C0C0C0;
     -webkit-border-radius: 5px;
     border-radius: 5px;
@@ -22,7 +22,7 @@ input {
     margin-left: 65px;
 }
 
-input:focus {
+input:focus, select:focus {
     border-color: #A5C7FE;
 }
 
