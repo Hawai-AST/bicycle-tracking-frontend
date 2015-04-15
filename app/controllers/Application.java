@@ -64,23 +64,22 @@ public class Application {
 
         return ok(jsonResponse);
 
-//        return ok(jsonResponse
-//                        + "\n\n"
-//                        + "SK-email: " + session("email")
-//                        + "\n"
-//                        + "SK-token: " + session("token")
-//        );
     }
 
     public Result maptest() {
         return ok(maptest.render());
     }
 
+    /**
+     * Stores key value pairs from the json request in the session
+     * @param jsonNode json node from which to extract the values
+     */
     private void storeValuesInSessionFrom(JsonNode jsonNode) {
         Iterator<String> nodeIt = jsonNode.fieldNames();
 
         while (nodeIt.hasNext()) {
             String field = nodeIt.next();
+            // store key value pairs from request in session
             session(field, jsonNode.get(field).asText());
         }
     }
