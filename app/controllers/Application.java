@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import models.Login;
 import models.Registration;
 import models.utility.AST;
+import models.utility.value.Address;
 import org.springframework.stereotype.Controller;
 import play.data.Form;
 import play.libs.F;
@@ -36,9 +37,29 @@ public class Application {
         Form<Registration> form = Form.form(Registration.class).bindFromRequest();
         Registration registration = form.get();
 
-        JsonNode jsonResponse = doRequest("http://localhost:8080/api/v1/register", registration.toJson());
+        Address address = new Address();
 
-        return ok(jsonResponse);
+        address.street = "Leetstreet";
+        address.houseNumber = "1";
+        address.postcode = "13337";
+        address.city = "Leethausen";
+        address.state = "Leetstate";
+        address.country = "Land of the Leet";
+
+        Registration reg = new Registration();
+
+        reg.address = address;
+        reg.firstName = "James";
+        reg.lastName = "Last";
+        reg.customerId = "0001337000";
+        reg.birthday = "01.03.1937";
+        reg.email = "leet@sheet.com";
+        reg.gender = "male";
+        reg.password = "1337";
+
+//        JsonNode jsonResponse = doRequest("http://localhost:8080/api/v1/register", registration.toJson());
+
+        return ok(reg.toJson());
 
         // TODO create json request for registration (and perform a login?)
         // TODO refactor technical login code maybe to allow passing in login credentials after registration
