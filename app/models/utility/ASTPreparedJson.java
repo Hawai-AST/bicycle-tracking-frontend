@@ -1,4 +1,4 @@
-package controllers.util;
+package models.utility;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import play.libs.F;
@@ -10,7 +10,7 @@ public class ASTPreparedJson {
 
     private WSRequestHolder wsRequestHolder;
 
-    public ASTPreparedJson(String url) {
+    protected ASTPreparedJson(String url) {
 
         wsRequestHolder = WS.url(url)
                 .setHeader("Client-Id", "DEV-101")
