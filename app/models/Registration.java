@@ -1,6 +1,7 @@
 package models;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import models.utility.value.Address;
 import play.libs.Json;
 
 // TODO use Address type as attribute instead of addrX attributes
@@ -10,13 +11,11 @@ public class Registration {
 
     public String   firstName;
     public String   lastName;
-    public String   birthdate;
+    public String   birthday;
     public String   gender;
-    public String   addrStreet;
-    public String   addrStreetNo;
-    public String   addrZipCode;
-    public String   addrLocation;
+    public Address  address;
     public String   email;
+    public String   customerId;
     public String   password;
     public String   passwordCheck;
 
@@ -27,7 +26,7 @@ public class Registration {
 //        if (lastName.isEmpty()) {
 //            return "Nachname muss angegeben werden";
 //        }
-//        if (birthdate.isEmpty()) {
+//        if (birthday.isEmpty()) {
 //            return "Geburtsdatum muss angegeben werden";
 //        }
 //        if (addrStreet.isEmpty()) {
@@ -61,17 +60,15 @@ public class Registration {
 
     public JsonNode toJson() {
        return Json.newObject()
-                .put("firstName", firstName)
-                .put("lastName", lastName)
-                .put("birthdate", birthdate)
-                .put("gender", gender)
-                .put("addrStreet", addrStreet)
-                .put("addrStreetNo", addrStreetNo)
-                .put("addrZipCode", addrZipCode)
-                .put("addrLocation", addrLocation)
                 .put("email", email)
-                .put("code", password)
-                .put("passwordCheck", passwordCheck);
+                .put("customerid", customerId)
+                .put("firstname", firstName)
+                .put("name", lastName)
+                .put("password", password)
+                .put("birthday", birthday)
+                .put("gender", gender)
+                .put("address", Json.toJson(address).toString());
+//                .put("passwordCheck", passwordCheck);
     }
 
 }
