@@ -1,9 +1,9 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import controllers.util.ASTPreparedJson;
 import models.Login;
 import models.Registration;
+import models.utility.AST;
 import org.springframework.stereotype.Controller;
 import play.data.Form;
 import play.libs.F;
@@ -36,30 +36,23 @@ public class Application {
         Form<Registration> form = Form.form(Registration.class).bindFromRequest();
         Registration registration = form.get();
 
-        // TODO create json request for registration (and perform a login?)
-        // TODO refactor technical login code maybe to allow passing in login credentials after registration
-
-        return ok(registration.toJson());
-    }
-
-    public Result authenticate() {
-        final String loginURL = "http://localhost:8080/api/v1/login";
-        final int responseTimeoutInMs = 10000;
-
-        Form<Login> form = Form.form(Login.class).bindFromRequest();
-        Login login = form.get();
-
-        JsonNode json = login.toJson();
-
-        F.Promise<JsonNode> jsonPromise = new ASTPreparedJson(loginURL).post(json);
-
-        // TODO Create general pages for no-OK (200) responses and implement proper handling
-        // obtain response content by 'unwrapping' JSON node from promise
-        JsonNode jsonResponse = jsonPromise.get(responseTimeoutInMs);
-        storeValuesInSessionFrom(jsonResponse);
+        JsonNode jsonResponse = doRequest("http://localhost:8080/api/v1/register", registration.toJson());
 
         return ok(jsonResponse);
 
+        // TODO create json request for registration (and perform a login?)
+        // TODO refactor technical login code maybe to allow passing in login credentials after registration
+
+    }
+
+    public Result authenticate() {
+        Form<Login> form = Form.form(Login.class).bindFromRequest();
+        Login login = form.get();
+
+        JsonNode jsonResponse = doRequest("http://localhost:8080/api/v1/login", login.toJson());
+        storeValuesInSessionFrom(jsonResponse);
+
+        return ok(jsonResponse);
     }
 
     public Result maptest() {
@@ -78,5 +71,21 @@ public class Application {
             // store key value pairs from request in session
             session(field, jsonNode.get(field).asText());
         }
+    }
+
+    /**
+     * Runs procedures neccessary to perform a request and returns the response
+     *
+     * @param url URL to call
+     * @param jsonNode Acutal request content
+     * @return Response of the request
+     */
+    private JsonNode doRequest(String url, JsonNode jsonNode) {
+        int responseTimeoutInMs = 10000;
+
+        F.Promise<JsonNode> jsonPromise = AST.preparedJson(url).post(jsonNode);
+
+        // TODO Create general pages for no-OK (200) responses and implement proper handling
+        return jsonPromise.get(responseTimeoutInMs);
     }
 }
