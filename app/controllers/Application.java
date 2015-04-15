@@ -23,7 +23,9 @@ public class Application {
     // ID needed for access to the backend API
     final String clientId = "DEV-101";
 
-    public Result index() { return ok(index.render()); }
+    public Result index() {
+        return ok(index.render());
+    }
 
     public Result signin() {
         return ok(signin.render(
@@ -62,18 +64,22 @@ public class Application {
                 .post(json)
                 .map(WSResponse::asJson);
 
-        // 'unwrap' JSON node from promise to obtain reponse content
+        // 'unwrap' JSON node from promise to obtain response content
         JsonNode jsonResponse = jsonPromise.get(10000);
         session("email", jsonResponse.get("email").asText());
         session("token", jsonResponse.get("token").asText());
 
-        return ok(jsonResponse
-                        + "\n\n"
-                        + "SK-email: " + session("email")
-                        + "\n"
-                        + "SK-token: " + session("token")
-        );
+        return ok(jsonResponse);
+
+//        return ok(jsonResponse
+//                        + "\n\n"
+//                        + "SK-email: " + session("email")
+//                        + "\n"
+//                        + "SK-token: " + session("token")
+//        );
     }
 
-    public Result maptest() { return ok(maptest.render()); }
+    public Result maptest() {
+        return ok(maptest.render());
+    }
 }
