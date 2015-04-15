@@ -8,7 +8,7 @@
         <h3>Login</h3>
         @helper.form(action = routes.Application.authenticate) {
             @helper.inputText(loginForm("email"), '_label -> "E-Mail:")
-            @helper.inputPassword(loginForm("password"), '_label -> "Passwort:")
+            @helper.inputPassword(loginForm("code"), '_label -> "Passwort:")
             <input type="submit" value="Einloggen"/>
         }
     </div>

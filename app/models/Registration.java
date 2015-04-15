@@ -45,14 +45,14 @@ public class Registration {
 //        if (email.isEmpty()) {
 //            return "E-Mail muss angegeben werden";
 //        }
-//        if (password.isEmpty()) {
+//        if (code.isEmpty()) {
 //            return "Passwort muss angegeben werden";
 //        }
 //        if (passwordCheck.isEmpty()) {
 //            return "Passwort muss erneut angegeben werden";
 //        }
 //
-//        if (!password.equals(passwordCheck)) {
+//        if (!code.equals(passwordCheck)) {
 //            return "Die Passwörter stimmen nicht überein!";
 //        }
 
@@ -70,7 +70,7 @@ public class Registration {
                 .put("addrZipCode", addrZipCode)
                 .put("addrLocation", addrLocation)
                 .put("email", email)
-                .put("password", password)
+                .put("code", password)
                 .put("passwordCheck", passwordCheck);
     }
 

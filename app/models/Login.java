@@ -6,13 +6,13 @@ import play.libs.Json;
 public class Login {
 
     public String email;
-    public String password;
+    public String code;
 
     public String validate() {
         if (email.isEmpty()) {
             return "E-Mail muss angegeben werden";
         }
-        if (password.isEmpty()) {
+        if (code.isEmpty()) {
             return "Passwort muss angegeben werden";
         }
         return null;
@@ -21,7 +21,8 @@ public class Login {
     public JsonNode toJson() {
 
         return Json.newObject()
-                .put("email", email)
-                .put("password", password);
+                .put("grant-type", "password")
+                .put("email", this.email)
+                .put("code", this.code);
     }
 }

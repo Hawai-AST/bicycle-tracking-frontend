@@ -7,7 +7,6 @@ import models.Registration;
 import org.springframework.stereotype.Controller;
 import play.data.Form;
 import play.libs.F;
-import play.libs.Json;
 import play.mvc.Result;
 import views.html.index;
 import views.html.maptest;
@@ -50,15 +49,12 @@ public class Application {
         Form<Login> form = Form.form(Login.class).bindFromRequest();
         Login login = form.get();
 
-        // TODO maybe create a utility method for creating json requests to refactor standard code
-        JsonNode json = Json.newObject()
-                .put("grant-type", "password")
-                .put("email", login.email)
-                .put("code", login.password);
+        JsonNode json = login.toJson();
 
         F.Promise<JsonNode> jsonPromise = new ASTPreparedJson(loginURL).post(json);
 
-        // 'unwrap' JSON node from promise to obtain response content
+        // TODO Create general pages for no-OK (200) responses and implement proper handling
+        // obtain response content by 'unwrapping' JSON node from promise
         JsonNode jsonResponse = jsonPromise.get(responseTimeoutInMs);
         storeValuesInSessionFrom(jsonResponse);
 
