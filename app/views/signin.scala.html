@@ -5,7 +5,7 @@
     <h1>@title</h1>
 
     <div id="signin_box">
-        <h3>Login</h3>
+        <h3>Anmelden</h3>
         @helper.form(action = routes.Application.authenticate) {
             @helper.inputText(loginForm("email"), '_label -> "E-Mail:")
             @helper.inputPassword(loginForm("code"), '_label -> "Passwort:")
@@ -19,6 +19,7 @@
             @helper.inputText(registrationForm("email"), '_label -> "*E-Mail:")
             @helper.inputPassword(registrationForm("password"), '_label -> "*Passwort:")
             @helper.inputPassword(registrationForm("passwordCheck"), '_label -> "*Passwort wiederholen:")
+            <br/>
             @helper.inputText(registrationForm("customerid"), '_label -> "*Kundennummer:")
             @helper.inputText(registrationForm("firstname"), '_label -> "*Vorname:")
             @helper.inputText(registrationForm("lastname"), '_label -> "*Nachname:")

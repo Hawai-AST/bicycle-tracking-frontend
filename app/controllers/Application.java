@@ -26,7 +26,7 @@ public class Application {
 
     public Result signin() {
         return ok(signin.render(
-                "Anmelden",
+                "Anmeldung",
                 Form.form(Login.class),
                 Form.form(Registration.class)
         ));
