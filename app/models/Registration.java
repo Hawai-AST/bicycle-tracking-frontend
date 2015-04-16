@@ -1,5 +1,6 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
 import models.utility.value.Address;
 import play.libs.Json;
@@ -9,21 +10,22 @@ import play.libs.Json;
 
 public class Registration {
 
-    public String   firstName;
-    public String   lastName;
-    public String   birthday;
-    public String   gender;
-    public Address  address;
-    public String   email;
-    public String   customerId;
-    public String   password;
-    public String   passwordCheck;
+    public String firstname;
+    public String name;
+    public String birthday;
+    public String gender;
+    public Address address;
+    public String email;
+    public String customerid;
+    public String password;
+    @JsonIgnore
+    public String passwordCheck;
 
     public String validate() {
-//        if (firstName.isEmpty()) {
+//        if (firstname.isEmpty()) {
 //            return "Vorname muss angegeben werden";
 //        }
-//        if (lastName.isEmpty()) {
+//        if (name.isEmpty()) {
 //            return "Nachname muss angegeben werden";
 //        }
 //        if (birthday.isEmpty()) {
@@ -59,16 +61,7 @@ public class Registration {
     }
 
     public JsonNode toJson() {
-       return Json.newObject()
-                .put("email", email)
-                .put("customerid", customerId)
-                .put("firstname", firstName)
-                .put("name", lastName)
-                .put("password", password)
-                .put("birthday", birthday)
-                .put("gender", gender)
-                .put("address", Json.toJson(address).toString());
-//                .put("passwordCheck", passwordCheck);
+        return Json.toJson(this);
     }
 
 }
