@@ -32,7 +32,7 @@ public class ASTPreparedJson implements PreparedJson {
     /**
      * Sets the content type for the request
      *
-     * @param name Name of the key which shall be added
+     * @param name  Name of the key which shall be added
      * @param value Value of the key
      * @return Modified wsRequestHolder
      */

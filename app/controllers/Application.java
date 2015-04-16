@@ -61,6 +61,7 @@ public class Application {
 
     /**
      * Stores key value pairs from the json request in the session
+     *
      * @param jsonNode json node from which to extract the values
      */
     private void storeValuesInSessionFrom(JsonNode jsonNode) {
@@ -76,7 +77,7 @@ public class Application {
     /**
      * Runs procedures neccessary to perform a request and returns the response
      *
-     * @param url URL to call
+     * @param url      URL to call
      * @param jsonNode Acutal request content
      * @return Response of the request
      */

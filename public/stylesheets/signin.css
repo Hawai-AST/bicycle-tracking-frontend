@@ -15,7 +15,8 @@
 }
 
 input, select {
-    padding:5px; border:2px solid #C0C0C0;
+    padding: 5px;
+    border: 2px solid #C0C0C0;
     -webkit-border-radius: 5px;
     border-radius: 5px;
     width: 55%;
@@ -27,7 +28,9 @@ input:focus, select:focus {
 }
 
 input[type=submit] {
-    padding: 5px 15px; background: #C0C0C0; border:0 none;
+    padding: 5px 15px;
+    background: #C0C0C0;
+    border: 0 none;
     cursor: pointer;
     -webkit-border-radius: 5px;
     border-radius: 5px;
