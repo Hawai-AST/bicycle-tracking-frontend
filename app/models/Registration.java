@@ -22,6 +22,7 @@ public class Registration {
     public String passwordCheck;
 
     public String validate() {
+//  Auskommentiert, da voerst nicht in Verwendung. Dient später als Vorlage.
 //        if (firstname.isEmpty()) {
 //            return "Vorname muss angegeben werden";
 //        }
