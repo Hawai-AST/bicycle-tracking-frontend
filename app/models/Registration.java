@@ -5,11 +5,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import models.utility.value.Address;
 import play.libs.Json;
 
-// TODO use Address type as attribute instead of addrX attributes
-// TODO validate email and other validations
+// TODO(Timmay):validate email and other validations
 
 public class Registration {
-
     public String firstname;
     public String name;
     public String birthday;

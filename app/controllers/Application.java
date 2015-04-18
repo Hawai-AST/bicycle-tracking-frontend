@@ -37,10 +37,6 @@ public class Application {
         JsonNode jsonResponse = doRequest("http://localhost:8080/api/v1/register", registration.toJson());
 
         return ok(jsonResponse);
-
-        // TODO (Timmay) create json request for registration (and perform a login?)
-        // TODO (Timmay) refactor technical login code maybe to allow passing in login credentials after registration
-
     }
 
     public Result authenticate() {
@@ -84,7 +80,7 @@ public class Application {
 
         F.Promise<JsonNode> jsonPromise = AST.preparedJson(url).post(jsonNode);
 
-        // TODO Create general pages for no-OK (200) responses and implement proper handling
+        // TODO(Timmay): Create general pages for no-OK (200) responses and implement proper handling
         return jsonPromise.get(responseTimeoutInMs);
     }
 }
