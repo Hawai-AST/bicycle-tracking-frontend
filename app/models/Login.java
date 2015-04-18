@@ -19,7 +19,6 @@ public class Login {
     }
 
     public JsonNode toJson() {
-
         return Json.newObject()
                 .put("grant-type", "password")
                 .put("email", this.email)

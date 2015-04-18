@@ -20,9 +20,7 @@ import static play.mvc.Results.ok;
 @Controller
 public class Application {
 
-    public Result index() {
-        return ok(index.render());
-    }
+    public Result index() { return ok(index.render()); }
 
     public Result signin() {
         return ok(signin.render(
@@ -40,8 +38,8 @@ public class Application {
 
         return ok(jsonResponse);
 
-        // TODO create json request for registration (and perform a login?)
-        // TODO refactor technical login code maybe to allow passing in login credentials after registration
+        // TODO (Timmay) create json request for registration (and perform a login?)
+        // TODO (Timmay) refactor technical login code maybe to allow passing in login credentials after registration
 
     }
 

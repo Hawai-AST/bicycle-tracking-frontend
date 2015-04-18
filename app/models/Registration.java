@@ -21,46 +21,6 @@ public class Registration {
     @JsonIgnore
     public String passwordCheck;
 
-    public String validate() {
-//  Auskommentiert, da voerst nicht in Verwendung. Dient später als Vorlage.
-//        if (firstname.isEmpty()) {
-//            return "Vorname muss angegeben werden";
-//        }
-//        if (name.isEmpty()) {
-//            return "Nachname muss angegeben werden";
-//        }
-//        if (birthday.isEmpty()) {
-//            return "Geburtsdatum muss angegeben werden";
-//        }
-//        if (addrStreet.isEmpty()) {
-//            return "Straße muss angegeben werden";
-//        }
-//        if (addrStreetNo.isEmpty()) {
-//            return "Hausnummer muss angegeben werden";
-//        }
-//        if (addrZipCode.isEmpty()) {
-//            return "Postleitzahl muss angegeben werden";
-//        }
-//        if (addrLocation.isEmpty()) {
-//            return "Ort muss angegeben werden";
-//        }
-//        if (email.isEmpty()) {
-//            return "E-Mail muss angegeben werden";
-//        }
-//        if (code.isEmpty()) {
-//            return "Passwort muss angegeben werden";
-//        }
-//        if (passwordCheck.isEmpty()) {
-//            return "Passwort muss erneut angegeben werden";
-//        }
-//
-//        if (!code.equals(passwordCheck)) {
-//            return "Die Passwörter stimmen nicht überein!";
-//        }
-
-        return null;
-    }
-
     public JsonNode toJson() {
         return Json.toJson(this);
     }

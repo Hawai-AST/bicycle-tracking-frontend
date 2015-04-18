@@ -22,7 +22,7 @@
             <br/>
             @helper.inputText(registrationForm("customerid"), '_label -> "*Kundennummer:")
             @helper.inputText(registrationForm("firstname"), '_label -> "*Vorname:")
-            @helper.inputText(registrationForm("lastname"), '_label -> "*Nachname:")
+            @helper.inputText(registrationForm("name"), '_label -> "*Nachname:")
             @helper.inputDate(registrationForm("birthday"), '_label -> "*Geburtsdatum:")
             @helper.select(field = registrationForm("gender"),
                 options = Seq("male" -> "Männlich", "female" -> "Weiblich"),
@@ -30,7 +30,7 @@
                 '_default -> "-- Bitte wählen --"
             )
             @helper.inputText(registrationForm("address.street"), '_label -> "*Straße:")
-            @helper.inputText(registrationForm("address.housenumber"), '_label -> "*Hausnummer:")
+            @helper.inputText(registrationForm("address.houseNumber"), '_label -> "*Hausnummer:")
             @helper.inputText(registrationForm("address.postcode"), '_label -> "*PLZ:")
             @helper.inputText(registrationForm("address.city"), '_label -> "*Ort:")
             @helper.inputText(registrationForm("address.state"), '_label -> "*Bundesland:")
