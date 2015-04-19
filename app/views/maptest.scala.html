@@ -9,14 +9,16 @@
   <script src="/assets/leaflet-routing-machine-2.3.0/Control.Geocoder.js"></script>
 
   <style type="text/css">
-    #map { height: 768px; width: 1024px; }
+    #map { height: 600px; width: 1024px; }
   </style>
 
   <div id="map"></div>
 
   <script type="application/javascript">
-    // hardcoded Hamburg GPS data
-    var map = L.map('map').setView([53.5502099, 9.9993636], 13);
+    // initial view = Hamburg
+    var map = L.map('map').setView([53.5502099, 9.9993636], 9);
+    // for autoscale with initial route
+    //var map = L.map('map');
 
     // http://{s}.tiles.mapbox.com/v3/MapID/{z}/{x}/{y}.png
     L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -26,10 +28,11 @@
 
     // add basic routing control
     L.Routing.control({
-      waypoints: [
-        L.latLng(53.4897, 10.2086),
-        L.latLng(53.5571614, 10.023104)
-      ],
+      // example route -> yes or no?
+//      waypoints: [
+//        L.latLng(53.56875, 9.98286),
+//        L.latLng(53.5571614, 10.023104)
+//      ],
       routeWhileDragging: true,
       geocoder: L.Control.Geocoder.nominatim()
     }).addTo(map);
