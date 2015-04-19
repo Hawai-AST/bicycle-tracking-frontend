@@ -14,7 +14,7 @@
     font-size: 12px;
 }
 
-input {
+#signin_box input {
     padding:5px; border:2px solid #C0C0C0;
     -webkit-border-radius: 5px;
     border-radius: 5px;

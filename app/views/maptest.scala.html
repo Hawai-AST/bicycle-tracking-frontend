@@ -6,9 +6,10 @@
   <link rel="stylesheet" href="/assets/leaflet-routing-machine-2.3.0/leaflet-routing-machine.css" />
   <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
   <script src="/assets/leaflet-routing-machine-2.3.0/leaflet-routing-machine.js"></script>
+  <script src="/assets/leaflet-routing-machine-2.3.0/Control.Geocoder.js"></script>
 
   <style type="text/css">
-    #map { height: 300px; width: 900px; }
+    #map { height: 768px; width: 1024px; }
   </style>
 
   <div id="map"></div>
@@ -28,7 +29,9 @@
       waypoints: [
         L.latLng(53.4897, 10.2086),
         L.latLng(53.5571614, 10.023104)
-      ]
+      ],
+      routeWhileDragging: true,
+      geocoder: L.Control.Geocoder.nominatim()
     }).addTo(map);
   </script>
 
