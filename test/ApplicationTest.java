@@ -10,7 +10,7 @@ public class ApplicationTest {
     @Test
     public void indexTemplate() {
         running(fakeApplication(), () -> {
-            Html html = views.html.index.render();
+            Html html = views.html.guest.index.render();
             assertThat(contentType(html)).isEqualTo("text/html");
             assertThat(contentAsString(html)).contains("HAWAI");
         });

@@ -5,7 +5,10 @@
 # Home page
 GET         /                    @controllers.Application.index
 GET         /signin              @controllers.Application.signin
+GET         /signout             @controllers.Application.signout
 GET         /maptest             @controllers.Application.maptest
+GET         /profile             @controllers.Application.profile
+POST        /updateProfile       @controllers.Application.updateProfile
 POST        /login               @controllers.Application.authenticate
 POST        /register            @controllers.Application.register
 
