@@ -24,7 +24,6 @@ public class Application {
 
     public Result signin() {
         return ok(signin.render(
-                "Anmeldung",
                 Form.form(Login.class),
                 Form.form(Registration.class)
         ));
@@ -82,5 +81,14 @@ public class Application {
 
         // TODO(Timmay): Create general pages for no-OK (200) responses and implement proper handling
         return jsonPromise.get(responseTimeoutInMs);
+    }
+
+    /**
+     * Detemines wheter the user is logged in or not
+     *
+     * @return true, if user is logged in
+     */
+    public static boolean isUserLoggedIn() {
+        return session("token") != null;
     }
 }
