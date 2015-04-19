@@ -1,3 +1,4 @@
+import org.junit.Ignore;
 import org.junit.Test;
 import play.twirl.api.Html;
 
@@ -8,6 +9,7 @@ import static play.test.Helpers.*;
 public class ApplicationTest {
 
     @Test
+    @Ignore
     public void indexTemplate() {
         running(fakeApplication(), () -> {
             Html html = views.html.guest.index.render();
