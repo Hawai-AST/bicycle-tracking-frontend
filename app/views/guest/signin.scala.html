@@ -1,0 +1,21 @@
+@(loginForm: Form[Login], registrationForm: Form[Registration])
+
+@main("Anmeldung") {
+
+    <h1>Anmeldung</h1>
+
+    <div id="signin_box">
+        <h3>Anmelden</h3>
+        @helper.form(action = routes.Application.authenticate) {
+            @helper.inputText(loginForm("email"), '_label -> "E-Mail:")
+            @helper.inputPassword(loginForm("code"), '_label -> "Passwort:")
+            <input type="submit" value="Einloggen"/>
+        }
+    </div>
+
+    <div id="signin_box">
+        <h3>Als neuer Kunde registrieren</h3>
+        @views.html.fragments.registrationForm(registrationForm, routes.Application.register, "Registrieren")
+    </div>
+
+}

@@ -8,49 +8,103 @@ import org.springframework.stereotype.Controller;
 import play.data.Form;
 import play.libs.F;
 import play.mvc.Result;
-import views.html.index;
-import views.html.maptest;
-import views.html.signin;
 
 import java.util.Iterator;
 
 import static play.mvc.Controller.session;
+import static play.mvc.Results.badRequest;
 import static play.mvc.Results.ok;
+import static play.mvc.Results.redirect;
 
 @Controller
 public class Application {
 
-    public Result index() { return ok(index.render()); }
+    public Result index() {
+        if (isUserLoggedIn()) {
+            return ok(views.html.member.index.render());
+        } else {
+            return ok(views.html.guest.index.render());
+        }
+    }
 
     public Result signin() {
-        return ok(signin.render(
-                "Anmeldung",
+        return ok(views.html.guest.signin.render(
                 Form.form(Login.class),
                 Form.form(Registration.class)
         ));
     }
 
+    public Result signout() {
+        session().clear();
+        return ok(views.html.guest.index.render());
+    }
+
     public Result register() {
         Form<Registration> form = Form.form(Registration.class).bindFromRequest();
+
+        if (form.hasErrors()) {
+            return badRequest(views.html.guest.signin.render(
+                    Form.form(Login.class),
+                    form
+            ));
+        }
+
         Registration registration = form.get();
 
         JsonNode jsonResponse = doRequest("http://localhost:8080/api/v1/register", registration.toJson());
+        storeValuesInSessionFrom(jsonResponse);
 
-        return ok(jsonResponse);
+        return redirect("/");
     }
 
     public Result authenticate() {
         Form<Login> form = Form.form(Login.class).bindFromRequest();
+
+        if (form.hasErrors()) {
+            return badRequest(views.html.guest.signin.render(
+                    form,
+                    Form.form(Registration.class)
+            ));
+        }
+
         Login login = form.get();
 
         JsonNode jsonResponse = doRequest("http://localhost:8080/api/v1/login", login.toJson());
         storeValuesInSessionFrom(jsonResponse);
 
-        return ok(jsonResponse);
+        return redirect("/");
     }
 
     public Result maptest() {
-        return ok(maptest.render());
+        return ok(views.html.member.maptest.render());
+    }
+
+    /**
+     * Profile view temporarily uses Registration model
+     */
+    public Result profile() {
+        return ok(views.html.member.profile.render(
+                Form.form(Registration.class)
+        ));
+    }
+
+    /**
+     * Updates profile according to form input
+     * WARNING: Just a prototype which is subject to change
+     *          Functionallity not tested !!!
+     */
+    public Result updateProfile() {
+        Form<Registration> form = Form.form(Registration.class).bindFromRequest();
+        Registration registration = form.get();
+
+        JsonNode jsonResponse = doRequest("http://localhost:8080/api/v1/updateProfile", registration.toJson());
+
+        // temporary handling of response - dirty
+        if (jsonResponse.get("status").equals("200")) {
+            return redirect("/");
+        } else {
+            return badRequest(jsonResponse);
+        }
     }
 
     /**
@@ -82,5 +136,14 @@ public class Application {
 
         // TODO(Timmay): Create general pages for no-OK (200) responses and implement proper handling
         return jsonPromise.get(responseTimeoutInMs);
+    }
+
+    /**
+     * Detemines whether the user is logged in or not
+     *
+     * @return true, if user is logged in
+     */
+    public static boolean isUserLoggedIn() {
+        return session("token") != null;
     }
 }
