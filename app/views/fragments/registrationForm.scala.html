@@ -12,7 +12,7 @@
     @helper.inputDate(registrationForm("birthday"), '_label -> "*Geburtsdatum:")
     @helper.select(field = registrationForm("gender"),
       options = Seq("male" -> "Männlich", "female" -> "Weiblich"),
-      '_label -> "Geschlecht:",
+      '_label -> "*Geschlecht:",
       '_default -> "-- Bitte wählen --"
     )
     @helper.inputText(registrationForm("address.street"), '_label -> "*Straße:")
