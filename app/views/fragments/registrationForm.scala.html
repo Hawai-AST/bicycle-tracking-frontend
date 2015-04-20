@@ -1,0 +1,27 @@
+@(registrationForm: Form[Registration], action: play.api.mvc.Call, buttonLabel: String)
+
+
+  @helper.form(action) {
+    @helper.inputText(registrationForm("email"), '_label -> "*E-Mail:")
+    @helper.inputPassword(registrationForm("password"), '_label -> "*Passwort:")
+    @helper.inputPassword(registrationForm("passwordCheck"), '_label -> "*Passwort wiederholen:")
+    <br/>
+    @helper.inputText(registrationForm("customerid"), '_label -> "*Kundennummer:")
+    @helper.inputText(registrationForm("firstname"), '_label -> "*Vorname:")
+    @helper.inputText(registrationForm("name"), '_label -> "*Nachname:")
+    @helper.inputDate(registrationForm("birthday"), '_label -> "*Geburtsdatum:")
+    @helper.select(field = registrationForm("gender"),
+      options = Seq("male" -> "Männlich", "female" -> "Weiblich"),
+      '_label -> "*Geschlecht:",
+      '_default -> "-- Bitte wählen --"
+    )
+    @helper.inputText(registrationForm("address.street"), '_label -> "*Straße:")
+    @helper.inputText(registrationForm("address.houseNumber"), '_label -> "*Hausnummer:")
+    @helper.inputText(registrationForm("address.postcode"), '_label -> "*PLZ:")
+    @helper.inputText(registrationForm("address.city"), '_label -> "*Ort:")
+    @helper.inputText(registrationForm("address.state"), '_label -> "*Bundesland:")
+    @helper.inputText(registrationForm("address.country"), '_label -> "*Land:")
+    <br/>
+    <p id="hint">* Pflichtangabe</p>
+    <input type="submit" value="@buttonLabel"/>
+  }

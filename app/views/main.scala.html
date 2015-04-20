@@ -4,7 +4,7 @@
 
 <html>
     <head>
-        <title>HAWAI AST@title</title>
+        <title>HAWAI AST - @title</title>
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
         <link rel="stylesheet" type="text/css" href="@routes.Assets.at("stylesheets/main.css")">
         <link rel="stylesheet" type="text/css" href="@routes.Assets.at("stylesheets/signin.css")">
@@ -19,15 +19,19 @@
         </div>
 
         <div id="nav">
-            @sidebar()
+        @if(controllers.Application.isUserLoggedIn) {
+            @member.sidebar()
+        } else {
+            @guest.sidebar()
+        }
         </div>
 
         <div id="section">
-            @content
+        @content
         </div>
 
         <div id="footer">
-            @footer()
+        @fragments.footer()
         </div>
 
     </body>

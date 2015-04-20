@@ -1,0 +1,12 @@
+@(registrationForm: Form[Registration])
+
+@main("Profil") {
+
+    <h1>Profil</h1>
+
+    <div id="signin_box">
+        <h3>Profil ändern</h3>
+        @views.html.fragments.registrationForm(registrationForm, routes.Application.updateProfile, "Aktualisieren")
+    </div>
+
+}

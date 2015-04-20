@@ -14,20 +14,23 @@
     font-size: 12px;
 }
 
-input {
-    padding:5px; border:2px solid #C0C0C0;
+input, select {
+    padding: 5px;
+    border: 2px solid #C0C0C0;
     -webkit-border-radius: 5px;
     border-radius: 5px;
     width: 55%;
     margin-left: 65px;
 }
 
-input:focus {
+input:focus, select:focus {
     border-color: #A5C7FE;
 }
 
 input[type=submit] {
-    padding: 5px 15px; background: #C0C0C0; border:0 none;
+    padding: 5px 15px;
+    background: #C0C0C0;
+    border: 0 none;
     cursor: pointer;
     -webkit-border-radius: 5px;
     border-radius: 5px;
@@ -50,4 +53,17 @@ label {
 
 h2 {
     font-size: 18px;
+}
+
+dd.error {
+    font-size: 12px;
+    color: darkred;
+    margin-top: 4px;
+    margin-right: 35px;
+    margin-bottom: 10px;
+    float: right;
+}
+
+select#gender {
+    width: 212px
 }
