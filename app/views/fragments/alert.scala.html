@@ -1,0 +1,9 @@
+@(alert: String)
+
+@if(alert != null) {
+    @if(!alert.isEmpty) {
+        <div class="alert alert-success" role="alert">
+            <strong>Yeah!</strong> @alert
+        </div>
+    }
+}
