@@ -1,38 +1,55 @@
-@(title: String)(content: Html)
+@(content: Html)
 
 <!DOCTYPE html>
+<!-- saved from url=(0041)http://holdirbootstrap.de/examples/theme/ -->
+<html lang="de"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Die 3 Meta-Tags oben *müssen* zuerst im head stehen; jeglicher sonstiger head-Inhalt muss *nach* diesen Tags kommen -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="@routes.Assets.at("bootstrap/images/favicon.ico")">
 
-<html>
-    <head>
-        <title>HAWAI AST - @title</title>
-        <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
-        <link rel="stylesheet" type="text/css" href="@routes.Assets.at("stylesheets/main.css")">
-        <link rel="stylesheet" type="text/css" href="@routes.Assets.at("stylesheets/signin.css")">
-        <script src="@routes.Assets.at("javascripts/jquery-1.7.1.min.js")" type="text/javascript"></script>
+    <title>HAWAI-AST</title>
 
-    </head>
+        <!-- Bootstrap-CSS -->
+    <link href="@routes.Assets.at("bootstrap/css/bootstrap.min.css")" rel="stylesheet">
+        <!-- Bootstrap-Theme -->
+    <link href="@routes.Assets.at("bootstrap/css/bootstrap-theme.min.css")" rel="stylesheet">
 
-    <body>
+        <!-- Besondere Stile für diese Vorlage -->
+    <link href="@routes.Assets.at("examples/theme/theme.css")" rel="stylesheet">
 
-        <div id="header">
-            <h1>HAWAI After-Sales-Tracker</h1>
-        </div>
+    <script src="./index.scala_files/ie-emulation-modes-warning.js"></script>
 
-        <div id="nav">
-        @if(controllers.Application.isUserLoggedIn) {
-            @member.sidebar()
-        } else {
-            @guest.sidebar()
-        }
-        </div>
+        <!-- Unterstützung für Media Queries und HTML5-Elemente in IE8 über HTML5 shim und Respond.js -->
+        <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
 
-        <div id="section">
-        @content
-        </div>
+    <body role="document">
 
-        <div id="footer">
-        @fragments.footer()
-        </div>
+        @guest.nav()
 
-    </body>
-</html>
+        <div class="container theme-showcase" role="main">
+
+            @content
+
+        </div> <!-- /container -->
+
+
+        <!-- Bootstrap-JavaScript
+    ================================================== -->
+        <!-- Am Ende des Dokuments platziert, damit Seiten schneller laden -->
+        <script src="./index.scala_files/jquery.min.js"></script>
+        <script src="./index.scala_files/bootstrap.min.js"></script>
+        <script src="./index.scala_files/docs.min.js"></script>
+            <!-- IE10-Anzeigefenster-Hack für Fehler auf Surface und Desktop-Windows-8 -->
+        <script src="./index.scala_files/ie10-viewport-bug-workaround.js"></script>
+
+
+        <div id="global-zeroclipboard-html-bridge" class="global-zeroclipboard-container" style="position : absolute ; left : 0 px ; top : - 9999 px ; width : 15 px ; height : 15 px ; z-index : 999999999 ;" title="" data-original-title="Copy to clipboard">      <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" id="global-zeroclipboard-flash-bridge" width="100%" height="100%">         <param name="movie" value="/assets/flash/ZeroClipboard.swf?noCache=1429573625262">         <param name="allowScriptAccess" value="sameDomain">         <param name="scale" value="exactfit">         <param name="loop" value="false">         <param name="menu" value="false">         <param name="quality" value="best">         <param name="bgcolor" value="#ffffff">         <param name="wmode" value="transparent">         <param name="flashvars" value="trustedOrigins=holdirbootstrap.de%2C%2F%2Fholdirbootstrap.de%2Chttp%3A%2F%2Fholdirbootstrap.de">         <embed src="/assets/flash/ZeroClipboard.swf?noCache=1429573625262" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="100%" height="100%" name="global-zeroclipboard-flash-bridge" allowscriptaccess="sameDomain" allowfullscreen="false" type="application/x-shockwave-flash" wmode="transparent" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="trustedOrigins=holdirbootstrap.de%2C%2F%2Fholdirbootstrap.de%2Chttp%3A%2F%2Fholdirbootstrap.de" scale="exactfit">                </object></div><svg xmlns="http://www.w3.org/2000/svg" width="1140" height="500" viewBox="0 0 1140 500" preserveAspectRatio="none" style="visibility : hidden ; position : absolute ; top : - 100 % ; left : - 100 % ;"><defs></defs><text x="0" y="53" style="font-weight : bold ; font-size : 53 pt ; font-family : Arial, Helvetica, Open Sans, sans-serif ; dominant-baseline : middle">
+        DritteFolie</text></svg></body></html>
