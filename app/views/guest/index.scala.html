@@ -1,6 +1,9 @@
-@()
+@(alert: String, alert_type: String)
 
     @main {
+
+        @views.html.fragments.alert(alert, alert_type)
+
         <div class="jumbotron">
             <h1>Herzlich Willkommen!</h1>
             <p>Das hier ist zwar alles noch nicht fertig, aber dafür funktioniert auch kaum!</p>
