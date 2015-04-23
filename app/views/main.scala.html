@@ -21,7 +21,7 @@
         <!-- Besondere Stile für diese Vorlage -->
     <link href="@routes.Assets.at("examples/theme/theme.css")" rel="stylesheet">
 
-    <script src="./index.scala_files/ie-emulation-modes-warning.js"></script>
+    <script src="@routes.Assets.at("javascripts/ie-emulation-modes-warning.js")"></script>
 
         <!-- Unterstützung für Media Queries und HTML5-Elemente in IE8 über HTML5 shim und Respond.js -->
         <!--[if lt IE 9]>
@@ -32,7 +32,11 @@
 
     <body role="document">
 
-        @guest.nav()
+        @if(controllers.Application.isUserLoggedIn) {
+            @member.nav()
+        } else {
+            @guest.nav()
+        }
 
         <div class="container theme-showcase" role="main">
 
@@ -44,12 +48,12 @@
         <!-- Bootstrap-JavaScript
     ================================================== -->
         <!-- Am Ende des Dokuments platziert, damit Seiten schneller laden -->
-        <script src="./index.scala_files/jquery.min.js"></script>
-        <script src="./index.scala_files/bootstrap.min.js"></script>
-        <script src="./index.scala_files/docs.min.js"></script>
+        <script src="@routes.Assets.at("javascripts/jquery.min.js")"></script>
+        <script src="@routes.Assets.at("javascripts/bootstrap.min.js")></script>
+        <script src="@routes.Assets.at("javascripts/docs.min.js")></script>
             <!-- IE10-Anzeigefenster-Hack für Fehler auf Surface und Desktop-Windows-8 -->
-        <script src="./index.scala_files/ie10-viewport-bug-workaround.js"></script>
+        <script src="@routes.Assets.at("javascripts/ie10-viewport-bug-workaround.js")></script>
 
 
-        <div id="global-zeroclipboard-html-bridge" class="global-zeroclipboard-container" style="position : absolute ; left : 0 px ; top : - 9999 px ; width : 15 px ; height : 15 px ; z-index : 999999999 ;" title="" data-original-title="Copy to clipboard">      <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" id="global-zeroclipboard-flash-bridge" width="100%" height="100%">         <param name="movie" value="/assets/flash/ZeroClipboard.swf?noCache=1429573625262">         <param name="allowScriptAccess" value="sameDomain">         <param name="scale" value="exactfit">         <param name="loop" value="false">         <param name="menu" value="false">         <param name="quality" value="best">         <param name="bgcolor" value="#ffffff">         <param name="wmode" value="transparent">         <param name="flashvars" value="trustedOrigins=holdirbootstrap.de%2C%2F%2Fholdirbootstrap.de%2Chttp%3A%2F%2Fholdirbootstrap.de">         <embed src="/assets/flash/ZeroClipboard.swf?noCache=1429573625262" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="100%" height="100%" name="global-zeroclipboard-flash-bridge" allowscriptaccess="sameDomain" allowfullscreen="false" type="application/x-shockwave-flash" wmode="transparent" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="trustedOrigins=holdirbootstrap.de%2C%2F%2Fholdirbootstrap.de%2Chttp%3A%2F%2Fholdirbootstrap.de" scale="exactfit">                </object></div><svg xmlns="http://www.w3.org/2000/svg" width="1140" height="500" viewBox="0 0 1140 500" preserveAspectRatio="none" style="visibility : hidden ; position : absolute ; top : - 100 % ; left : - 100 % ;"><defs></defs><text x="0" y="53" style="font-weight : bold ; font-size : 53 pt ; font-family : Arial, Helvetica, Open Sans, sans-serif ; dominant-baseline : middle">
+        <div id="global-zeroclipboard-html-bridge" class="global-zeroclipboard-container" style="position : absolute ; left : 0px ; top : -9999px ; width: 15px ; height : 15px ; z-index : 999999999 ;" title="" data-original-title="Copy to clipboard">      <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" id="global-zeroclipboard-flash-bridge" width="100%" height="100%">         <param name="movie" value="/assets/flash/ZeroClipboard.swf?noCache=1429573625262">         <param name="allowScriptAccess" value="sameDomain">         <param name="scale" value="exactfit">         <param name="loop" value="false">         <param name="menu" value="false">         <param name="quality" value="best">         <param name="bgcolor" value="#ffffff">         <param name="wmode" value="transparent">         <param name="flashvars" value="trustedOrigins=holdirbootstrap.de%2C%2F%2Fholdirbootstrap.de%2Chttp%3A%2F%2Fholdirbootstrap.de">         <embed src="/assets/flash/ZeroClipboard.swf?noCache=1429573625262" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="100%" height="100%" name="global-zeroclipboard-flash-bridge" allowscriptaccess="sameDomain" allowfullscreen="false" type="application/x-shockwave-flash" wmode="transparent" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="trustedOrigins=holdirbootstrap.de%2C%2F%2Fholdirbootstrap.de%2Chttp%3A%2F%2Fholdirbootstrap.de" scale="exactfit">                </object></div><svg xmlns="http://www.w3.org/2000/svg" width="1140" height="500" viewBox="0 0 1140 500" preserveAspectRatio="none" style="visibility : hidden ; position : absolute ; top : -100% ; left : -100% ;"><defs></defs><text x="0" y="53" style="font-weight : bold ; font-size : 53pt ; font-family : Arial, Helvetica, Open Sans, sans-serif ; dominant-baseline : middle">
         DritteFolie</text></svg></body></html>
