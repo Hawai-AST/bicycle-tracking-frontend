@@ -1,0 +1,11 @@
+@(name: String, label: String)
+
+<div class="form-group">
+    <label class="col-xs-3 control-label">@label</label>
+    <div class="col-xs-5 date">
+        <div class="input-group input-append date" id="datePicker">
+            <input type="text" class="form-control" name="@name"/>
+            <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+        </div>
+    </div>
+</div>
