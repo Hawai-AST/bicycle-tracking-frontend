@@ -1,5 +1,6 @@
 @()
 
+
 @helper.form(action = routes.Application.authenticate, args = 'class -> "navbar-form navbar-right") {
     <div class="form-group">
         <input type="text" name="email" value placeholder="E-Mail" class="form-control" oldautocomplete="remove"
@@ -9,6 +10,8 @@
         <input type="password" name="code" value placeholder="Passwort" class="form-control" oldautocomplete="remove"
         autocomplete="off">
     </div>
-    <button type="submit" class="btn btn-success" value="auth">Anmelden</button>
-    <button type="submit" class="btn btn-primary" value="register">Registrieren</button>
+    <button type="submit" class="btn btn-success navbar-btn" name="action" value="auth">Anmelden</button>
+    <button type="submit" class="btn btn-primary navbar-btn" name="action" value="signup">Registrieren</button>
 }
+
+
