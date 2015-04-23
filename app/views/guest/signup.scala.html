@@ -1,0 +1,26 @@
+@(registrationForm: Form[Registration])
+    @import views.html.helper.bs3._
+
+    @main {
+        <h3 class="h3">Als neuer Kunde registrieren</h3>
+        <div style="width : 70% ; padding : 15px 30px 30px ;"> <!-- temporary styling -->
+        @helper.form(action = routes.Application.register, args = 'class -> "form-horizontal") {
+            @inputEmail("email", "E-Mail")
+            @inputPasswort("password", "Passwort")
+            @inputPasswort("passwordCheck", "Passwort bestätigen")
+            <br>
+            @inputText("firstname", "Vorname")
+            @inputText("name", "Nachname")
+            @inputText("birthday", "Geburtsdatum") <!-- mock -->
+            @inputText("gender", "Geschlecht") <!-- mock -->
+            <br>
+                @inputText("address.street", "Straße")
+                @inputText("address.houseNumber", "Hausnummer")
+                @inputText("address.postcode", "PLZ")
+                @inputText("address.city", "Stadt")
+                @inputText("address.state", "Bundesland")
+                @inputText("address.country", "Land")
+                @inputSubmit("Registrieren", "default")
+            }
+        </div>
+    }
