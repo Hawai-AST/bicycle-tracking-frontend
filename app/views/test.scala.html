@@ -1,7 +1,0 @@
-@(loginForm: Form[Login])
-
-@helper.form(action = routes.Application.authenticate) {
-    @helper.inputText(loginForm("email"), '_label -> "E-Mail:")
-    @helper.inputPassword(loginForm("code"), '_label -> "Passwort:")
-    <input type="submit" value="Einloggen"/>
-}
