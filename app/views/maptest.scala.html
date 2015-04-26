@@ -37,6 +37,7 @@
         .setLatLng(e.latlng)
         .openOn(map);
 
+      // @TODO Fix bug: autozoom on route working when waypoints written into box but not when clicked via map
       L.DomEvent.on(startBtn, 'click', function() {
         control.spliceWaypoints(0, 1, e.latlng);
         map.closePopup();
@@ -69,12 +70,17 @@
 
     control.addTo(map);
 
-    // Find user location and move map initially
-    L.Control.Geocoder.nominatim().geocode("@{currentUserAddress}", function(results){
-      if (results.length > 0) {
-        map.panTo(results[0].center);
-        map.fitBounds(results[0].bbox);
-      }
-    });
+    // Unless map is initiallized with route
+    var waypoints = control.getWaypoints();
+    if (waypoints[0].latLng == null || waypoints[1].latLng == null) {
+      // Find user location and move map initially
+      L.Control.Geocoder.nominatim().geocode("@{currentUserAddress}", function(results){
+        // Only moves to user location if address was found
+        if (results.length > 0) {
+          map.panTo(results[0].center);
+          map.fitBounds(results[0].bbox);
+        }
+      });
+    }
   </script>
 }
