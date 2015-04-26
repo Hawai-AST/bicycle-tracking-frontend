@@ -1,7 +1,7 @@
-@()
+@(currentUserAddress: String)
 
 @main(" - Map Test") {
-
+  <p> You are here: @{currentUserAddress} </p>
   <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
   <link rel="stylesheet" href="/assets/leaflet-routing-machine-2.3.0/leaflet-routing-machine.css" />
   <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
@@ -17,8 +17,6 @@
   <script type="application/javascript">
     // initial view = Hamburg
     var map = L.map('map').setView([53.5502099, 9.9993636], 9);
-    // for autoscale with initial route
-    //var map = L.map('map');
 
     // Create pop-up for setting waypoints in map
     function createButton(label, container) {
@@ -59,15 +57,24 @@
 
     // Add basic routing control
     var control = L.Routing.control({
-      // example route -> yes or no?
+      // example route 
 //      waypoints: [
 //        L.latLng(53.56875, 9.98286),
 //        L.latLng(53.5571614, 10.023104)
 //      ],
       routeWhileDragging: true,
-      geocoder: L.Control.Geocoder.nominatim()
+      geocoder: L.Control.Geocoder.nominatim(),
+      reverseWaypoints: true
     });
 
     control.addTo(map);
+
+    // Find user location and move map initially
+    L.Control.Geocoder.nominatim().geocode("@{currentUserAddress}", function(results){
+      if (results.length > 0) {
+        map.panTo(results[0].center);
+        map.fitBounds(results[0].bbox);
+      }
+    });
   </script>
 }

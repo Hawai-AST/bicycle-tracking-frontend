@@ -80,6 +80,7 @@ public class Application {
 
     public Result maptest() {
         // TODO get current user address
-        
-        return ok(maptest.render()); }
+        String currentUserAddress = "Berliner Tor 7, Hamburg";
+        return ok(views.html.maptest.render(currentUserAddress));
+    }
 }
