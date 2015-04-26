@@ -78,5 +78,8 @@ public class Application {
 //                ;
     }
 
-    public Result maptest() { return ok(maptest.render()); }
+    public Result maptest() {
+        // TODO get current user address
+        
+        return ok(maptest.render()); }
 }
