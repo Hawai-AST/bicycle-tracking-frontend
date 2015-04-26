@@ -17,7 +17,7 @@
   <script type="application/javascript">
     // initial view = Hamburg
     var map = L.map('map').setView([53.5502099, 9.9993636], 9);
-
+     
     // Create pop-up for setting waypoints in map
     function createButton(label, container) {
       var btn = L.DomUtil.create('button', '', container);
@@ -37,7 +37,7 @@
         .setLatLng(e.latlng)
         .openOn(map);
 
-      // @TODO Fix bug: autozoom on route working when waypoints written into box but not when clicked via map
+      // TODO Fix bug: autozoom on route working when waypoints written into box but not when clicked via map
       L.DomEvent.on(startBtn, 'click', function() {
         control.spliceWaypoints(0, 1, e.latlng);
         map.closePopup();
