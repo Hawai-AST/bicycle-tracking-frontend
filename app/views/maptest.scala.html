@@ -1,7 +1,7 @@
 @(currentUserAddress: String)
 
 @main(" - Map Test") {
-  <p> You are here: @{currentUserAddress} </p>
+  <p> Home sweet home: @{currentUserAddress} </p>
   <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
   <link rel="stylesheet" href="/assets/leaflet-routing-machine-2.3.0/leaflet-routing-machine.css" />
   <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
@@ -17,7 +17,7 @@
   <script type="application/javascript">
     // initial view = Hamburg
     var map = L.map('map').setView([53.5502099, 9.9993636], 9);
-     
+
     // Create pop-up for setting waypoints in map
     function createButton(label, container) {
       var btn = L.DomUtil.create('button', '', container);
@@ -70,7 +70,7 @@
 
     control.addTo(map);
 
-    // Unless map is initiallized with route
+    // Unless map is initialized with route
     var waypoints = control.getWaypoints();
     if (waypoints[0].latLng == null || waypoints[1].latLng == null) {
       // Find user location and move map initially
