@@ -79,7 +79,7 @@ public class Application {
     }
 
     public Result maptest() {
-        // TODO get current user address
+        // TODO get real current user address
         String currentUserAddress = "Berliner Tor 7, Hamburg";
         return ok(views.html.maptest.render(currentUserAddress));
     }
