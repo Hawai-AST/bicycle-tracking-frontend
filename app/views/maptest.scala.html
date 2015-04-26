@@ -20,13 +20,33 @@
     // for autoscale with initial route
     //var map = L.map('map');
 
+    // Create pop-up for setting waypoints in map
+    function createButton(label, container) {
+      var btn = L.DomUtil.create('button', '', container);
+      btn.setAttribute('type', 'button');
+      btn.innerHTML = label;
+      return btn;
+    }
+
+    map.on('click', function(e) {
+      var container = L.DomUtil.create('div'),
+        startBtn = createButton('Start from this location', container),
+        destBtn = createButton('Go to this location', container);
+
+      L.popup()
+        .setContent(container)
+        .setLatLng(e.latlng)
+        .openOn(map);
+    });
+
+    // Get map itself
     // http://{s}.tiles.mapbox.com/v3/MapID/{z}/{x}/{y}.png
     L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
       maxZoom: 18
     }).addTo(map);
 
-    // add basic routing control
+    // Add basic routing control
     L.Routing.control({
       // example route -> yes or no?
 //      waypoints: [
@@ -37,6 +57,4 @@
       geocoder: L.Control.Geocoder.nominatim()
     }).addTo(map);
   </script>
-
-
 }
