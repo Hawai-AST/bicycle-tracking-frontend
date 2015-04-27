@@ -1,7 +1,8 @@
 @()
 
-
-@helper.form(action = routes.Application.authenticate, args = 'class -> "navbar-form navbar-right") {
+@helper.form(action = routes.Application.authenticate,
+    args =  'class -> "navbar-form navbar-right",
+            'style -> "margin-top: 0px; margin-bottom: 0px;") {
     <div class="form-group">
         <input type="text" name="email" value placeholder="E-Mail" class="form-control" oldautocomplete="remove"
         autocomplete="off">
@@ -11,7 +12,5 @@
         autocomplete="off">
     </div>
     <button type="submit" class="btn btn-success navbar-btn" name="action" value="auth">Anmelden</button>
-    <button type="submit" class="btn btn-primary navbar-btn" name="action" value="signup">Registrieren</button>
+    <button type="submit" class="btn btn-default navbar-btn" name="action" value="signup">Registrieren</button>
 }
-
-
