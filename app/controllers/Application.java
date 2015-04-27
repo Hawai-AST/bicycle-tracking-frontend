@@ -4,22 +4,15 @@ import com.fasterxml.jackson.databind.JsonNode;
 import models.Login;
 import models.Registration;
 import models.utility.AST;
-import org.springframework.stereotype.Controller;
 import play.Logger;
 import play.data.Form;
 import play.libs.F;
+import play.mvc.Controller;
 import play.mvc.Result;
-import play.mvc.Results;
 
 import java.util.Iterator;
 
-import static play.mvc.Controller.*;
-import static play.mvc.Results.badRequest;
-import static play.mvc.Results.ok;
-import static play.mvc.Results.redirect;
-
-@Controller
-public class Application {
+public class Application extends Controller {
 
     public static Result signup() {
         return ok(views.html.guest.signup.render(Form.form(Registration.class)));
