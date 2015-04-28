@@ -1,10 +1,10 @@
-@(name: String, label: String)
+@(field: Field, label: String = "Datum")
 
-<div class="form-group">
+<div class="form-group @if(field.hasErrors) {has-error}">
     <label class="col-xs-3 control-label">@label</label>
     <div class="col-xs-5 date">
         <div class="input-group input-append date" id="datePicker">
-            <input type="text" class="form-control" name="@name"/>
+            <input type="text" class="form-control" id="dp1" name="@field.name" value="@field.value.getOrElse("")"/>
             <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
         </div>
     </div>
