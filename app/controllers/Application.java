@@ -4,13 +4,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import models.Login;
 import models.Registration;
 import models.utility.AST;
-import play.Logger;
 import play.data.Form;
 import play.libs.F;
 import play.mvc.Controller;
 import play.mvc.Result;
 
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 public class Application extends Controller {
 
@@ -20,9 +21,9 @@ public class Application extends Controller {
 
     public static Result index() {
         if (isUserLoggedIn()) {
-            return ok(views.html.member.index.render(flash("alert"), flash("alert_type")));
+            return ok(views.html.member.index.render());
         } else {
-            return ok(views.html.guest.index.render(flash("alert"), flash("alert_type")));
+            return ok(views.html.guest.index.render());
         }
     }
 
@@ -100,7 +101,7 @@ public class Application extends Controller {
                 case "signup":
                     return redirect("/signup");
                 case "auth":
-                    Logger.info("Action auth received");
+                    // Logger.info("Action auth received");
                     break;
                 default:
                     return badRequest("Bad Action: " + action);
@@ -108,6 +109,13 @@ public class Application extends Controller {
         }
 
         Form<Login> form = Form.form(Login.class).bindFromRequest();
+
+        if (form.hasErrors()) {
+            flash("alert", "Anmeldung fehlgeschlagen. Bitte geben Sie E-Mail UND Passwort an!");
+            flash("alert_type", "danger");
+            return redirect("/");
+        }
+
         Login login = form.get();
 
         JsonNode jsonResponse = doRequest("http://localhost:8080/api/v1/login", login.toJson());
@@ -169,7 +177,6 @@ public class Application extends Controller {
 
     /**
      * Stores key value pairs from the json request in the session
-     *
      * @param jsonNode json node from which to extract the values
      */
     private static void storeValuesInSessionFrom(JsonNode jsonNode) {
@@ -184,7 +191,6 @@ public class Application extends Controller {
 
     /**
      * Runs procedures neccessary to perform a request and returns the response
-     *
      * @param url      URL to call
      * @param jsonNode Acutal request content
      * @return Response of the request
@@ -200,10 +206,30 @@ public class Application extends Controller {
 
     /**
      * Checks whether the user is logged in or not
-     *
      * @return true, if user is logged in
      */
     public static boolean isUserLoggedIn() {
         return session("token") != null;
+    }
+
+    /**
+     * Generates a map of options for a gender choice field
+     * @return Map of options for gender choice field
+     */
+    public static Map<String, String> getGenderOptions() {
+        Map<String, String> options = new HashMap<>();
+        options.put("none", "Keine Angabe");
+        options.put("male", "Männlich");
+        options.put("female", "Weiblich");
+        return options;
+    }
+
+    /**
+     * Directly returns the value of the requested key in the flash object
+     * @param key key to which the value should be returned
+     * @return value of the requested key
+     */
+    public static String getFlash(String key) {
+        return flash(key);
     }
 }
