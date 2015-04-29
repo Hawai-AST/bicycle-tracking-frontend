@@ -213,15 +213,17 @@ public class Application extends Controller {
     }
 
     /**
-     * Generates a map of options for a gender choice field
-     * @return Map of options for gender choice field
+     * @return Map of options for a gender choice field
      */
     public static Map<String, String> getGenderOptions() {
-        Map<String, String> options = new HashMap<>();
-        options.put("none", "Keine Angabe");
-        options.put("male", "Männlich");
-        options.put("female", "Weiblich");
-        return options;
+        return AST.genderMap();
+    }
+
+    /**
+     * @return Inversed version of options for a gender choice field
+     */
+    public static Map<String, String> getGenderOptionsInverse() {
+        return AST.genderMapInverse();
     }
 
     /**
