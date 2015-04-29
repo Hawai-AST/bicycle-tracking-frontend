@@ -79,6 +79,7 @@ public class Application extends Controller {
                                 jsonResponse.get("message").asText() + "\n" +
                                 "STATUS: " + jsonResponse.get("status").asText());
                         flash("alert_type", "danger");
+                        return badRequest(views.html.guest.signup.render(form));
                 }
             }
         }

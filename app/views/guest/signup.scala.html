@@ -3,6 +3,8 @@
 
 @main {
 
+    @views.html.fragments.alert()
+
     <h3 class="h3">Als neuer Kunde registrieren</h3>
     <div style="width : 70% ; padding : 15px 30px 30px ;"> <!-- temporary styling -->
         @helper.form(action = routes.Application.register, args = 'class -> "form-horizontal") {
