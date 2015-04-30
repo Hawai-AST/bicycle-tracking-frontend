@@ -7,6 +7,7 @@
   <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
   <script src="/assets/leaflet-routing-machine-2.3.0/leaflet-routing-machine.js"></script>
   <script src="/assets/leaflet-routing-machine-2.3.0/Control.Geocoder.js"></script>
+<!--  <script src="/assets/leaflet-routing-machine-2.3.0/lrm-graphhopper-1.1.0.js"></script> -->
 
   <style type="text/css">
     #map { height: 600px; width: 1024px; }
@@ -66,6 +67,9 @@
       routeWhileDragging: true,
       geocoder: L.Control.Geocoder.nominatim(),
       reverseWaypoints: true
+//      // Set GraphHopper as router -- IMPORTANT: Only 500 queries per day for free...!
+//      router: L.Routing.GraphHopper('0ed0b695-73f5-4c79-98ac-81ebf3da1d5f')
+//      // TODO how the fck get bike into it???? should be available
     });
 
     control.addTo(map);
