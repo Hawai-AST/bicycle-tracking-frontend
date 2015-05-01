@@ -67,10 +67,8 @@
       routeWhileDragging: true,
       geocoder: L.Control.Geocoder.nominatim(),
       reverseWaypoints: true,
-//      // Set GraphHopper as router -- IMPORTANT: Only 500 queries per day for free...!
+      // Set GraphHopper as router -- IMPORTANT: Only 500 queries per day for free...!
       router: L.Routing.graphHopper('0ed0b695-73f5-4c79-98ac-81ebf3da1d5f', { "urlParameters": {'vehicle': "bike"}})
-
-      // TODO how the fck get bike into it???? should be available
     });
 
     control.addTo(map);
