@@ -1,7 +1,6 @@
 @(currentUserAddress: String)
 
 @main(" - Map Test") {
-  <p> Home sweet home: @{currentUserAddress} </p>
   <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
   <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
   <link rel="stylesheet" href="/assets/leaflet-routing-machine-2.3.0/leaflet-routing-machine.css" />
@@ -10,6 +9,8 @@
   <script src="/assets/leaflet-routing-machine-2.3.0/Control.Geocoder.js"></script>
   <script src="/assets/leaflet-routing-machine-2.3.0/lrm-graphhopper-1.1.0.js"></script>
   <script src="/assets/leaflet-routing-machine-2.3.0/easy-button.js"></script>
+
+  <p> Home sweet home: @{currentUserAddress} </p>
 
   <style type="text/css">
     #map { height: 600px; width: 1024px; }
@@ -56,8 +57,35 @@
 
     // Add button for data export
     L.easyButton('fa-floppy-o',
-                  function() {/* TODO */},
-                  'Save route');
+                  function() {
+                    var waypoints = control.getWaypoints();
+
+                    // Waypoints has more information than backend needs,
+                    // therewith we build a hash with relevant information
+                    var data = $.map(waypoints, function(value, index){
+                        return {
+                            lat: value.latLng.lat,
+                            lng: value.latLng.lng,
+                            name: value.name
+                         }
+                    });
+
+                    // Send information to backend
+                    $.ajax({
+                      url: "/waypoints",
+                      type: "POST",
+                      data: {
+                        waypoints: data
+                      }
+                    })
+                     .done(function() {
+                        // TODO wie soll Speicherung signalisiert werden?
+                      })
+                      .fail(function() {
+                        alert( "Something went wrong, pls try again." );
+                      });
+                  },
+                  "Save route");
 
     // Add button for data import
     L.easyButton('fa-folder-open',
