@@ -168,11 +168,11 @@ public class Application extends Controller {
     /**
      * Account view temporarily uses Registration model for filling purposes
      */
-    public static Result account() {
+    /*public static Result account() {
         return ok(views.html.member.account.render(
                 Form.form(Registration.class)
         ));
-    }
+    }*/
 
     // TODO(Timmay): Implement action for updating users
 
