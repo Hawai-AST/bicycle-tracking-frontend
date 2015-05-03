@@ -2,12 +2,14 @@
 
 @main(" - Map Test") {
   <p> Home sweet home: @{currentUserAddress} </p>
+  <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
   <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
   <link rel="stylesheet" href="/assets/leaflet-routing-machine-2.3.0/leaflet-routing-machine.css" />
   <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
   <script src="/assets/leaflet-routing-machine-2.3.0/leaflet-routing-machine.js"></script>
   <script src="/assets/leaflet-routing-machine-2.3.0/Control.Geocoder.js"></script>
   <script src="/assets/leaflet-routing-machine-2.3.0/lrm-graphhopper-1.1.0.js"></script>
+  <script src="/assets/leaflet-routing-machine-2.3.0/easy-button.js"></script>
 
   <style type="text/css">
     #map { height: 600px; width: 1024px; }
@@ -32,6 +34,8 @@
       var container = L.DomUtil.create('div'),
         startBtn = createButton('Start from this location', container),
         destBtn = createButton('Go to this location', container);
+//        exportBtn = createButton('Export route', container),
+//        importBtn = createButton('Import route', container);
 
       L.popup()
         .setContent(container)
@@ -49,6 +53,16 @@
         map.closePopup();
       });
     });
+
+    // Add button for data export
+    L.easyButton('fa-floppy-o',
+                  function() {/* TODO */},
+                  'Save route');
+
+    // Add button for data import
+    L.easyButton('fa-folder-open',
+                  function(){/* TODO */},
+                  'Open saved route');
 
     // Get map itself
     // http://{s}.tiles.mapbox.com/v3/MapID/{z}/{x}/{y}.png
