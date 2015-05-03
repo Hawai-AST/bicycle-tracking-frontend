@@ -35,8 +35,6 @@
       var container = L.DomUtil.create('div'),
         startBtn = createButton('Start from this location', container),
         destBtn = createButton('Go to this location', container);
-//        exportBtn = createButton('Export route', container),
-//        importBtn = createButton('Import route', container);
 
       L.popup()
         .setContent(container)
@@ -60,8 +58,9 @@
                   function() {
                     var waypoints = control.getWaypoints();
 
-                    // Waypoints has more information than backend needs,
-                    // therewith we build a hash with relevant information
+                    // Waypoints has too much information for backend,
+                    // therewith we build hashes with relevant information
+                    // data = array of objects, objects = hashes with lat, lng and name
                     var data = $.map(waypoints, function(value, index){
                         return {
                             lat: value.latLng.lat,
@@ -69,6 +68,7 @@
                             name: value.name
                          }
                     });
+                    console.log(data);
 
                     // Send information to backend
                     $.ajax({
