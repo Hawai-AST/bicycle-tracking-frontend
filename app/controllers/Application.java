@@ -13,6 +13,8 @@ import play.libs.ws.WSRequestHolder;
 import play.libs.ws.WSResponse;
 import play.mvc.Result;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Iterator;
 
 import static play.mvc.Controller.session;
@@ -73,25 +75,27 @@ public class Application {
 
         Login login = form.get();
 
-        //JsonNode jsonResponse = doRequest("http://localhost:8080/api/v1/login", login.toJson());
 
         WSRequestHolder wsRequestHolder = WS.url("http://localhost:8080/oauth/token")
                 .setHeader("Authorization", "Basic REVWLTEwMTpERVZTRUNSRVQ=");
         wsRequestHolder.setContentType("application/x-www-form-urlencoded");
 
         int responseTimeoutInMs = 10000;
-        //PreparedJson preparedJson = AST.preparedJson("http://localhost:8080/oauth/token");
-        //preparedJson.setContentType("application/x-www-form-urlencoded");
-        F.Promise<JsonNode> jsonPromise = wsRequestHolder.post("username=claustorbenhaug%40hotmail.de&" +
-                "grant_type=password&" +
-                "password=findus12&" +
-                "scope=read+write").map(WSResponse::asJson);//preparedJson.post(login.toJson());
 
-        // TODO(Timmay): Create general pages for no-OK (200) responses and implement proper handling
+        F.Promise<JsonNode> jsonPromise = null;
+        try {
+            jsonPromise = wsRequestHolder.post("username=" + URLEncoder.encode(login.email, "UTF-8") + "&" +
+                    "grant_type=password&" +
+                    "password=" + URLEncoder.encode(login.code, "UTF-8") + "&" +
+                    "scope=read write").map(WSResponse::asJson);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
         JsonNode jsonResponse = jsonPromise.get(responseTimeoutInMs);
         storeValuesInSessionFrom(jsonResponse);
 
-        return ok(jsonResponse);//redirect("/");
+        return ok(jsonResponse);
     }
 
     public Result maptest() {
