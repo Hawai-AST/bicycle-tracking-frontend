@@ -14,9 +14,13 @@ public class Login {
 
     public JsonNode toJson() {
         return Json.newObject()
-                .put("grant-type", "password")
-                .put("email", this.email)
-                .put("code", this.code);
+                .put("username", this.email)
+                .put("grant_type", "password")
+                .put("password", this.code)
+                .put("scope", "read write");
+
+
+
     }
 
     public List<ValidationError> validate() {
