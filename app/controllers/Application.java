@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import models.Login;
 import models.Registration;
 import models.utility.AST;
+import models.utility.PreparedJson;
 import org.springframework.stereotype.Controller;
 import play.data.Form;
 import play.libs.F;
@@ -69,7 +70,15 @@ public class Application {
 
         Login login = form.get();
 
-        JsonNode jsonResponse = doRequest("http://localhost:8080/api/v1/login", login.toJson());
+        //JsonNode jsonResponse = doRequest("http://localhost:8080/api/v1/login", login.toJson());
+
+        int responseTimeoutInMs = 10000;
+        PreparedJson preparedJson = AST.preparedJson("http://localhost:8080/api/v1/login");
+        preparedJson.setContentType("application/x-www-form-urlencoded");
+        F.Promise<JsonNode> jsonPromise = preparedJson.post(login.toJson());
+
+        // TODO(Timmay): Create general pages for no-OK (200) responses and implement proper handling
+        JsonNode jsonResponse = jsonPromise.get(responseTimeoutInMs);
         storeValuesInSessionFrom(jsonResponse);
 
         return redirect("/");
