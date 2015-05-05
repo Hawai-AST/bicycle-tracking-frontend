@@ -8,6 +8,9 @@ import models.utility.PreparedJson;
 import org.springframework.stereotype.Controller;
 import play.data.Form;
 import play.libs.F;
+import play.libs.ws.WS;
+import play.libs.ws.WSRequestHolder;
+import play.libs.ws.WSResponse;
 import play.mvc.Result;
 
 import java.util.Iterator;
@@ -72,10 +75,17 @@ public class Application {
 
         //JsonNode jsonResponse = doRequest("http://localhost:8080/api/v1/login", login.toJson());
 
+        WSRequestHolder wsRequestHolder = WS.url("http://localhost:8080/oauth/token")
+                .setHeader("Authorization", "Basic REVWLTEwMTpERVZTRUNSRVQ=");
+        wsRequestHolder.setContentType("application/x-www-form-urlencoded");
+
         int responseTimeoutInMs = 10000;
-        PreparedJson preparedJson = AST.preparedJson("http://localhost:8080/oauth/token");
-        preparedJson.setContentType("application/x-www-form-urlencoded");
-        F.Promise<JsonNode> jsonPromise = preparedJson.post(login.toJson());
+        //PreparedJson preparedJson = AST.preparedJson("http://localhost:8080/oauth/token");
+        //preparedJson.setContentType("application/x-www-form-urlencoded");
+        F.Promise<JsonNode> jsonPromise = wsRequestHolder.post("username=claustorbenhaug%40hotmail.de&" +
+                "grant_type=password&" +
+                "password=findus12&" +
+                "scope=read+write").map(WSResponse::asJson);//preparedJson.post(login.toJson());
 
         // TODO(Timmay): Create general pages for no-OK (200) responses and implement proper handling
         JsonNode jsonResponse = jsonPromise.get(responseTimeoutInMs);
