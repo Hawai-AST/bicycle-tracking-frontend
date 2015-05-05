@@ -93,9 +93,11 @@ public class Application {
         }
 
         JsonNode jsonResponse = jsonPromise.get(responseTimeoutInMs);
-        storeValuesInSessionFrom(jsonResponse);
-
-        return ok(jsonResponse);
+        if(jsonResponse.get("access_token")!=null){
+            storeValuesInSessionFrom(jsonResponse);
+            session("token", session("access_token"));
+        }
+        return redirect("/");
     }
 
     public Result maptest() {
@@ -167,6 +169,6 @@ public class Application {
      * @return true, if user is logged in
      */
     public static boolean isUserLoggedIn() {
-        return session("token") != null;
+        return session("access_token") != null;
     }
 }
