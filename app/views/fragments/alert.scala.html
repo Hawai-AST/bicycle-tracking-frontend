@@ -1,0 +1,9 @@
+@()
+
+@if(Application.getFlash("alert") != null) {
+    @if(!Application.getFlash("alert").isEmpty) {
+        <div class="alert alert-@Application.getFlash("alert_type")" role="alert">
+            @Application.getFlash("alert")
+        </div>
+    }
+}

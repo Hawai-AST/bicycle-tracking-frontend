@@ -9,7 +9,7 @@ import play.libs.Json;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Registration {
+public class ChangeUserCredentials {
     public String firstname;
     public String name;
     public String birthday;
@@ -17,9 +17,6 @@ public class Registration {
     public Address address;
     public String email;
     public String customerid;
-    public String password;
-    @JsonIgnore
-    public String passwordCheck;
 
     public JsonNode toJson() {
         return Json.toJson(this);
@@ -53,12 +50,6 @@ public class Registration {
         }
         if (email.isEmpty()) {
             errors.add(new ValidationError("email", "Bitte geben Sie Ihre E-Mail an"));
-        }
-        if (password.isEmpty()) {
-            errors.add(new ValidationError("password", "Bitte geben Sie ein Passwort an"));
-        }
-        if (!password.equals(passwordCheck) || passwordCheck.isEmpty() /*<-- just to color the input field red */) {
-            errors.add(new ValidationError("passwordCheck", "Die Passwörter stimmen nicht überein"));
         }
 
         return errors.isEmpty() ? null : errors;
