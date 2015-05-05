@@ -17,6 +17,13 @@ public class ASTPreparedJson implements PreparedJson {
                 .setContentType("application/json");
     }
 
+    protected ASTPreparedJson(String url, String token) {
+        wsRequestHolder = WS.url(url)
+                .setHeader("Authorization")
+                .setHeader("Authorization", "Bearer " + token)
+                .setContentType("application/json");
+    }
+
     /**
      * Sets the url for the request
      *
@@ -69,7 +76,7 @@ public class ASTPreparedJson implements PreparedJson {
      * @return Promised response from get call
      */
     @Override
-    public F.Promise<WSResponse> get() {
-        return wsRequestHolder.get();
+    public F.Promise<JsonNode> get() {
+        return wsRequestHolder.get().map(WSResponse::asJson);
     }
 }

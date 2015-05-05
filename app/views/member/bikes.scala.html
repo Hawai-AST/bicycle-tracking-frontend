@@ -1,0 +1,38 @@
+@import com.fasterxml.jackson.databind.node.ArrayNode
+
+@(amount: Integer, bikes: ArrayNode)
+
+@main("Bikes") {
+
+  <h1>Profil</h1>
+  <p>Amount: @{amount}</p>
+  @for(bike <- bikes.elements()) {
+    <table>
+      <tbody>
+        <tr>
+          <td>ID</td>
+          <td>@{bike.get("id").asInt()}</td>
+        </tr>
+        <tr>
+          <td>Type</td>
+          <td>@{bike.get("type").asText()}</td>
+        </tr>
+        <tr>
+          <td>Framenumber</td>
+          <td>@{bike.get("frameNumber").asInt()}</td>
+        </tr>
+        <tr>
+          <td>Purchased at</td>
+          <td>@{bike.get("purchaseDate").asText()}</td>
+        </tr>
+        <tr>
+          <td>Next maintenance</td>
+          <td>@{bike.get("nextMaintenance").asText()}</td>
+        </tr>
+      </tbody>
+    </table>
+
+
+  }
+
+}
