@@ -13,7 +13,7 @@ public class ASTPreparedJson implements PreparedJson {
     protected ASTPreparedJson(String url) {
 
         wsRequestHolder = WS.url(url)
-                .setHeader("Authorization", "Basic REVWLTEwMTpERVZTRUNSRVQK")
+                .setHeader("Authorization", "Basic REVWLTEwMTpERVZTRUNSRVQ=")
                 .setContentType("application/json");
     }
 

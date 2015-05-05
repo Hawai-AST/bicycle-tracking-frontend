@@ -73,7 +73,7 @@ public class Application {
         //JsonNode jsonResponse = doRequest("http://localhost:8080/api/v1/login", login.toJson());
 
         int responseTimeoutInMs = 10000;
-        PreparedJson preparedJson = AST.preparedJson("http://localhost:8080/api/oauth/token");
+        PreparedJson preparedJson = AST.preparedJson("http://localhost:8080/oauth/token");
         preparedJson.setContentType("application/x-www-form-urlencoded");
         F.Promise<JsonNode> jsonPromise = preparedJson.post(login.toJson());
 
@@ -81,7 +81,7 @@ public class Application {
         JsonNode jsonResponse = jsonPromise.get(responseTimeoutInMs);
         storeValuesInSessionFrom(jsonResponse);
 
-        return redirect("/");
+        return ok(jsonResponse);//redirect("/");
     }
 
     public Result maptest() {
