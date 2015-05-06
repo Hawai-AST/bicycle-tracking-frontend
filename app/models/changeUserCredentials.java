@@ -1,7 +1,7 @@
 package models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
+import models.utility.value.EMail;
 import models.utility.value.Address;
 import play.data.validation.ValidationError;
 import play.libs.Json;
@@ -10,21 +10,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChangeUserCredentials {
-    public String firstname;
+    public String firstName;
     public String name;
-    public String birthday;
+    public String birthdate;
     public String gender;
     public Address address;
-    public String email;
-    public String customerid;
+    public EMail mailAddress;
+    public String id;
+    public int version;
 
     public JsonNode toJson() {
         return Json.toJson(this);
     }
 
+    public static ChangeUserCredentials fromJson(JsonNode node){
+        return Json.fromJson(node,ChangeUserCredentials.class);
+    }
     public List<ValidationError> validate() {
         List<ValidationError> errors = new ArrayList<>();
-        if (firstname.isEmpty()) {
+        if (firstName.isEmpty()) {
             errors.add(new ValidationError("firstname", "Bitte geben Sie Ihren Vornamen an"));
         }
         if (name.isEmpty()) {
@@ -48,7 +52,7 @@ public class ChangeUserCredentials {
         if (address.street.isEmpty()) {
             errors.add(new ValidationError("address.street", "Bitte geben Sie Ihre Straße an"));
         }
-        if (email.isEmpty()) {
+        if (mailAddress.mailAddress.isEmpty()) {
             errors.add(new ValidationError("email", "Bitte geben Sie Ihre E-Mail an"));
         }
 

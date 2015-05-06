@@ -6,33 +6,37 @@
     @views.html.fragments.alert()
 
     <h1>Konto</h1>
-    <div style="...">
-        <h2>Passwort &auml;ndern</h2>
+    <div style="width: 70% ; padding: 15px 30px 30px ;">
+        <h3>Passwort ändern</h3>
         @helper.form(action = routes.Account.changePassword(),'id -> "changePasswordForm"){
-            @helper.inputPassword(changePasswordForm("password"),'_label -> "*Passwort")
-            @helper.inputPassword(changePasswordForm("passwordCheck"),'_label -> "*Passwort wiederholen:")
+            @inputPassword(changePasswordForm("password"), "*Passwort")
+            @inputPassword(changePasswordForm("passwordCheck"), "*Passwort wiederholen:")
 
             @inputSubmit("Ändern")
         }
     </div>
-    <div style = "...">
-        <h2>Daten &auml;ndern</h2>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <div style="width: 70% ; padding: 15px 30px 30px ;">
+        <h3>Daten ändern</h3>
         @helper.form(action = routes.Account.changeUserCredentials, 'id -> "changeUserCredentialsForm"){
-            @inputText(changeUserCredentialsForm("email"), "E-Mail")
-            @inputText(changeUserCredentialsForm("customerid"), "Kundennummer")
-            <br>
-            @inputText(changeUserCredentialsForm("firstname"), "Vorname")
+            @inputText(changeUserCredentialsForm("mailAddress.mailAddress"), "Email")
+            @inputText(changeUserCredentialsForm("id"), "Kundennummer")
+            <br/>
+            @inputText(changeUserCredentialsForm("firstName"), "Vorname")
             @inputText(changeUserCredentialsForm("name"), "Nachname")
-            @inputDate(changeUserCredentialsForm("birthday"), "Geburtsdatum") <!-- mock -->
+            @inputDate(changeUserCredentialsForm("birthdate"), "Geburtsdatum")
             @select(changeUserCredentialsForm("gender"), "Geschlecht")
-            <br>
-                @inputText(changeUserCredentialsForm("address.street"), "Straße")
-                @inputText(changeUserCredentialsForm("address.houseNumber"), "Hausnummer")
-                @inputText(changeUserCredentialsForm("address.postcode"), "PLZ")
-                @inputText(changeUserCredentialsForm("address.city"), "Stadt")
-                @inputText(changeUserCredentialsForm("address.state"), "Bundesland")
-                @inputText(changeUserCredentialsForm("address.country"), "Land")
-                @inputSubmit("Ändern")
+            <br/>
+            @inputText(changeUserCredentialsForm("address.street"), "Straße")
+            @inputText(changeUserCredentialsForm("address.houseNumber"), "Hausnummer")
+            @inputText(changeUserCredentialsForm("address.postcode"), "PLZ")
+            @inputText(changeUserCredentialsForm("address.city"), "Stadt")
+            @inputText(changeUserCredentialsForm("address.state"), "Bundesland")
+            @inputText(changeUserCredentialsForm("address.country"), "Land")
+            @inputSubmit("Ändern")
             }
     </div>
 
