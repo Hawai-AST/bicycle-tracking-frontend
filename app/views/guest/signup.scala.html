@@ -5,8 +5,8 @@
 
     @views.html.fragments.alert()
 
-    <h3 class="h3">Als neuer Kunde registrieren</h3>
-    <div style="width : 70% ; padding : 15px 30px 30px ;"> <!-- temporary styling -->
+    <div class="col-md-10 col-md-offset-1">
+        <h2 class="h2">Als neuer Kunde registrieren</h2>
         @helper.form(action = routes.Application.register, args = 'class -> "form-horizontal") {
             @inputText(registrationForm("email"), "E-Mail")
             @inputPassword(registrationForm("password"), "Passwort")
@@ -15,7 +15,7 @@
             <br>
             @inputText(registrationForm("firstname"), "Vorname")
             @inputText(registrationForm("name"), "Nachname")
-            @inputDate(registrationForm("birthday"), "Geburtsdatum") <!-- mock -->
+            @inputDate(registrationForm("birthday"), "Geburtsdatum")
             @select(registrationForm("gender"), "Geschlecht")
             <br>
             @inputText(registrationForm("address.street"), "Straße")
