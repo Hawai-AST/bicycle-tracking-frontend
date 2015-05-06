@@ -1,5 +1,6 @@
 package controllers;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import models.ChangePassword;
 import models.ChangeUserCredentials;
 import play.data.Form;
@@ -35,9 +36,18 @@ public class Account extends Controller{
             flash("alert_type", "danger");
             return badRequest(account.render(filledForm, changeUserCredentialsForm));
         }else {
-            flash("alert", "Passwort wurde erfolgreich geaendert");
-            flash("alert_type", "success");
-            return ok(account.render(filledForm, changeUserCredentialsForm));
+            ChangePassword changePassword = filledForm.get();
+            JsonNode jsonResponse = Application.doRequest("http://localhost:8080/api/v1/user/password", changePassword.toJson());
+            if(jsonResponse != null){
+                flash("alert", "Passwort konnte nicht geändert werden");
+                flash("alert_type", "danger");
+                return ok(jsonResponse.asText());
+            }else {
+                flash("alert", "Passwort wurde erfolgreich geaendert");
+                flash("alert_type", "success");
+                return ok(account.render(filledForm, changeUserCredentialsForm));
+            }
+
         }
     }
 

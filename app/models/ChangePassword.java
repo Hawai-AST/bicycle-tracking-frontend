@@ -15,8 +15,8 @@ public class ChangePassword {
     public String password;
     public String passwordCheck;
 
-    public JsonNode toJson(String token){
-        return Json.newObject().put("token", token).put("method", "changePassword").put("password", password);
+    public JsonNode toJson(){
+        return Json.newObject().put("code", password);
     }
 
     public List<ValidationError> validate() {

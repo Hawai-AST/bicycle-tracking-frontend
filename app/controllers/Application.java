@@ -152,11 +152,14 @@ public class Application extends Controller {
         // TODO(Timmay): Interpret response and react appropriately
         // temp response and error handling - not to seriously review at this time
         if (jsonResponse.get("access_token") != null) {
+            storeValuesInSessionFrom(jsonResponse);
+            session("token", session("access_token"));
+            session("email", login.email);
             /*
             if (jsonResponse.get("email").asText().equals(login.email)) {
                 flash("alert", "Sie haben sich erfolgreich eingeloggt!");
                 flash("alert_type", "success");
-                storeValuesInSessionFrom(jsonResponse);
+
             } else {
                 // temp alerting if a wild unexpected email error on login appears
                 return badRequest("Debug: Login war laut Backend erfolgreich, jedoch stimmen die Email Adressen nicht " +
@@ -226,7 +229,7 @@ public class Application extends Controller {
      * @param jsonNode Acutal request content
      * @return Response of the request
      */
-    private static JsonNode doRequest(String url, JsonNode jsonNode) {
+    public static JsonNode doRequest(String url, JsonNode jsonNode) {
         int responseTimeoutInMs = 10000;
 
         F.Promise<JsonNode> jsonPromise = AST.preparedJson(url).post(jsonNode);
