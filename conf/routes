@@ -3,13 +3,15 @@
 # ~~~~
 
 # Home page
-GET         /                    controllers.Application.index
-GET         /signup              controllers.Application.signup
-GET         /signout             controllers.Application.signout
-GET         /maptest             controllers.Application.maptest
-GET         /profile             controllers.Application.account
-POST        /login               controllers.Application.authenticate
-POST        /register            controllers.Application.register
+GET         /                           controllers.Application.index
+GET         /signup                     controllers.Application.signup
+GET         /signout                    controllers.Application.signout
+GET         /maptest                    controllers.Application.maptest
+GET         /profile                    controllers.Account.showAccount
+POST        /changePassword             controllers.Account.changePassword
+POST        /changeUserCredentials      controllers.Account.changeUserCredentials
+POST        /login                      controllers.Application.authenticate
+POST        /register                   controllers.Application.register
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file        controllers.Assets.at(path="/public", file)
+GET         /assets/*file               controllers.Assets.at(path="/public", file)

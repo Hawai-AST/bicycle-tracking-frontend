@@ -4,12 +4,24 @@ import com.fasterxml.jackson.databind.JsonNode;
 import models.Login;
 import models.Registration;
 import models.utility.AST;
+import models.utility.PreparedJson;
+import play.data.Form;
+import play.libs.F;
+import play.libs.ws.WS;
+import play.libs.ws.WSRequestHolder;
+import play.libs.ws.WSResponse;
+import play.mvc.Result;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import play.data.Form;
 import play.libs.F;
 import play.mvc.Controller;
 import play.mvc.Result;
 
 import java.util.HashMap;
+
 import java.util.Iterator;
 import java.util.Map;
 
@@ -119,15 +131,35 @@ public class Application extends Controller {
 
         Login login = form.get();
 
-        JsonNode jsonResponse = doRequest("http://localhost:8080/api/v1/login", login.toJson());
+        WSRequestHolder wsRequestHolder = WS.url("http://localhost:8080/oauth/token")
+                .setHeader("Authorization", "Basic REVWLTEwMTpERVZTRUNSRVQ=");
+        wsRequestHolder.setContentType("application/x-www-form-urlencoded");
+
+        int responseTimeoutInMs = 10000;
+
+        F.Promise<JsonNode> jsonPromise = null;
+        try {
+            jsonPromise = wsRequestHolder.post("username=" + URLEncoder.encode(login.email, "UTF-8") + "&" +
+                    "grant_type=password&" +
+                    "password=" + URLEncoder.encode(login.code, "UTF-8") + "&" +
+                    "scope=read write").map(WSResponse::asJson);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        JsonNode jsonResponse = jsonPromise.get(responseTimeoutInMs);
 
         // TODO(Timmay): Interpret response and react appropriately
         // temp response and error handling - not to seriously review at this time
-        if (jsonResponse.get("email") != null) {
+        if (jsonResponse.get("access_token") != null) {
+            storeValuesInSessionFrom(jsonResponse);
+            session("token", session("access_token"));
+            session("email", login.email);
+            /*
             if (jsonResponse.get("email").asText().equals(login.email)) {
                 flash("alert", "Sie haben sich erfolgreich eingeloggt!");
                 flash("alert_type", "success");
-                storeValuesInSessionFrom(jsonResponse);
+
             } else {
                 // temp alerting if a wild unexpected email error on login appears
                 return badRequest("Debug: Login war laut Backend erfolgreich, jedoch stimmen die Email Adressen nicht " +
@@ -135,7 +167,7 @@ public class Application extends Controller {
                                 "Backend: " + jsonResponse.get("email").asText() + "\n" +
                                 "Login Model: " + login.email
                 );
-            }
+            }*/
         } else {
             if (jsonResponse.get("status") != null) {
                 switch (jsonResponse.get("status").asText()) {
@@ -154,6 +186,7 @@ public class Application extends Controller {
                         flash("alert_type", "danger");
                 }
             }
+
         }
         return redirect("/");
     }
@@ -168,11 +201,11 @@ public class Application extends Controller {
     /**
      * Account view temporarily uses Registration model for filling purposes
      */
-    public static Result account() {
+    /*public static Result account() {
         return ok(views.html.member.account.render(
                 Form.form(Registration.class)
         ));
-    }
+    }*/
 
     // TODO(Timmay): Implement action for updating users
 
@@ -196,7 +229,7 @@ public class Application extends Controller {
      * @param jsonNode Acutal request content
      * @return Response of the request
      */
-    private static JsonNode doRequest(String url, JsonNode jsonNode) {
+    public static JsonNode doRequest(String url, JsonNode jsonNode) {
         int responseTimeoutInMs = 10000;
 
         F.Promise<JsonNode> jsonPromise = AST.preparedJson(url).post(jsonNode);
@@ -210,7 +243,7 @@ public class Application extends Controller {
      * @return true, if user is logged in
      */
     public static boolean isUserLoggedIn() {
-        return session("token") != null;
+        return session("access_token") != null;
     }
 
     /**
