@@ -1,11 +1,15 @@
 @()
 
-    @main {
+@main {
 
-        @views.html.fragments.alert()
+    @views.html.fragments.alert()
 
-        <div class="jumbotron">
+    <div class="jumbotron">
+        <div class="text-center">
             <h1>Herzlich Willkommen!</h1>
-            <p>Das hier ist zwar alles noch nicht fertig, aber dafür funktioniert auch kaum!</p>
+            <h2><small>Registrieren Sie sich jetzt kostenlos und nutzen Sie alle Vorteile unseres After-Sales-Tracker's</small></h2>
+            <br/>
+            <a href="@routes.Application.signup" class="btn btn-lg btn-primary">Jetzt registrieren</a>
         </div>
-    }
+    </div>
+}
