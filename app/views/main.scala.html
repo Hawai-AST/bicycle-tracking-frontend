@@ -1,38 +1,60 @@
-@(title: String)(content: Html)
+@(content: Html)
 
 <!DOCTYPE html>
-
-<html>
+<!-- saved from url=(0041)http://holdirbootstrap.de/examples/theme/ -->
+<html lang="de">
     <head>
-        <title>HAWAI AST - @title</title>
-        <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
-        <link rel="stylesheet" type="text/css" href="@routes.Assets.at("stylesheets/main.css")">
-        <link rel="stylesheet" type="text/css" href="@routes.Assets.at("stylesheets/signin.css")">
-        <script src="@routes.Assets.at("javascripts/jquery-1.7.1.min.js")" type="text/javascript"></script>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Die 3 Meta-Tags oben *müssen* zuerst im head stehen; jeglicher sonstiger head-Inhalt muss *nach* diesen Tags kommen -->
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <link rel="icon" href="@routes.Assets.at("images/favicon.ico")">
 
+        <title>HAWAI-AST</title>
+
+        <!-- Bootstrap-CSS -->
+        <link href="@routes.Assets.at("bootstrap/css/bootstrap.min.css")" rel="stylesheet">
+        <!-- Bootstrap-Theme -->
+        <link href="@routes.Assets.at("bootstrap/css/bootstrap-theme.min.css")" rel="stylesheet">
+
+        <!-- Bootstrap Datepicker CSS -->
+        <link href="@routes.Assets.at("stylesheets/datepicker.css")" rel="stylesheet" href=""/>
+
+        <!-- Besondere Stile für diese Vorlage -->
+        <link href="@routes.Assets.at("examples/theme/theme.css")" rel="stylesheet">
+
+        <script src="@routes.Assets.at("javascripts/ie-emulation-modes-warning.js")"></script>
+
+        <!-- Unterstützung für Media Queries und HTML5-Elemente in IE8 über HTML5 shim und Respond.js -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
     </head>
 
-    <body>
-
-        <div id="header">
-            <h1>HAWAI After-Sales-Tracker</h1>
-        </div>
-
-        <div id="nav">
+    <body role="document">
         @if(controllers.Application.isUserLoggedIn) {
-            @member.sidebar()
+            @member.nav()
         } else {
-            @guest.sidebar()
+            @guest.nav()
         }
-        </div>
 
-        <div id="section">
-        @content
-        </div>
+        <div class="container theme-showcase" role="main">
+            @content
+        </div> <!-- /container -->
 
-        <div id="footer">
-        @fragments.footer()
-        </div>
-
+        <!-- Bootstrap-JavaScript
+        ================================================== -->
+        <!-- Am Ende des Dokuments platziert, damit Seiten schneller laden -->
+        <script src="@routes.Assets.at("javascripts/jquery.min.js")"></script>
+        <script src="@routes.Assets.at("javascripts/bootstrap.min.js")"></script>
+        <script src="@routes.Assets.at("javascripts/docs.min.js")"></script>
+        <script src="@routes.Assets.at("javascripts/bootstrap-datepicker.js")"></script>
+        <!-- IE10-Anzeigefenster-Hack für Fehler auf Surface und Desktop-Windows-8 -->
+        <script src="@routes.Assets.at("javascripts/ie10-viewport-bug-workaround.js")"></script>
+        <script src="@routes.Assets.at("javascripts/application.js")"></script>
     </body>
 </html>

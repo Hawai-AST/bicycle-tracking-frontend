@@ -1,9 +1,15 @@
 @()
 
-    @main("Startseite") {
+@main {
 
-        <h1>Willkommen!</h1>
+    @views.html.fragments.alert()
 
-        <p>Herzlichst willkommen zu dieser überaus bescheidenen Homepage der BAI4 SE2 SS15 Gruppe D.</p>
-
-    }
+    <div class="jumbotron">
+        <div class="text-center">
+            <h1>Herzlich Willkommen!</h1>
+            <h2><small>Registrieren Sie sich jetzt kostenlos und nutzen Sie alle Vorteile unseres After-Sales-Tracker's</small></h2>
+            <br/>
+            <a href="@routes.Application.signup" class="btn btn-lg btn-primary">Jetzt registrieren</a>
+        </div>
+    </div>
+}
