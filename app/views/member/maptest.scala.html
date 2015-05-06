@@ -54,49 +54,53 @@
     });
 
     // Add button for data export
-    L.easyButton('fa-floppy-o',
-                  function() {
-                    var waypoints = control.getWaypoints();
+    L.easyButton(
+        'fa-floppy-o',
+        function() {
+            var waypoints = control.getWaypoints();
 
-                    // Waypoints has too much information for backend,
-                    // therewith we build hashes with relevant information
-                    // data = array of objects, objects = hashes with lat, lng and name
-                    var data = $.map(waypoints, function(value, index){
-                        return {
-                            lat: value.latLng.lat,
-                            lng: value.latLng.lng,
-                            name: value.name
-                         }
-                    });
-                    console.log(data);
+            // Waypoints has too much information for backend,
+            // therewith we build hashes with relevant information
+            // data = array of objects, objects = hashes with lat, lng and name
+            var data = $.map(waypoints, function(value, index){
+                return {
+                    lat: value.latLng.lat,
+                    lng: value.latLng.lng,
+                    name: value.name
+                }
+            });
 
-                    // Send information to backend
-                    $.ajax({
-                      url: "/waypoints",
-                      type: "POST",
-                      data: {
-                        waypoints: data
-                      }
-                    })
-                     .done(function() {
-                        // TODO wie soll Speicherung signalisiert werden?
-                      })
-                      .fail(function() {
-                        alert( "Something went wrong, pls try again." );
-                      });
-                  },
-                  "Save route");
+            console.log(data);
+
+            // Send information to backend
+            $.ajax({
+                url: "/waypoints",
+                type: "POST",
+                data: {
+                    waypoints: data
+                }
+            }).done(function() {
+                // TODO wie soll Speicherung signalisiert werden?
+            }).fail(function() {
+                alert( "Something went wrong, pls try again." );
+            });
+        },
+        "Save route");
 
     // Add button for data import
-    L.easyButton('fa-folder-open',
-                  function(){/* TODO */},
-                  'Open saved route');
+    L.easyButton(
+        'fa-folder-open',
+        function(){/* TODO */},
+        'Open saved route');
 
     // Get map itself
     // http://{s}.tiles.mapbox.com/v3/MapID/{z}/{x}/{y}.png
     L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-      maxZoom: 18
+        attribution:
+            'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> ' +
+            'contributors, ' + '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+            'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+        maxZoom: 18
     }).addTo(map);
 
     // Add basic routing control
