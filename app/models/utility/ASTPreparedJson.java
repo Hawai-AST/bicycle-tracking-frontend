@@ -1,23 +1,23 @@
 package models.utility;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import controllers.Application;
 import play.libs.F;
 import play.libs.ws.WS;
 import play.libs.ws.WSRequestHolder;
 import play.libs.ws.WSResponse;
+
+import static controllers.Application.session;
 
 public class ASTPreparedJson implements PreparedJson {
 
     private WSRequestHolder wsRequestHolder;
 
     protected ASTPreparedJson(String url) {
-
         wsRequestHolder = WS.url(url)
                 .setHeader("Authorization", "Basic REVWLTEwMTpERVZTRUNSRVQ=")
                 .setContentType("application/json");
-        if(Application.session("access_token")!=null){
-            wsRequestHolder.setHeader("Authorization", "Bearer " + Application.session("access_token"));
+        if (session("access_token") != null) {
+            wsRequestHolder.setHeader("Authorization", "Bearer " + session("access_token"));
         }
     }
 
@@ -66,12 +66,13 @@ public class ASTPreparedJson implements PreparedJson {
     public F.Promise<JsonNode> post(JsonNode body) {
         try {
             return wsRequestHolder.post(body).map(WSResponse::asJson).recover(new F.Function<Throwable, JsonNode>() {
+                // if null response is returned, recover it and return 'java' null properly
                 @Override
                 public JsonNode apply(Throwable throwable) throws Throwable {
                     return null;
                 }
             });
-        }catch(RuntimeException e){
+        } catch (RuntimeException e) {
             return null;
         }
     }
