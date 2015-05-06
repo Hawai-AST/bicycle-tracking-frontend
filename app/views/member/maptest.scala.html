@@ -19,38 +19,39 @@
     <div id="map"></div>
 
     <script type="application/javascript">
+
     // initial view = Hamburg
     var map = L.map('map').setView([53.5502099, 9.9993636], 9);
 
     // Create pop-up for setting waypoints in map
     function createButton(label, container) {
-      var btn = L.DomUtil.create('button', '', container);
-      btn.setAttribute('type', 'button');
-      btn.innerHTML = label;
-      return btn;
+        var btn = L.DomUtil.create('button', '', container);
+        btn.setAttribute('type', 'button');
+        btn.innerHTML = label;
+        return btn;
     }
 
     // Add start and destination waypoint from clicking on map
     map.on('click', function(e) {
-      var container = L.DomUtil.create('div'),
-        startBtn = createButton('Start from this location', container),
-        destBtn = createButton('Go to this location', container);
+        var container = L.DomUtil.create('div'),
+            startBtn = createButton('Start from this location', container),
+            destBtn = createButton('Go to this location', container);
 
-      L.popup()
-        .setContent(container)
-        .setLatLng(e.latlng)
-        .openOn(map);
+        L.popup()
+            .setContent(container)
+            .setLatLng(e.latlng)
+            .openOn(map);
 
-      // TODO Fix bug: autozoom on route working when waypoints written into box but not when clicked via map
-      L.DomEvent.on(startBtn, 'click', function() {
-        control.spliceWaypoints(0, 1, e.latlng);
-        map.closePopup();
-      });
+        // TODO Fix bug: autozoom on route working when waypoints written into box but not when clicked via map
+        L.DomEvent.on(startBtn, 'click', function() {
+            control.spliceWaypoints(0, 1, e.latlng);
+            map.closePopup();
+        });
 
-      L.DomEvent.on(destBtn, 'click', function() {
-        control.spliceWaypoints(control.getWaypoints().length - 1, 1, e.latlng);
-        map.closePopup();
-      });
+        L.DomEvent.on(destBtn, 'click', function() {
+            control.spliceWaypoints(control.getWaypoints().length - 1, 1, e.latlng);
+            map.closePopup();
+        });
     });
 
     // Add button for data export
@@ -105,16 +106,16 @@
 
     // Add basic routing control
     var control = L.Routing.control({
-      // example route
-//      waypoints: [
+        // example route
+//        waypoints: [
 //        L.latLng(53.56875, 9.98286),
 //        L.latLng(53.5571614, 10.023104)
-//      ],
-      routeWhileDragging: true,
-      geocoder: L.Control.Geocoder.nominatim(),
-      reverseWaypoints: true,
-      // Set GraphHopper as router -- IMPORTANT: Only 500 queries per day for free...!
-      router: L.Routing.graphHopper('0ed0b695-73f5-4c79-98ac-81ebf3da1d5f', { "urlParameters": {'vehicle': "bike"}})
+//        ],
+        routeWhileDragging: true,
+        geocoder: L.Control.Geocoder.nominatim(),
+        reverseWaypoints: true,
+        // Set GraphHopper as router -- IMPORTANT: Only 500 queries per day for free...!
+        router: L.Routing.graphHopper('0ed0b695-73f5-4c79-98ac-81ebf3da1d5f', { "urlParameters": {'vehicle': "bike"}})
     });
 
     control.addTo(map);
@@ -122,14 +123,16 @@
     // Unless map is initialized with route
     var waypoints = control.getWaypoints();
     if (waypoints[0].latLng == null || waypoints[1].latLng == null) {
-      // Find user location and move map initially
-      L.Control.Geocoder.nominatim().geocode("@{currentUserAddress}", function(results){
-        // Only moves to user location if address was found
-        if (results.length > 0) {
-          map.panTo(results[0].center);
-          map.fitBounds(results[0].bbox);
-        }
-      });
+        // Find user location and move map initially
+        L.Control.Geocoder.nominatim().geocode(
+            "@{currentUserAddress}",
+            function(results){
+                // Only moves to user location if address was found
+                if (results.length > 0) {
+                    map.panTo(results[0].center);
+                    map.fitBounds(results[0].bbox);
+                }
+            });
     }
-  </script>
+    </script>
 }
