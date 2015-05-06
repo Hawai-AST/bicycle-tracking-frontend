@@ -6,7 +6,7 @@
     @views.html.fragments.alert()
 
     <h1>Konto</h1>
-    <div style="width: 70% ; padding: 15px 30px 30px ;">
+    <div class="col-md-10 col-md-offset-1">
         <h3>Passwort ändern</h3>
         @helper.form(action = routes.Account.changePassword(),'id -> "changePasswordForm"){
             @inputPassword(changePasswordForm("password"), "*Passwort")
@@ -19,7 +19,7 @@
     <br/>
     <br/>
     <br/>
-    <div style="width: 70% ; padding: 15px 30px 30px ;">
+    <div class="col-md-10 col-md-offset-1">
         <h3>Daten ändern</h3>
         @helper.form(action = routes.Account.changeUserCredentials, 'id -> "changeUserCredentialsForm"){
             @inputText(changeUserCredentialsForm("mailAddress.mailAddress"), "Email")
