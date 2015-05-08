@@ -1,0 +1,43 @@
+@(changePasswordForm: Form[ChangePassword], changeUserCredentialsForm: Form[ChangeUserCredentials])
+@import views.html.helper.bs3._
+
+
+@main {
+    @views.html.fragments.alert()
+
+    <h1>Konto</h1>
+    <div class="col-md-10 col-md-offset-1">
+        <h3>Passwort ändern</h3>
+        @helper.form(action = routes.Account.changePassword(),'id -> "changePasswordForm"){
+            @inputPassword(changePasswordForm("password"), "*Passwort")
+            @inputPassword(changePasswordForm("passwordCheck"), "*Passwort wiederholen:")
+
+            @inputSubmit("Ändern")
+        }
+    </div>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <div class="col-md-10 col-md-offset-1">
+        <h3>Daten ändern</h3>
+        @helper.form(action = routes.Account.changeUserCredentials, 'id -> "changeUserCredentialsForm"){
+            @inputText(changeUserCredentialsForm("mailAddress.mailAddress"), "Email")
+            @inputText(changeUserCredentialsForm("id"), "Kundennummer")
+            <br/>
+            @inputText(changeUserCredentialsForm("firstName"), "Vorname")
+            @inputText(changeUserCredentialsForm("name"), "Nachname")
+            @inputDate(changeUserCredentialsForm("birthdate"), "Geburtsdatum")
+            @select(changeUserCredentialsForm("gender"), "Geschlecht")
+            <br/>
+            @inputText(changeUserCredentialsForm("address.street"), "Straße")
+            @inputText(changeUserCredentialsForm("address.houseNumber"), "Hausnummer")
+            @inputText(changeUserCredentialsForm("address.postcode"), "PLZ")
+            @inputText(changeUserCredentialsForm("address.city"), "Stadt")
+            @inputText(changeUserCredentialsForm("address.state"), "Bundesland")
+            @inputText(changeUserCredentialsForm("address.country"), "Land")
+            @inputSubmit("Ändern")
+            }
+    </div>
+
+}

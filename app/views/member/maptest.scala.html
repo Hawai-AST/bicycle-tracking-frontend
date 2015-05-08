@@ -1,24 +1,138 @@
-@()
+@(currentUserAddress: String)
 
-    @main("Map Test") {
-        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
-        <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+@main {
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+    <link rel="stylesheet" href="/assets/leaflet-routing-machine-2.3.0/leaflet-routing-machine.css" />
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+    <script src="/assets/leaflet-routing-machine-2.3.0/leaflet-routing-machine.js"></script>
+    <script src="/assets/leaflet-routing-machine-2.3.0/Control.Geocoder.js"></script>
+    <script src="/assets/leaflet-routing-machine-2.3.0/lrm-graphhopper-1.1.0.js"></script>
+    <script src="/assets/leaflet-routing-machine-2.3.0/easy-button.js"></script>
 
-        <style type="text/css">
-        #map { height : 300px ; width : 900px ; }
-        </style>
+    <p> Home sweet home: @{currentUserAddress} </p>
 
-        <div id="map"></div>
+    <style type="text/css">
+    #map { height: 600px; width: 1024px; }
+    </style>
 
-        <script type="application/javascript">
-    var map = L.map('map').setView([53.5502099, 9.9993636], 13);
+    <div id="map"></div>
 
+    <script type="application/javascript">
+
+    // initial view = Hamburg
+    var map = L.map('map').setView([53.5502099, 9.9993636], 9);
+
+    // Create pop-up for setting waypoints in map
+    function createButton(label, container) {
+        var btn = L.DomUtil.create('button', '', container);
+        btn.setAttribute('type', 'button');
+        btn.innerHTML = label;
+        return btn;
+    }
+
+    // Add start and destination waypoint from clicking on map
+    map.on('click', function(e) {
+        var container = L.DomUtil.create('div'),
+            startBtn = createButton('Start from this location', container),
+            destBtn = createButton('Go to this location', container);
+
+        L.popup()
+            .setContent(container)
+            .setLatLng(e.latlng)
+            .openOn(map);
+
+        // TODO Fix bug: autozoom on route working when waypoints written into box but not when clicked via map
+        L.DomEvent.on(startBtn, 'click', function() {
+            control.spliceWaypoints(0, 1, e.latlng);
+            map.closePopup();
+        });
+
+        L.DomEvent.on(destBtn, 'click', function() {
+            control.spliceWaypoints(control.getWaypoints().length - 1, 1, e.latlng);
+            map.closePopup();
+        });
+    });
+
+    // Add button for data export
+    L.easyButton(
+        'fa-floppy-o',
+        function() {
+            var waypoints = control.getWaypoints();
+
+            // Waypoints has too much information for backend,
+            // therewith we build hashes with relevant information
+            // data = array of objects, objects = hashes with lat, lng and name
+            var data = $.map(waypoints, function(value, index){
+                return {
+                    lat: value.latLng.lat,
+                    lng: value.latLng.lng,
+                    name: value.name
+                }
+            });
+
+            console.log(data);
+
+            // Send information to backend
+            $.ajax({
+                url: "/waypoints",
+                type: "POST",
+                data: {
+                    waypoints: data
+                }
+            }).done(function() {
+                // TODO wie soll Speicherung signalisiert werden?
+            }).fail(function() {
+                alert( "Something went wrong, pls try again." );
+            });
+        },
+        "Save route");
+
+    // Add button for data import
+    L.easyButton(
+        'fa-folder-open',
+        function(){/* TODO */},
+        'Open saved route');
+
+    // Get map itself
     // http://{s}.tiles.mapbox.com/v3/MapID/{z}/{x}/{y}.png
     L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-      maxZoom: 18
+        attribution:
+            'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> ' +
+            'contributors, ' + '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+            'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+        maxZoom: 18
     }).addTo(map);
-  </script>
 
+    // Add basic routing control
+    var control = L.Routing.control({
+        // example route
+//        waypoints: [
+//        L.latLng(53.56875, 9.98286),
+//        L.latLng(53.5571614, 10.023104)
+//        ],
+        routeWhileDragging: true,
+        geocoder: L.Control.Geocoder.nominatim(),
+        reverseWaypoints: true,
+        // Set GraphHopper as router -- IMPORTANT: Only 500 queries per day for free...!
+        router: L.Routing.graphHopper('0ed0b695-73f5-4c79-98ac-81ebf3da1d5f', { "urlParameters": {'vehicle': "bike"}})
+    });
 
+    control.addTo(map);
+
+    // Unless map is initialized with route
+    var waypoints = control.getWaypoints();
+    if (waypoints[0].latLng == null || waypoints[1].latLng == null) {
+        // Find user location and move map initially
+        L.Control.Geocoder.nominatim().geocode(
+            "@{currentUserAddress}",
+            function(results){
+                // Only moves to user location if address was found
+                if (results.length > 0) {
+                    map.panTo(results[0].center);
+                    map.fitBounds(results[0].bbox);
+                }
+            });
     }
+    </script>
+}

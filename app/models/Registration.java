@@ -9,8 +9,6 @@ import play.libs.Json;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO(Timmay):validate email and other validations
-
 public class Registration {
     public String firstname;
     public String name;
@@ -28,47 +26,38 @@ public class Registration {
     }
 
     public List<ValidationError> validate() {
-        List<ValidationError> errors = new ArrayList<ValidationError>();
+        List<ValidationError> errors = new ArrayList<>();
         if (firstname.isEmpty()) {
-            errors.add(new ValidationError("firstname", "Vorname ungültig"));
+            errors.add(new ValidationError("firstname", "Bitte geben Sie Ihren Vornamen an"));
         }
         if (name.isEmpty()) {
-            errors.add(new ValidationError("name", "Nachname ungültig"));
-        }
-        if (birthday.isEmpty()) {
-            errors.add(new ValidationError("birthday", "Geburtstag ungültig"));
-        }
-        if (gender.isEmpty()) {
-            errors.add(new ValidationError("gender", "Geschlecht nicht ausgewählt"));
+            errors.add(new ValidationError("name", "Bitte geben Sie Ihren Nachnamen an"));
         }
         if (address.city.isEmpty()) {
-            errors.add(new ValidationError("address.city", "Stadt ungültig"));
+            errors.add(new ValidationError("address.city", "Bitte geben Sie Ihre Stadt an"));
         }
         if (address.country.isEmpty()) {
-            errors.add(new ValidationError("address.country", "Land ungültig"));
+            errors.add(new ValidationError("address.country", "Bitte geben Sie Ihr Land an"));
         }
         if (address.houseNumber.isEmpty()) {
-            errors.add(new ValidationError("address.houseNumber", "Hausnummer ungültig"));
+            errors.add(new ValidationError("address.houseNumber", "Bitte geben Sie Ihre Hausnummer an"));
         }
         if (address.postcode.isEmpty()) {
-            errors.add(new ValidationError("address.postcode", "Postleitzahl ungültig"));
+            errors.add(new ValidationError("address.postcode", "Bitte geben Sie Ihre Postleitzahl an"));
         }
         if (address.state.isEmpty()) {
-            errors.add(new ValidationError("address.state", "Bundesland ungültig"));
+            errors.add(new ValidationError("address.state", "Bitte geben Sie Ihr Bundesland an"));
         }
         if (address.street.isEmpty()) {
-            errors.add(new ValidationError("address.street", "Straße ungültig"));
+            errors.add(new ValidationError("address.street", "Bitte geben Sie Ihre Straße an"));
         }
         if (email.isEmpty()) {
-            errors.add(new ValidationError("email", "E-Mail Adresse ungültig"));
-        }
-        if (customerid.isEmpty()) {
-            errors.add(new ValidationError("customerid", "Kundennummer ungültig"));
+            errors.add(new ValidationError("email", "Bitte geben Sie Ihre E-Mail an"));
         }
         if (password.isEmpty()) {
-            errors.add(new ValidationError("password", "Password ungültig"));
+            errors.add(new ValidationError("password", "Bitte geben Sie ein Passwort an"));
         }
-        if (!password.equals(passwordCheck)) {
+        if (!password.equals(passwordCheck) || passwordCheck.isEmpty() /*<-- just to color the input field red */) {
             errors.add(new ValidationError("passwordCheck", "Die Passwörter stimmen nicht überein"));
         }
 

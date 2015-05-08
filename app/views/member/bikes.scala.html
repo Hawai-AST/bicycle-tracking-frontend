@@ -1,13 +1,13 @@
+@(amount: Integer, bikes: ArrayNode)
 @import com.fasterxml.jackson.databind.node.ArrayNode
 
-@(amount: Integer, bikes: ArrayNode)
 
 @main("Bikes") {
 
   <h1>Profil</h1>
   <p>Amount: @{amount}</p>
   @for(bike <- bikes.elements()) {
-    <table>
+    <table class="table">
       <tbody>
         <tr>
           <td>ID</td>
