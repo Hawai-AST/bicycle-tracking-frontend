@@ -72,12 +72,29 @@
             });
 
             // Build route as per API spec
+            // Set name of the route
             var routeName = window.prompt("Bitte gib den Namen deiner Route ein!");
+
+            // User clicked cancel
+            if (routeName === null) {
+                return;
+            }
+
+            // User didn't type a name
+            if (routeName === "") {
+                window.alert("Die Route kann ohne Namen nicht gespeichert werden.");
+                return;
+            }
+
+            // TODO (Marjan) bikeID of clicked on bike
+            var bikeID = 123;
+            // TODO (Marjan) get km out of map
+            var lengthInKm = 123.5;
 
             var route = {
                 name: routeName,
-                bikeID: 123, // TODO (Marjan) bikeID of clicked on bike
-                lengthInKm: 123.5, // TODO (Marjan) get km out of map
+                bikeID: bikeID,
+                lengthInKm: lengthInKm,
                 rodeAt: "2015-04-25T12:35:55Z", // TODO (Marjan) get input from user
                 finishedAt: "2015-04-25T12:35:55Z", // TODO (Marjan) get input from user
                 waypoints: data
