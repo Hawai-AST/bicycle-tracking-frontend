@@ -54,6 +54,9 @@
         });
     });
 
+    // Intitialize total distance of route
+    var lengthInKm;
+
     // Add button for data export
     L.easyButton(
         'fa-floppy-o',
@@ -88,8 +91,6 @@
 
             // TODO (Marjan) bikeID of clicked on bike
             var bikeID = 123;
-            // TODO (Marjan) get km out of map
-            var lengthInKm = 123.5;
 
             var route = {
                 name: routeName,
@@ -146,6 +147,12 @@
     });
 
     control.addTo(map);
+
+    // Get distance from map, convert to km
+    // TODO (Marjan) atm it always picks first route option - should check which route option is the actual used one
+    control.addEventListener("routesfound", function(route){
+        lengthInKm = route.routes[0].summary.totalDistance / 1000;
+    });
 
     // Unless map is initialized with route
     var waypoints = control.getWaypoints();
