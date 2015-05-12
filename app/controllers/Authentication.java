@@ -55,7 +55,7 @@ public class Authentication extends Controller {
                 flash("alert_type", "success");
                 storeValuesInSessionFrom(jsonResponse);
             } else {
-                // duplicate code - structure just for temporary error handling...
+                // duplicate code - structure just for temporary error handling
                 switch (jsonResponse.get("status").asText()) {
                     default:
                         flash("alert", "Registrierung fehlgeschlagen. " +
