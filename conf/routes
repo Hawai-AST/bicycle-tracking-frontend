@@ -13,7 +13,7 @@ POST        /changeUserCredentials        controllers.Account.changeUserCredenti
 POST        /login                        controllers.Application.authenticate
 POST        /register                     controllers.Application.register
 POST        /waypoints                    controllers.Waypoints.create
-GET         /bikes                        @controllers.Bikes.index
+GET         /bikes                        controllers.Bikes.index
 
 # Map static resources from the /public folder to the /assets URL path
 GET        /assets/*file                  controllers.Assets.at(path="/public", file)
