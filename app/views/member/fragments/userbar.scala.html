@@ -1,6 +1,6 @@
 @()
 
-@helper.form(action = routes.Application.signout, args = 'class -> "navbar-form navbar-right") {
+@helper.form(action = routes.Authentication.signout, args = 'class -> "navbar-form navbar-right") {
     <!-- Split button -->
     <div class="btn-group">
         <button type="button" class="btn btn-info">@session.get("email")</button>
@@ -9,7 +9,7 @@
             <span class="sr-only">Kontomenü</span>
         </button>
         <ul class="dropdown-menu" role="menu">
-            <li><a href="/profile">Konto Einstellungen</a></li>
+            <li><a href="/profile">Kontoeinstellungen</a></li>
         </ul>
     </div>
     <button type="submit" class="btn btn-primary" value="signout">Abmelden</button>
