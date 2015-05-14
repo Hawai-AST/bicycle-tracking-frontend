@@ -8,6 +8,7 @@ GET         /signup                       controllers.Application.signup
 GET         /signout                      controllers.Application.signout
 GET         /maptest                      controllers.Application.maptest
 GET         /tracks                       controllers.Tracks.tracks
+GET         /newtracks                    controllers.Tracks.newtracks
 GET         /profile                      controllers.Account.showAccount
 POST        /changePassword               controllers.Account.changePassword
 POST        /changeUserCredentials        controllers.Account.changeUserCredentials

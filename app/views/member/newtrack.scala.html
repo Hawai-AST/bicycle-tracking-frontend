@@ -1,0 +1,17 @@
+@(trackForm: Form[TrackRegistration])
+@import views.html.helper.bs3._
+
+@main {
+  <h1>Hier kannst du in Kürze deine gefahrenen Strecken eintragen</h1>
+
+  <div class="col-md-10 col-md-offset-1">
+    <h2 class="h2">Eine neue Strecke eintragen</h2>
+    @helper.form(action = routes.Tracks.newtracks, 'class -> "form-horizontal") {
+      @inputText(trackForm("name"), "Streckenname:")
+
+    }
+  </div>
+
+
+
+}
