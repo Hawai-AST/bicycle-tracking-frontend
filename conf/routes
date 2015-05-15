@@ -3,15 +3,15 @@
 # ~~~~
 
 # Home page
-GET        /                              controllers.Application.index
-GET        /signup                        controllers.Application.signup
-GET        /signout                       controllers.Application.signout
-GET        /maptest                       controllers.Application.maptest
-GET        /profile                       controllers.Account.showAccount
+GET         /                             controllers.Application.index
+GET         /signup                       controllers.Authentication.signup
+GET         /signout                      controllers.Authentication.signout
+GET         /maptest                      controllers.Application.maptest
+GET         /profile                      controllers.Account.showAccount
 POST        /changePassword               controllers.Account.changePassword
 POST        /changeUserCredentials        controllers.Account.changeUserCredentials
-POST        /login                        controllers.Application.authenticate
-POST        /register                     controllers.Application.register
+POST        /login                        controllers.Authentication.authenticate
+POST        /register                     controllers.Authentication.register
 POST        /waypoints                    controllers.Waypoints.create
 GET         /bikes                        controllers.Bikes.index
 
