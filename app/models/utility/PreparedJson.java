@@ -14,5 +14,5 @@ public interface PreparedJson {
 
     F.Promise<JsonNode> post(JsonNode body);
 
-    F.Promise<JsonNode> get();
+    F.Promise<WSResponse> get();
 }
