@@ -10,51 +10,55 @@
     });
   </script>
 
-  <h1>Profil</h1>
+  <h1>Meine Fahrr&auml;der</h1>
   <div role="tabpanel">
-    <ul class="nav nav-tabs" role="tablist">
-      @for((bike, i) <- bikes.elements().zipWithIndex) {
-        @if(i == 0) {
-          <li role="presentation" class="active"><a href="#bike-@{bike.get("id").asInt()}" aria-controls="bike-@{bike.get("id").asInt()}" role="tab" data-toggle="tab">@{bike.get("type").asText()}</a></li>
-        } else {
-          <li role="presentation"><a href="#bike-@{bike.get("id").asInt()}" aria-controls="bike-@{bike.get("id").asInt()}" role="tab" data-toggle="tab">@{bike.get("type").asText()}</a></li>
+    @if(bikes.size() == 0) {
+      <p>Keine Fahrr&auml;der eingetragen.</p>
+    } else {
+      <ul class="nav nav-tabs" role="tablist">
+        @for((bike, i) <- bikes.elements().zipWithIndex) {
+          @if(i == 0) {
+            <li role="presentation" class="active"><a href="#bike-@{bike.get("id").asInt()}" aria-controls="bike-@{bike.get("id").asInt()}" role="tab" data-toggle="tab">@{bike.get("type").asText()}</a></li>
+          } else {
+            <li role="presentation"><a href="#bike-@{bike.get("id").asInt()}" aria-controls="bike-@{bike.get("id").asInt()}" role="tab" data-toggle="tab">@{bike.get("type").asText()}</a></li>
+          }
         }
-      }
-    </ul>
+      </ul>
 
-    <div class="tab-content">
-      @for((bike, i) <- bikes.elements().zipWithIndex) {
-        @if(i == 0) {
-          <div role="tabpanel" class="tab-pane active" id="bike-@{bike.get("id").asInt()}">
-        } else {
-          <div role="tabpanel" class="tab-pane" id="bike-@{bike.get("id").asInt()}">
+      <div class="tab-content">
+        @for((bike, i) <- bikes.elements().zipWithIndex) {
+          @if(i == 0) {
+            <div role="tabpanel" class="tab-pane active" id="bike-@{bike.get("id").asInt()}">
+          } else {
+            <div role="tabpanel" class="tab-pane" id="bike-@{bike.get("id").asInt()}">
+          }
+            <table class="table">
+              <tbody>
+                <tr>
+                  <td>ID</td>
+                  <td>@{bike.get("id").asInt()}</td>
+                </tr>
+                <tr>
+                  <td>Type</td>
+                  <td>@{bike.get("type").asText()}</td>
+                </tr>
+                <tr>
+                  <td>Framenumber</td>
+                  <td>@{bike.get("frameNumber").asInt()}</td>
+                </tr>
+                <tr>
+                  <td>Purchased at</td>
+                  <td>@{bike.get("purchaseDate").asText()}</td>
+                </tr>
+                <tr>
+                  <td>Next maintenance</td>
+                  <td>@{bike.get("nextMaintenance").asText()}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         }
-          <table class="table">
-            <tbody>
-              <tr>
-                <td>ID</td>
-                <td>@{bike.get("id").asInt()}</td>
-              </tr>
-              <tr>
-                <td>Type</td>
-                <td>@{bike.get("type").asText()}</td>
-              </tr>
-              <tr>
-                <td>Framenumber</td>
-                <td>@{bike.get("frameNumber").asInt()}</td>
-              </tr>
-              <tr>
-                <td>Purchased at</td>
-                <td>@{bike.get("purchaseDate").asText()}</td>
-              </tr>
-              <tr>
-                <td>Next maintenance</td>
-                <td>@{bike.get("nextMaintenance").asText()}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      }
-    </div>
+      </div>
+    }
   </div>
 }
