@@ -8,7 +8,7 @@
     <h2 class="h2">Eine neue Strecke eintragen</h2>
     @helper.form(action = routes.Tracks.newtracks, 'class -> "form-horizontal") {
       @inputText(trackForm("name"), "Streckenname:")
-
+      @selectBike(trackForm("id"), "Fahrrad:")
     }
   </div>
 

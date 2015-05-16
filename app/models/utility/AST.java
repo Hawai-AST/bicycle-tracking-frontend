@@ -26,4 +26,16 @@ public class AST {
         }
         return inverseMap;
     }
+
+    /**
+     *
+     * @return bikes name of logged in user
+     */
+    public static Map<String, String> bikeMap() {
+        Map<String, String> options = new HashMap<>();
+        options.put("", "wähle");
+        options.put("bike1", "Bike1");
+        options.put("bike2", "Bike2");
+        return options;
+    }
 }
