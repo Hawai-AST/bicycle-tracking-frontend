@@ -14,7 +14,9 @@
         <link rel="icon" href="@routes.Assets.at("images/favicon.ico")">
 
         <title>HAWAI-AST</title>
-
+        <script src="@routes.Assets.at("javascripts/jquery.min.js")"></script>
+        <script src="@routes.Assets.at("javascripts/jquery.simple-dtpicker.js")"></script>
+        <script src="@routes.Assets.at("javascripts/ie-emulation-modes-warning.js")"></script>
         <!-- Bootstrap-CSS -->
         <link href="@routes.Assets.at("bootstrap/css/bootstrap.min.css")" rel="stylesheet">
         <!-- Bootstrap-Theme -->
@@ -26,7 +28,8 @@
         <!-- Besondere Stile für diese Vorlage -->
         <link href="@routes.Assets.at("examples/theme/theme.css")" rel="stylesheet">
 
-        <script src="@routes.Assets.at("javascripts/ie-emulation-modes-warning.js")"></script>
+        <link href="@routes.Assets.at("stylesheets/jquery.simple-dtpicker.css")" rel="stylesheet" href=""/>
+
 
         <!-- Unterstützung für Media Queries und HTML5-Elemente in IE8 über HTML5 shim und Respond.js -->
         <!--[if lt IE 9]>
@@ -49,10 +52,11 @@
         <!-- Bootstrap-JavaScript
         ================================================== -->
         <!-- Am Ende des Dokuments platziert, damit Seiten schneller laden -->
-        <script src="@routes.Assets.at("javascripts/jquery.min.js")"></script>
+
         <script src="@routes.Assets.at("javascripts/bootstrap.min.js")"></script>
         <script src="@routes.Assets.at("javascripts/docs.min.js")"></script>
         <script src="@routes.Assets.at("javascripts/bootstrap-datepicker.js")"></script>
+
         <!-- IE10-Anzeigefenster-Hack für Fehler auf Surface und Desktop-Windows-8 -->
         <script src="@routes.Assets.at("javascripts/ie10-viewport-bug-workaround.js")"></script>
         <script src="@routes.Assets.at("javascripts/application.js")"></script>

@@ -1,19 +1,22 @@
+
 @(trackForm: Form[TrackRegistration])
 @import views.html.helper.bs3._
 
 @main {
   <div class="col-md-10 col-md-offset-1">
     <h2 class="h2">Eine neue Strecke eintragen</h2>
-    <div style="height:450px; width:450px; background:#5cb85c; float:right;"></div>
-    <div >
-      <div style="float:left; width:400px;">
+
+      <div style="margin-bottom: auto">
         @helper.form(action = routes.Tracks.newtracks, 'class -> "form-horizontal") {
           @inputText(trackForm("name"), "Streckenname:")
           @selectBike(trackForm("id"), "Fahrrad:")
-          @inputTime(trackForm("time"), "Startzeit")
+          @inputTime(trackForm("startAt"), "Startzeit")
+          @inputTime(trackForm("finishedAt"), "Endzeit")
+
         }
       </div>
-    </div>
+      <div style="background:#5cb85c; border: black solid; height:800px; margin-top: 50px; width:1000px;"></div>
+
   </div>
 
 
