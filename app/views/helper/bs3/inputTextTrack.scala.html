@@ -1,0 +1,17 @@
+@(field: Field, label: String = "", placeholder: String = "", help: String = "", compulsory: Boolean = false)
+
+<div class="form-group @if(field.hasErrors) {has-error}">
+    <label class="col-sm-4 control-label">
+        @label
+    </label>
+    <div class="col-sm-6">
+        <input type="text"
+         class="form-control"
+         id="@field.id"
+         name="@field.name"
+         value="@field.value.getOrElse("")"
+        placeholer="@if(compulsory) {Pflichtangabe} else {@placeholder} "/>
+        <span class="help-block">@help</span>
+        <span class="help-block">@{ field.error.map { error => error.message }}</span>
+    </div>
+</div>

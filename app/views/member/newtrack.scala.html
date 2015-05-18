@@ -3,19 +3,20 @@
 @import views.html.helper.bs3._
 
 @main {
-  <div class="col-md-10 col-md-offset-1">
+  <div class="col-md-12 col-md-offset-1">
     <h2 class="h2">Eine neue Strecke eintragen</h2>
-
-      <div style="margin-bottom: auto">
+    <div class="col-md-4">
+      <div>
         @helper.form(action = routes.Tracks.newtracks, 'class -> "form-horizontal") {
-          @inputText(trackForm("name"), "Streckenname:")
+          @inputTextTrack(trackForm("name"), "Streckenname:")
           @selectBike(trackForm("id"), "Fahrrad:")
           @inputTime(trackForm("startAt"), "Startzeit")
           @inputTime(trackForm("finishedAt"), "Endzeit")
 
         }
       </div>
-      <div style="background:#5cb85c; border: black solid; height:800px; margin-top: 50px; width:1000px;"></div>
+    </div>
+    <div style="background:#5cb85c; border: black solid; float:right; height:550px; width:720px;"></div>
 
   </div>
 
