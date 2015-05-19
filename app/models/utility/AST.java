@@ -1,5 +1,9 @@
 package models.utility;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import play.libs.ws.WSResponse;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,6 +11,7 @@ import java.util.Map;
  * Factory Class
  */
 public class AST {
+
     public static PreparedJson preparedJson(String url) {
         return new ASTPreparedJson(url);
     }
@@ -34,8 +39,22 @@ public class AST {
     public static Map<String, String> bikeMap() {
         Map<String, String> options = new HashMap<>();
         options.put("", "wähle");
-        options.put("bike1", "Bike1");
-        options.put("bike2", "Bike2");
+        JsonNode response = AST.preparedJson("http://localhost:8080/api/v1/bikes").get().map(WSResponse::asJson).get(10000);
+        ArrayNode arrayNode =  (ArrayNode) response.get("bikes");
+
+        if (arrayNode == null){
+            System.err.print("\n\n ----AST#46 didn't work----");
+            options.put("bike1", "didn't work");
+        } else {
+            System.err.print("\n\n ----AST#49 hier----");
+            options.put("bike1", "hier sollten Fahrräder stehen");
+            System.out.print(arrayNode.toString());
+        }
         return options;
     }
 }
+
+/*
+  JsonNode response = AST.preparedJson("http://localhost:8080/api/v1/bikes").get().map(WSResponse::asJson).get(10000);
+  return ok(bikes.render(response.get("amount").asInt(), (ArrayNode) response.get("bikes")));
+*/
