@@ -173,4 +173,13 @@ public class Authentication extends Controller {
         }
         return redirect("/");
     }
+
+    /**
+     * Checks whether the user is logged in or not
+     *
+     * @return true, if user is logged in
+     */
+    public static boolean isUserLoggedIn() {
+        return session("access_token") != null;
+    }
 }
