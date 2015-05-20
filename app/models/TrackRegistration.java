@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import controllers.Waypoints;
 import play.libs.Json;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -13,10 +14,10 @@ public class TrackRegistration {
 
     public String name;
     public long bikeId;
-    public int lengthInKm;
+    public int lengthInKm = 12;
     public Date startAt;
     public Date finishedAt;
-    public Waypoints waypoints;
+    public ArrayList<Waypoints> waypoints = new ArrayList<>(2);
 
 
     public JsonNode toJson(){

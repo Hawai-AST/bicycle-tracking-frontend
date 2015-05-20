@@ -39,6 +39,8 @@ public class AST {
     public static Map<String, String> bikeMap() {
         Map<String, String> options = new HashMap<>();
         options.put("", "wähle");
+        options.put("1", "1");
+        options.put("2", "2");
         JsonNode response = AST.preparedJson("http://localhost:8080/api/v1/bikes").get().map(WSResponse::asJson).get(10000);
         ArrayNode arrayNode =  (ArrayNode) response.get("bikes");
 

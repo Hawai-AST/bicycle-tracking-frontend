@@ -12,6 +12,7 @@ GET         /newtracks                    controllers.Tracks.newtracks
 GET         /profile                      controllers.Account.showAccount
 POST        /changePassword               controllers.Account.changePassword
 POST        /changeUserCredentials        controllers.Account.changeUserCredentials
+POST        /saveTracks                   controllers.Tracks.saveTracks
 POST        /login                        controllers.Application.authenticate
 POST        /register                     controllers.Application.register
 POST        /waypoints                    controllers.Waypoints.create

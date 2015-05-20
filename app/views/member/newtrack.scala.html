@@ -9,12 +9,19 @@
     <h2 class="h2">Eine neue Strecke eintragen</h2>
     <div class="col-md-4">
       <div>
-        @helper.form(action = routes.Tracks.newtracks, 'class -> "form-horizontal") {
+        @helper.form(action = routes.Tracks.saveTracks, 'class -> "form-horizontal") {
           @inputTextTrack(trackForm("name"), "Streckenname:")
-          @selectBike(trackForm("id"), "Fahrrad:")
+          @selectBike(trackForm("bikeId"), "Fahrrad:")
           @inputTime(trackForm("startAt"), "Startzeit")
           @inputTime(trackForm("finishedAt"), "Endzeit")
-
+          @inputTextTrack(trackForm("lengthInKm"), "länge")
+          @inputTextTrack(trackForm("waypoints[0].latitude"), "waypoints1a")
+          @inputTextTrack(trackForm("waypoints[0].longitude"), "waypoints1b")
+          @inputTextTrack(trackForm("waypoints[0].name"), "waypoints1c")
+          @inputTextTrack(trackForm("waypoints[1].latitude"), "waypoints2a")
+          @inputTextTrack(trackForm("waypoints[1].longitude"), "waypoints2b")
+          @inputTextTrack(trackForm("waypoints[1].name"), "waypoints2c")
+          @inputSubmit("Speichern")
         }
       </div>
     </div>

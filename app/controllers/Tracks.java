@@ -38,4 +38,19 @@ public class Tracks extends Controller {
     }
 
 
+
+    public static Result saveTracks(){
+        Form<TrackRegistration> form = Form.form(TrackRegistration.class).bindFromRequest();
+        System.out.println(form.toString());
+//        if (Application.doRequest("http://localhost:8080/api/v1/route", form.get().toJson()) != null) {
+//            flash("alert", "Strecke konnte nicht gespeichert werden");
+//            flash("alert_type", "danger");
+//            return badRequest(Application.doRequest("http://localhost:8080/api/v1/route", form.get().toJson()));
+//        } else {
+//            flash("alert", "Strecke wurde gespeichert");
+//            flash("alert_type", "success");
+//            return ok(views.html.member.newtrack.render(form));
+//        }
+        return ok(views.html.member.newtrack.render(form));
+    }
 }
