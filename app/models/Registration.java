@@ -45,6 +45,9 @@ public class Registration {
         if (address.postcode.isEmpty()) {
             errors.add(new ValidationError("address.postcode", "Bitte geben Sie Ihre Postleitzahl an"));
         }
+        if (!address.postcode.matches("(([a-z]|[A-Z])([a-z]|[A-Z]))?[0-9]+")) {
+            errors.add(new ValidationError("address.postcode", "Es sind nur Zahlen erlaubt, optional angeführt von einem Länderkürzel"));
+        }
         if (address.state.isEmpty()) {
             errors.add(new ValidationError("address.state", "Bitte geben Sie Ihr Bundesland an"));
         }
