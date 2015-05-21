@@ -1,7 +1,7 @@
 package models;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import controllers.Waypoints;
+import controllers.Maps;
 import play.libs.Json;
 
 import java.util.ArrayList;
@@ -17,7 +17,6 @@ public class TrackRegistration {
     public int lengthInKm = 12;
     public Date startAt;
     public Date finishedAt;
-
 
     public JsonNode toJson(){
         return Json.toJson(this);
