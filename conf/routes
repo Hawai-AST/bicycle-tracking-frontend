@@ -3,19 +3,23 @@
 # ~~~~
 
 # Home page
-GET         /                             controllers.Application.index
-GET         /signup                       controllers.Application.signup
-GET         /signout                      controllers.Application.signout
-GET         /maptest                      controllers.Application.maptest
-GET         /tracks                       controllers.Tracks.tracks
-GET         /newtracks                    controllers.Tracks.newtracks
-GET         /profile                      controllers.Account.showAccount
-POST        /changePassword               controllers.Account.changePassword
-POST        /changeUserCredentials        controllers.Account.changeUserCredentials
-POST        /saveTracks                   controllers.Tracks.saveTracks
-POST        /login                        controllers.Application.authenticate
-POST        /register                     controllers.Application.register
-POST        /waypoints                    controllers.Waypoints.create
+GET           /                             controllers.Application.index
+GET           /signup                       controllers.Application.signup
+GET           /signout                      controllers.Application.signout
+GET           /maptest                      controllers.Application.maptest
+GET           /route                        controllers.Maps.index
+GET           /route/:id                    controllers.Maps.show(id:Integer)
+GET           /tracks                       controllers.Tracks.tracks
+GET           /newtracks                    controllers.Tracks.newtracks
+GET           /profile                      controllers.Account.showAccount
+PUT           /route/:id                    controllers.Maps.update(id:Integer)
+POST          /changePassword               controllers.Account.changePassword
+POST          /changeUserCredentials        controllers.Account.changeUserCredentials
+POST          /saveTracks                   controllers.Tracks.saveTracks
+POST          /login                        controllers.Application.authenticate
+POST          /register                     controllers.Application.register
+POST          /route                        controllers.Maps.create
+DELETE        /route/:id                    controllers.Maps.delete(id:Integer)
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file                 controllers.Assets.at(path="/public", file)
+GET           /assets/*file                 controllers.Assets.at(path="/public", file)
