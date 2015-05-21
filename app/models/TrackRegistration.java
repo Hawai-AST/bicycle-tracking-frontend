@@ -17,7 +17,6 @@ public class TrackRegistration {
     public int lengthInKm = 12;
     public Date startAt;
     public Date finishedAt;
-    public ArrayList<Waypoints> waypoints = new ArrayList<>(2);
 
 
     public JsonNode toJson(){
