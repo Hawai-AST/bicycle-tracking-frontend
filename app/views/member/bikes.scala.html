@@ -1,6 +1,7 @@
 @import com.fasterxml.jackson.databind.node.ArrayNode
-@(amount: Integer, bikes: ArrayNode)
-
+@import views.html.helper.bs3._
+@import play.data.Form.form
+@(amount: Integer, bikes: ArrayNode, bikeForm: Form[Bike] = form(classOf[Bike])))
 
 @main {
   <script>
@@ -10,6 +11,32 @@
     });
   </script>
 
+  @for(bike <- bikes.elements()) {
+    <div class="modal fade" id="editModal-@bike.get("id").asText()" tabindex="-1" role="dialog" aria-labelledby="editLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+        @helper.form(action = routes.Bikes.update, 'id -> ("editBike" + bike.get("id").asText())) {
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="editLabel">Fahrrad bearbeiten</h4>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" value="@bike.get("id").asText()" name="id" />
+            @inputText(bikeForm("type").copy(value=Some(bike.get("type").asText())), "Typ")
+            @inputText(bikeForm("frameNumber").copy(value=Some(bike.get("frameNumber").asText())), "Rahmennummer")
+            @inputDate(bikeForm("purchaseDate").copy(value=Some(bike.get("purchaseDate").asText())), "Kaufdatum")
+            @inputDate(bikeForm("nextMaintenance").copy(value=Some(bike.get("nextMaintenance").asText())), "Nächste Wartung")
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Schlie&szlig;en</button>
+            <button type="submit" class="btn btn-primary">Speichern</button>
+          </div>
+        }
+        </div>
+      </div>
+    </div>
+  }
+
   <h1>Meine Fahrr&auml;der</h1>
   <div role="tabpanel">
     @if(bikes.size() == 0) {
@@ -18,9 +45,9 @@
       <ul class="nav nav-tabs" role="tablist">
         @for((bike, i) <- bikes.elements().zipWithIndex) {
           @if(i == 0) {
-            <li role="presentation" class="active"><a href="#bike-@{bike.get("id").asInt()}" aria-controls="bike-@{bike.get("id").asInt()}" role="tab" data-toggle="tab">@{bike.get("type").asText()}</a></li>
+            <li role="presentation" class="active"><a href="#bike-@{bike.get("id").asText()}" aria-controls="bike-@{bike.get("id").asText()}" role="tab" data-toggle="tab">@{bike.get("type").asText()}</a></li>
           } else {
-            <li role="presentation"><a href="#bike-@{bike.get("id").asInt()}" aria-controls="bike-@{bike.get("id").asInt()}" role="tab" data-toggle="tab">@{bike.get("type").asText()}</a></li>
+            <li role="presentation"><a href="#bike-@{bike.get("id").asText()}" aria-controls="bike-@{bike.get("id").asText()}" role="tab" data-toggle="tab">@{bike.get("type").asText()}</a></li>
           }
         }
       </ul>
@@ -28,15 +55,18 @@
       <div class="tab-content">
         @for((bike, i) <- bikes.elements().zipWithIndex) {
           @if(i == 0) {
-            <div role="tabpanel" class="tab-pane active" id="bike-@{bike.get("id").asInt()}">
+            <div role="tabpanel" class="tab-pane active" id="bike-@{bike.get("id").asText()}">
           } else {
-            <div role="tabpanel" class="tab-pane" id="bike-@{bike.get("id").asInt()}">
+            <div role="tabpanel" class="tab-pane" id="bike-@{bike.get("id").asText()}">
           }
+
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal-@bike.get("id").asText()">Edit</button>
+
             <table class="table">
               <tbody>
                 <tr>
                   <td>ID</td>
-                  <td>@{bike.get("id").asInt()}</td>
+                  <td>@{bike.get("id").asText()}</td>
                 </tr>
                 <tr>
                   <td>Type</td>

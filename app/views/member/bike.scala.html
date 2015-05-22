@@ -1,0 +1,15 @@
+@(bikeForm: Form[Bike])
+@import views.html.helper.bs3._
+
+@main {
+  <h1>Fahrrad hinzufügen</h1>
+
+  @helper.form(action = routes.Bikes.update, 'id -> "addBike"){
+    @inputText(bikeForm("type"), "Typ")
+    @inputText(bikeForm("frameNumber"), "Rahmennummer")
+    @inputDate(bikeForm("purchaseDate"), "Kaufdatum")
+    @inputDate(bikeForm("nextMaintenance"), "Nächste Wartung")
+
+    @inputSubmit("Hinzufügen")
+  }
+}
