@@ -14,7 +14,6 @@ public class TrackRegistration {
 
     public String name;
     public long bikeId;
-    public int lengthInKm = 12;
     public Date startAt;
     public Date finishedAt;
 

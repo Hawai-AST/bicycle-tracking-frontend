@@ -1,10 +1,18 @@
-
 @(trackForm: Form[TrackRegistration])
-
 
 @import views.html.helper.bs3._
 
 @main {
+  <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+  <link rel="stylesheet" href="/assets/leaflet-routing-machine-2.3.0/leaflet-routing-machine.css" />
+  <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+  <script src="/assets/leaflet-routing-machine-2.3.0/leaflet-routing-machine.js"></script>
+  <script src="/assets/leaflet-routing-machine-2.3.0/Control.Geocoder.js"></script>
+  <script src="/assets/leaflet-routing-machine-2.3.0/lrm-graphhopper-1.1.0.js"></script>
+  <script src="/assets/leaflet-routing-machine-2.3.0/easy-button.js"></script>
+
+
   <div class="col-md-12 col-md-offset-1">
     <h2 class="h2">Eine neue Strecke eintragen</h2>
     <div class="col-md-4" style="margin-top : 50 px ;">
@@ -19,17 +27,179 @@
         }
 
         <script>
-//          var myModule = require('./application/javascript');
-//          var name = myModule.name;
+          var myModule = require('./application/javascript');
+          var name = myModule.name;
 
-            var name = "hallo";
+         //   var name = "hallo";
             document.write(name);
             document.getElementById("way").value =  name;
         </script>
       </div>
     </div>
-    @*<div style="background:#5cb85c; border: black solid; float:right; height:550px; width:720px;"></div>*@
+    <!--<div style="background:#5cb85c; border: black solid; float:right; height:550px; width:720px;"></div>-->
 
+
+
+
+    <p> Home sweet home: Berliner Tor 7 </p>
+
+    <style type="text/css">
+    #map { height: 550px; width: 720px; }
+    </style>
+
+    <div id="map"></div>
+
+    <script type="application/javascript">
+
+    // initial view = Hamburg
+    var map = L.map('map').setView([53.5502099, 9.9993636], 9);
+
+    // Create pop-up for setting waypoints in map
+    function createButton(label, container) {
+        var btn = L.DomUtil.create('button', '', container);
+        btn.setAttribute('type', 'button');
+        btn.innerHTML = label;
+        return btn;
+    }
+
+    // Add start and destination waypoint from clicking on map
+    map.on('click', function(e) {
+        var container = L.DomUtil.create('div'),
+            startBtn = createButton('Start from this location', container),
+            destBtn = createButton('Go to this location', container);
+
+        L.popup()
+            .setContent(container)
+            .setLatLng(e.latlng)
+            .openOn(map);
+
+        // TODO (Marjan) Fix bug: autozoom on route working when waypoints written into box but not when clicked via map
+        L.DomEvent.on(startBtn, 'click', function() {
+            control.spliceWaypoints(0, 1, e.latlng);
+            map.closePopup();
+        });
+
+        L.DomEvent.on(destBtn, 'click', function() {
+            control.spliceWaypoints(control.getWaypoints().length - 1, 1, e.latlng);
+            map.closePopup();
+        });
+    });
+
+    // Intitialize total distance of route
+    var lengthInKm;
+
+    // Add button for data export
+    L.easyButton(
+        'fa-floppy-o',
+        function() {
+            var waypoints = control.getWaypoints();
+
+            // Maps has too much information for backend,
+            // therewith we build hashes with relevant information
+            // data = array of objects, objects = hashes with lat, lng and name
+            var data = $.map(waypoints, function(value, index){
+                return {
+                    lat: value.latLng.lat,
+                    lng: value.latLng.lng,
+                    name: value.name
+                }
+            });
+
+            // Build route as per API spec
+            // Set name of the route
+            var routeName = window.prompt("Bitte gib den Namen deiner Route ein!");
+
+            // User clicked cancel
+            if (routeName === null) {
+                return;
+            }
+
+            // User didn't type a name
+            if (routeName === "") {
+                window.alert("Die Route kann ohne Namen nicht gespeichert werden.");
+                return;
+            }
+
+            // TODO (Marjan) bikeID of clicked on bike
+            var bikeID = 123;
+
+            var route = {
+                name: routeName,
+                bikeID: bikeID,
+                lengthInKm: lengthInKm,
+                rodeAt: "2015-04-25T12:35:55Z", // TODO (Marjan) get input from user
+                finishedAt: "2015-04-25T12:35:55Z", // TODO (Marjan) get input from user
+                waypoints: data
+            }
+
+            console.log(route);
+
+            // Send information to backend
+            $.ajax({
+                url: "/route",
+                type: "POST",
+                data: route
+            }).done(function() {
+                // TODO wie soll Speicherung signalisiert werden?
+            }).fail(function() {
+                alert( "Something went wrong, pls try again." );
+            });
+        },
+        "Save route");
+
+    // Add button for data import
+    L.easyButton(
+        'fa-folder-open',
+        function(){/* TODO */},
+        'Open saved route');
+
+    // Get map itself
+    // http://{s}.tiles.mapbox.com/v3/MapID/{z}/{x}/{y}.png
+    L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution:
+            'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> ' +
+            'contributors, ' + '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+            'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+        maxZoom: 18
+    }).addTo(map);
+
+    // Add basic routing control
+    var control = L.Routing.control({
+        // example route
+//        waypoints: [
+//        L.latLng(53.56875, 9.98286),
+//        L.latLng(53.5571614, 10.023104)
+//        ],
+        routeWhileDragging: true,
+        geocoder: L.Control.Geocoder.nominatim(),
+        reverseWaypoints: true,
+        // Set GraphHopper as router -- IMPORTANT: Only 500 queries per day for free...!
+        router: L.Routing.graphHopper('0ed0b695-73f5-4c79-98ac-81ebf3da1d5f', { "urlParameters": {'vehicle': "bike"}})
+    });
+
+    control.addTo(map);
+
+    // Get distance from map, convert to km
+    // TODO (Marjan) atm it always picks first route option - should check which route option is the actual used one
+    control.addEventListener("routesfound", function(route){
+        lengthInKm = route.routes[0].summary.totalDistance / 1000;
+    });
+
+    // Unless map is initialized with route
+    var waypoints = control.getWaypoints();
+    if (waypoints[0].latLng == null || waypoints[1].latLng == null) {
+        // Find user location and move map initially
+        L.Control.Geocoder.nominatim().geocode(
+            "Berliner Tor 7, 20099 Hamburg",
+            function(results){
+                // Only moves to user location if address was found
+                if (results.length > 0) {
+                    map.panTo(results[0].center);
+                    map.fitBounds(results[0].bbox);
+                }
+            });
+    }
+    </script>
   </div>
 }
 

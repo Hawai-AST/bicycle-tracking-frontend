@@ -21,7 +21,8 @@ import static play.data.Form.form;
 public class Tracks extends Controller {
 
     public static Result tracks() {
-        return ok(views.html.member.tracks.render());
+        Form<TrackRegistration> form = Form.form(TrackRegistration.class).bindFromRequest();
+        return ok(views.html.member.tracks.render(form));
     }
 
     public static Result newtracks(){
@@ -37,7 +38,7 @@ public class Tracks extends Controller {
         return AST.bikeMap();
     }
 
-
+    public static Map<String, String> getTrackName() { return AST.trackNameMap();}
 
     public static Result saveTracks(){
         Form<TrackRegistration> form = Form.form(TrackRegistration.class).bindFromRequest();

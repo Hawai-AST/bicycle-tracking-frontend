@@ -1,7 +1,27 @@
+@(trackForm: Form[TrackRegistration])
+
+@import views.html.helper.bs3._
 
 @main {
   <h1>Hier kannst du in Kürze deine gefahrenen Strecken ansehen</h1>
+  <div class="col-md-12 col-md-offset-1">
+  <h2 class="h2">Strecken bearbeiten</h2>
+    <div style="background:#5cb85c; border: black solid; float:left; height:550px; width:720px;"></div>
+  <div class="col-md-4" style="margin-top : 50 px ;">
+    <div>
+      @helper.form(action = routes.Tracks.saveTracks, 'class -> "form-horizontal") {
+        @selectTrack(trackForm("name"), "Streckenname:")
+        @selectBike(trackForm("bikeId"), "Fahrrad:")
+        @inputTime(trackForm("startAt"), "Startzeit")
+        @inputTime(trackForm("finishedAt"), "Endzeit")
+        @inputSubmit("Änderung speichern")
+      }
 
+    </div>
+  </div>
+
+
+  </div>
 
 
 }

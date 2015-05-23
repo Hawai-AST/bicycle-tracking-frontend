@@ -54,6 +54,17 @@ public class AST {
         }
         return options;
     }
+
+    public static Map<String, String> trackNameMap() {
+        Map<String, String> retval = new HashMap<>();
+        retval.put("0", "");
+        retval.put("1", "Track 1");
+        retval.put("2", "Track 2");
+        retval.put("3", "Track 3");
+        JsonNode response = AST.preparedJson("http://localhost:8080/api/v1/route").get().map(WSResponse::asJson).get(10000);
+        ArrayNode arrayNode =  (ArrayNode) response.get("name");
+        return retval;
+    }
 }
 
 /*
