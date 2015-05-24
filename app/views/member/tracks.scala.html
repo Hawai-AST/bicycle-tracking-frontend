@@ -126,8 +126,8 @@
         // data = array of objects, objects = hashes with lat, lng and name
         var data = $.map(waypoints, function(value, index){
             return {
-                lat: value.latLng.lat,
-                lng: value.latLng.lng,
+                latitude: value.latLng.lat,
+                longitude: value.latLng.lng,
                 name: value.name
             }
         });
@@ -184,19 +184,18 @@
         $.ajax({
             url: "/route",
             type: "POST",
-            data: route
+            //dataType: 'json',
+            data: JSON.stringify(route)
         }).done(function() {
-            // TODO (Louisa / Marjan)  wie soll Speicherung signalisiert werden (hübscher)?
+            // TODO (Louisa / Marjan)  wie soll Speicherung signalisiert werden (hÃ¼bscher)?
+            console.log(JSON.stringify(route));
             alert( "Die Route wurde erfolgreich gespeichert" );
             window.location.reload();
         }).fail(function() {
             alert( "Something went wrong, pls try again." );
         });
-
     }
     </script>
-
-
 
   <div class="col-md-4" style="margin-top : 50 px; float:right;">
     <div>
@@ -208,12 +207,7 @@
         @inputTime(trackForm("finishedAt"), "Endzeit")
         @inputSubmit("Änderung speichern")
       }
-
     </div>
   </div>
-
-
-  </div>
-
-
+  <!--</div>-->
 }

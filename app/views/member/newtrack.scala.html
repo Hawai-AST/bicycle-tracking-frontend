@@ -137,8 +137,8 @@
         // data = array of objects, objects = hashes with lat, lng and name
         var data = $.map(waypoints, function(value, index){
             return {
-                lat: value.latLng.lat,
-                lng: value.latLng.lng,
+                latitude: value.latLng.lat,
+                longitude: value.latLng.lng,
                 name: value.name
             }
         });
@@ -195,15 +195,16 @@
         $.ajax({
             url: "/route",
             type: "POST",
-            data: route
+            //dataType: 'json',
+            data: JSON.stringify(route)
         }).done(function() {
             // TODO (Louisa / Marjan)  wie soll Speicherung signalisiert werden (hübscher)?
+            console.log(JSON.stringify(route));
             alert( "Die Route wurde erfolgreich gespeichert" );
             window.location.reload();
         }).fail(function() {
             alert( "Something went wrong, pls try again." );
         });
-
     }
     </script>
   </div>
