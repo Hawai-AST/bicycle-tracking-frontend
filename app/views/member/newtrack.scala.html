@@ -221,7 +221,6 @@
         }
 
         // Get information from Form
-        // TODO (Louisa Marjan) leere felder abfangen
         var bikeID = document.getElementById("bike").value;
 
         if (bikeID === "") {
@@ -230,7 +229,22 @@
         }
 
         var startAt = document.getElementById("startAt").value;
+
+        // Catch if user deleted default date and didn't enter new
+        if (startAt === "") {
+            window.alert("Bitte w\u00e4hle einen Startzeitpunkt.");
+            return;
+        }
+
         var finishedAt = document.getElementById("finishedAt").value;
+
+        // Catch if user deleted default date and didn't enter new
+        if (finishedAt === "") {
+            window.alert("Bitte w\u00e4hle einen Endzeitpunkt.");
+            return;
+        }
+
+        // TODO (Marjan / Louisa) Catch if format of date is wrong -> disable to write into field only click?
 
         var route = {
             name: routeName,
