@@ -1,4 +1,4 @@
-@(trackForm: Form[TrackRegistration])
+@(trackForm: Form[TrackRegistration], currentUserAddress: String)
 
 @import views.html.helper.bs3._
 
@@ -36,7 +36,7 @@
 
 
 
-    <p> Home sweet home: Berliner Tor 7 </p>
+    <p> Home sweet home: @{currentUserAddress} </p>
 
     <style type="text/css">
     #map { height: 550px; width: 720px; }
@@ -99,16 +99,20 @@
                     name: value.name
                 }
             });
-            document.getElementsById("waypoints").value = waypoints;
+
 
             // Build route as per API spec
             // Set name of the route
-            var routeName = window.prompt("Bitte gib den Namen deiner Route ein!");
+//            var routeName = window.prompt("Bitte gib den Namen deiner Route ein!");
 
-            // User clicked cancel
-            if (routeName === null) {
-                return;
-            }
+            var routeName = document.getElementById("name").value;
+
+//            // User clicked cancel
+//            if (routeName === null) {
+//                return;
+//            }
+
+            //TODO (Louisa Marjan) leere felder abfangen
 
             // User didn't type a name
             if (routeName === "") {
@@ -116,15 +120,18 @@
                 return;
             }
 
-            // TODO (Marjan) bikeID of clicked on bike
-            var bikeID = 123;
+            //get bikeId from Form
+
+            var bikeID = document.getElementById("bike").value;
+            var startAt = document.getElementById("startAt").value;
+            var finishedAt = document.getElementById("finishedAt").value;
 
             var route = {
                 name: routeName,
                 bikeID: bikeID,
                 lengthInKm: lengthInKm,
-                rodeAt: "2015-04-25T12:35:55Z", // TODO (Marjan) get input from user
-                finishedAt: "2015-04-25T12:35:55Z", // TODO (Marjan) get input from user
+                startAt: startAt, // TODO (Marjan) get input from user
+                finishedAt: finishedAt, // TODO (Marjan) get input from user
                 waypoints: data
             }
 
@@ -155,7 +162,7 @@
         attribution:
             'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> ' +
             'contributors, ' + '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-            'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+            'Imagery ï¿½ <a href="http://mapbox.com">Mapbox</a>',
         maxZoom: 18
     }).addTo(map);
 
@@ -181,15 +188,13 @@
     control.addEventListener("routesfound", function(route){
         lengthInKm = route.routes[0].summary.totalDistance / 1000;
     });
-    lengthInKm = route.routes[0].summary.totalDistance / 1000;
-    document.getElementById("length").value = lengthInKm;
 
     // Unless map is initialized with route
     var waypoints = control.getWaypoints();
     if (waypoints[0].latLng == null || waypoints[1].latLng == null) {
         // Find user location and move map initially
         L.Control.Geocoder.nominatim().geocode(
-            "Berliner Tor 7, 20099 Hamburg",
+            "@{currentUserAddress}",
             function(results){
                 // Only moves to user location if address was found
                 if (results.length > 0) {
