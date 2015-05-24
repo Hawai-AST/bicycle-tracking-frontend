@@ -15,7 +15,6 @@ POST        /register                     controllers.Authentication.register
 POST        /waypoints                    controllers.Waypoints.create
 GET         /bikes                        controllers.Bikes.index
 GET         /bike/new                     controllers.Bikes.add
-GET         /bike/:id                     controllers.Bikes.edit(id: String)
 POST        /bike                         controllers.Bikes.update
 
 # Map static resources from the /public folder to the /assets URL path

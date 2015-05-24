@@ -1,6 +1,7 @@
 package models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import play.data.validation.ValidationError;
 import play.libs.Json;
@@ -18,12 +19,11 @@ public class Bike {
     public String salesLocation;
     public int frameNumber;
 
-    public long timestamp;
-    public int status;
-    public String error;
-    public String exception;
-    public String message;
-    public String path;
+    // Have to explicitly declare setter to un-ignore id when reading from server.
+    @JsonProperty
+    public void setId(String inId) {
+        this.id = inId;
+    }
 
     public JsonNode toJson() {
         return Json.toJson(this);

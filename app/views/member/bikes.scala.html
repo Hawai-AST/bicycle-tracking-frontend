@@ -1,7 +1,7 @@
-@import com.fasterxml.jackson.databind.node.ArrayNode
 @import views.html.helper.bs3._
 @import play.data.Form.form
-@(amount: Integer, bikes: ArrayNode, bikeForm: Form[Bike] = form(classOf[Bike])))
+@import java.util
+@(amount: Integer, bikes: util.List[Bike], bikeForm: Form[Bike] = form(classOf[Bike])))
 
 @main {
   <script>
@@ -11,21 +11,21 @@
     });
   </script>
 
-  @for(bike <- bikes.elements()) {
-    <div class="modal fade" id="editModal-@bike.get("id").asText()" tabindex="-1" role="dialog" aria-labelledby="editLabel" aria-hidden="true">
+  @for(bike <- bikes) {
+    <div class="modal fade" id="editModal-@bike.id" tabindex="-1" role="dialog" aria-labelledby="editLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
-        @helper.form(action = routes.Bikes.update, 'id -> ("editBike" + bike.get("id").asText())) {
+        @helper.form(action = routes.Bikes.update, 'id -> ("editBike" + bike.id)) {
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title" id="editLabel">Fahrrad bearbeiten</h4>
           </div>
           <div class="modal-body">
-            <input type="hidden" value="@bike.get("id").asText()" name="id" />
-            @inputText(bikeForm("type").copy(value=Some(bike.get("type").asText())), "Typ")
-            @inputText(bikeForm("frameNumber").copy(value=Some(bike.get("frameNumber").asText())), "Rahmennummer")
-            @inputDate(bikeForm("purchaseDate").copy(value=Some(bike.get("purchaseDate").asText())), "Kaufdatum")
-            @inputDate(bikeForm("nextMaintenance").copy(value=Some(bike.get("nextMaintenance").asText())), "Nächste Wartung")
+            <input type="hidden" value="@bike.id" name="id" />
+            @inputText(bikeForm("type").copy(value=Some(bike.`type`)), "Typ")
+            @inputText(bikeForm("frameNumber").copy(value=Some(bike.frameNumber.toString)), "Rahmennummer")
+            @inputDate(bikeForm("purchaseDate").copy(value=Some(bike.purchaseDate)), "Kaufdatum")
+            @inputDate(bikeForm("nextMaintenance").copy(value=Some(bike.nextMaintenance)), "Nächste Wartung")
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Schlie&szlig;en</button>
@@ -38,51 +38,48 @@
   }
 
   <h1>Meine Fahrr&auml;der</h1>
+  <a href="/bike/new" class="btn btn-success pull-right">&plus;</a>
   <div role="tabpanel">
-    @if(bikes.size() == 0) {
+    @if(bikes.isEmpty) {
       <p>Keine Fahrr&auml;der eingetragen.</p>
     } else {
       <ul class="nav nav-tabs" role="tablist">
-        @for((bike, i) <- bikes.elements().zipWithIndex) {
+        @for((bike, i) <- bikes.zipWithIndex) {
           @if(i == 0) {
-            <li role="presentation" class="active"><a href="#bike-@{bike.get("id").asText()}" aria-controls="bike-@{bike.get("id").asText()}" role="tab" data-toggle="tab">@{bike.get("type").asText()}</a></li>
+            <li role="presentation" class="active"><a href="#bike-@{bike.id}" aria-controls="bike-@{bike.id}" role="tab" data-toggle="tab">@{bike.`type`}</a></li>
           } else {
-            <li role="presentation"><a href="#bike-@{bike.get("id").asText()}" aria-controls="bike-@{bike.get("id").asText()}" role="tab" data-toggle="tab">@{bike.get("type").asText()}</a></li>
+            <li role="presentation"><a href="#bike-@{bike.id}" aria-controls="bike-@{bike.id}" role="tab" data-toggle="tab">@{bike.`type`}</a></li>
           }
         }
       </ul>
 
       <div class="tab-content">
-        @for((bike, i) <- bikes.elements().zipWithIndex) {
+        @for((bike, i) <- bikes.zipWithIndex) {
           @if(i == 0) {
-            <div role="tabpanel" class="tab-pane active" id="bike-@{bike.get("id").asText()}">
+            <div role="tabpanel" class="tab-pane active" id="bike-@{bike.id}">
           } else {
-            <div role="tabpanel" class="tab-pane" id="bike-@{bike.get("id").asText()}">
+            <div role="tabpanel" class="tab-pane" id="bike-@{bike.id}">
           }
 
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal-@bike.get("id").asText()">Edit</button>
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal-@bike.id">Edit</button>
 
             <table class="table">
               <tbody>
                 <tr>
-                  <td>ID</td>
-                  <td>@{bike.get("id").asText()}</td>
-                </tr>
-                <tr>
                   <td>Type</td>
-                  <td>@{bike.get("type").asText()}</td>
+                  <td>@{bike.`type`}</td>
                 </tr>
                 <tr>
                   <td>Framenumber</td>
-                  <td>@{bike.get("frameNumber").asInt()}</td>
+                  <td>@{bike.frameNumber}</td>
                 </tr>
                 <tr>
                   <td>Purchased at</td>
-                  <td>@{bike.get("purchaseDate").asText()}</td>
+                  <td>@{bike.purchaseDate}</td>
                 </tr>
                 <tr>
                   <td>Next maintenance</td>
-                  <td>@{bike.get("nextMaintenance").asText()}</td>
+                  <td>@{bike.purchaseDate}</td>
                 </tr>
               </tbody>
             </table>

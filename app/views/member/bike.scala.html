@@ -5,6 +5,7 @@
   <h1>Fahrrad hinzufügen</h1>
 
   @helper.form(action = routes.Bikes.update, 'id -> "addBike"){
+    <input type="hidden" name="id" value="">
     @inputText(bikeForm("type"), "Typ")
     @inputText(bikeForm("frameNumber"), "Rahmennummer")
     @inputDate(bikeForm("purchaseDate"), "Kaufdatum")
