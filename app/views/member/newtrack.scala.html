@@ -195,12 +195,15 @@
         $.ajax({
             url: "/route",
             type: "POST",
-            //dataType: 'json',
+            // Internet says these two lines are mandatory but with them it's not working.... Why?!
+//            contentType: 'application/json; charset=utf-8',
+//            dataType: 'json',
             data: JSON.stringify(route)
         }).done(function() {
             // TODO (Louisa / Marjan)  wie soll Speicherung signalisiert werden (hübscher)?
             console.log(JSON.stringify(route));
             alert( "Die Route wurde erfolgreich gespeichert" );
+            // TODO (Louisa/ Marjan) When reloading page date fields should reload again to actual day and time
             window.location.reload();
         }).fail(function() {
             alert( "Something went wrong, pls try again." );
