@@ -12,7 +12,6 @@
   <script src="/assets/leaflet-routing-machine-2.3.0/lrm-graphhopper-1.1.0.js"></script>
   <script src="/assets/leaflet-routing-machine-2.3.0/easy-button.js"></script>
 
-
   <div class="col-md-12 col-md-offset-1">
     <h2 class="h2">Eine neue Strecke eintragen</h2>
       <p>Vergewissern Sie sich, dass Sie bereits ein Fahrrad auf unserer Seite eingetragen haben!</p>
@@ -24,14 +23,9 @@
           @inputTime(trackForm("startAt"), "Startzeit")
           @inputTime(trackForm("finishedAt"), "Endzeit")
         }
-          <button onclick="func()">Speichern</button>
-
+        <button onclick="exportRoute()">Speichern</button>
       </div>
     </div>
-
-
-
-
 
     <p> Home sweet home: @{currentUserAddress} </p>
 
@@ -174,6 +168,7 @@
         geocoder: L.Control.Geocoder.nominatim(),
         reverseWaypoints: true,
         // Set GraphHopper as router -- IMPORTANT: Only 500 queries per day for free...!
+        // TODO (Marjan) look up what happens if free queries used up
         router: L.Routing.graphHopper('0ed0b695-73f5-4c79-98ac-81ebf3da1d5f', { "urlParameters": {'vehicle': "bike"}})
     });
 
@@ -181,12 +176,11 @@
 
     // Get distance from map, convert to km
     // TODO (Marjan) atm it always picks first route option - should check which route option is the actual used one
-
     control.addEventListener("routesfound", function(route){
         lengthInKm = route.routes[0].summary.totalDistance / 1000;
     });
 
-    // Unless map is initialized with route
+    // Initialize map with user's home address unless map is initialized with route
     var waypoints = control.getWaypoints();
     if (waypoints[0].latLng == null || waypoints[1].latLng == null) {
         // Find user location and move map initially
@@ -201,71 +195,58 @@
             });
     }
 
+    // Gets called from "Speichern" button
+    function exportRoute() {
+        var waypoints = control.getWaypoints();
 
-
-    function func() {
-            var waypoints = control.getWaypoints();
-
-            // Maps has too much information for backend,
-            // therewith we build hashes with relevant information
-            // data = array of objects, objects = hashes with lat, lng and name
-            var data = $.map(waypoints, function(value, index){
-                return {
-                    lat: value.latLng.lat,
-                    lng: value.latLng.lng,
-                    name: value.name
-                }
-            });
-
-
-            // Build route as per API spec
-            // Set name of the route
-//            var routeName = window.prompt("Bitte gib den Namen deiner Route ein!");
-
-            var routeName = document.getElementById("name").value;
-
-//            // User clicked cancel
-//            if (routeName === null) {
-//                return;
-//            }
-
-            //TODO (Louisa Marjan) leere felder abfangen
-
-            // User didn't type a name
-            if (routeName === "") {
-                window.alert("Die Route kann ohne Namen nicht gespeichert werden.");
-                return;
+        // Maps has too much information for backend,
+        // therewith we build hashes with relevant information
+        // data = array of objects, objects = hashes with lat, lng and name
+        var data = $.map(waypoints, function(value, index){
+            return {
+                lat: value.latLng.lat,
+                lng: value.latLng.lng,
+                name: value.name
             }
+        });
 
-            //get bikeId from Form
+        // Build route as per API spec
+        // Set name of the route
+        var routeName = document.getElementById("name").value;
 
-            var bikeID = document.getElementById("bike").value;
-            var startAt = document.getElementById("startAt").value;
-            var finishedAt = document.getElementById("finishedAt").value;
-
-            var route = {
-                name: routeName,
-                bikeID: bikeID,
-                lengthInKm: lengthInKm,
-                startAt: startAt, // TODO (Marjan) get input from user
-                finishedAt: finishedAt, // TODO (Marjan) get input from user
-                waypoints: data
-            }
-
-            console.log(route);
-
-            // Send information to backend
-            $.ajax({
-                url: "/route",
-                type: "POST",
-                data: route
-            }).done(function() {
-                // TODO wie soll Speicherung signalisiert werden?
-            }).fail(function() {
-                alert( "Something went wrong, pls try again." );
-            });
+        // Catch if user didn't type a name
+        if (routeName === "") {
+            window.alert("Die Route kann ohne Namen nicht gespeichert werden.");
+            return;
         }
 
+        // Get information from Form
+        var bikeID = document.getElementById("bike").value;
+        var startAt = document.getElementById("startAt").value;
+        var finishedAt = document.getElementById("finishedAt").value;
+
+        var route = {
+            name: routeName,
+            bikeID: bikeID,
+            lengthInKm: lengthInKm,
+            startAt: startAt,
+            finishedAt: finishedAt,
+            waypoints: data
+        }
+
+        console.log(route);
+
+        // Send information to backend
+        $.ajax({
+            url: "/route",
+            type: "POST",
+            data: route
+        }).done(function() {
+            // TODO wie soll Speicherung signalisiert werden?
+        }).fail(function() {
+            alert( "Something went wrong, pls try again." );
+        });
+    }
     </script>
   </div>
 }
