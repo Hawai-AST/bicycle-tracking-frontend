@@ -4,9 +4,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import models.BikeListDTO;
 import play.libs.ws.WSResponse;
+import play.mvc.Result;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Factory Class
@@ -57,10 +59,19 @@ public class AST {
         retval.put("0", "");
         retval.put("1", "Track 1");
         retval.put("2", "Track 2");
-        retval.put("3", "Track 3");
+        retval.put("3", "zrack 3");
         JsonNode response = AST.preparedJson("http://localhost:8080/api/v1/route").get().map(WSResponse::asJson).get(10000);
         ArrayNode arrayNode =  (ArrayNode) response.get("name");
         return retval;
+    }
+
+
+    public static String getTrack(){
+        String s = "";
+        // TODO (Louisa / Marjan) use/get correct id
+        JsonNode response = AST.preparedJson("http://localhost:8080/api/v1/route").get().map(WSResponse::asJson).get(10000);
+        System.out.println("these are the routes" + response);
+        return s;
     }
 
     public static String getUserAddress(){

@@ -11,6 +11,7 @@ import play.libs.ws.WSResponse;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import static play.data.Form.form;
 
@@ -22,7 +23,9 @@ public class Tracks extends Controller {
 
     public static Result tracks() {
         Form<TrackRegistration> form = Form.form(TrackRegistration.class).bindFromRequest();
-        return ok(views.html.member.tracks.render(form));
+        String currentUserAddress = AST.getUserAddress();
+        getTrack();
+        return ok(views.html.member.tracks.render(form, currentUserAddress));
     }
 
     public static Result newtracks(){
@@ -33,13 +36,19 @@ public class Tracks extends Controller {
 
     /**
      *
-     * @return a list of the users' bikes
+     * @return a list of the users bikes
      */
     public static Map<String, String> getBikeOptions() {
         return AST.bikeMap();
     }
 
-    public static Map<String, String> getTrackName() { return AST.trackNameMap();}
+    public static Map<String, String> getTrackName() {
+        return AST.trackNameMap();
+    }
+
+    public static String getTrack(){
+        return AST.getTrack();
+    }
 
     public static Result saveTracks(){
         Form<TrackRegistration> form = Form.form(TrackRegistration.class).bindFromRequest();
