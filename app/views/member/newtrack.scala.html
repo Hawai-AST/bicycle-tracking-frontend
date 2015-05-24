@@ -221,7 +221,14 @@
         }
 
         // Get information from Form
+        // TODO (Louisa Marjan) leere felder abfangen
         var bikeID = document.getElementById("bike").value;
+
+        if (bikeID === "") {
+            window.alert("Bitte w\u00e4hle ein Fahhrad aus.");
+            return;
+        }
+
         var startAt = document.getElementById("startAt").value;
         var finishedAt = document.getElementById("finishedAt").value;
 
