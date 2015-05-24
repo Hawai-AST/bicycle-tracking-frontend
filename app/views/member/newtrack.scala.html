@@ -23,11 +23,8 @@
           @selectBike(trackForm("bike"), "Fahrrad:") <!-- bikeID -->
           @inputTime(trackForm("startAt"), "Startzeit")
           @inputTime(trackForm("finishedAt"), "Endzeit")
-          <input type="hidden" name="length" value=""/>
-          <input type="hidden" name="waypoints" value="">
-          @inputSubmit("Speichern")
         }
-
+          <button onclick="func()">Speichern</button>
 
       </div>
     </div>
@@ -84,9 +81,129 @@
     var lengthInKm;
 
     // Add button for data export
+//    L.easyButton(
+//        'fa-floppy-o',
+//        function() {
+//            var waypoints = control.getWaypoints();
+//
+//            // Maps has too much information for backend,
+//            // therewith we build hashes with relevant information
+//            // data = array of objects, objects = hashes with lat, lng and name
+//            var data = $.map(waypoints, function(value, index){
+//                return {
+//                    lat: value.latLng.lat,
+//                    lng: value.latLng.lng,
+//                    name: value.name
+//                }
+//            });
+//
+//
+//            // Build route as per API spec
+//            // Set name of the route
+////            var routeName = window.prompt("Bitte gib den Namen deiner Route ein!");
+//
+//            var routeName = document.getElementById("name").value;
+//
+////            // User clicked cancel
+////            if (routeName === null) {
+////                return;
+////            }
+//
+//            //TODO (Louisa Marjan) leere felder abfangen
+//
+//            // User didn't type a name
+//            if (routeName === "") {
+//                window.alert("Die Route kann ohne Namen nicht gespeichert werden.");
+//                return;
+//            }
+//
+//            //get bikeId from Form
+//
+//            var bikeID = document.getElementById("bike").value;
+//            var startAt = document.getElementById("startAt").value;
+//            var finishedAt = document.getElementById("finishedAt").value;
+//
+//            var route = {
+//                name: routeName,
+//                bikeID: bikeID,
+//                lengthInKm: lengthInKm,
+//                startAt: startAt, // TODO (Marjan) get input from user
+//                finishedAt: finishedAt, // TODO (Marjan) get input from user
+//                waypoints: data
+//            }
+//
+//            console.log(route);
+//
+//            // Send information to backend
+//            $.ajax({
+//                url: "/route",
+//                type: "POST",
+//                data: route
+//            }).done(function() {
+//                // TODO wie soll Speicherung signalisiert werden?
+//            }).fail(function() {
+//                alert( "Something went wrong, pls try again." );
+//            });
+//        },
+//        "Save route");
+
+    // Add button for data import
     L.easyButton(
-        'fa-floppy-o',
-        function() {
+        'fa-folder-open',
+        function(){/* TODO */},
+        'Open saved route');
+
+    // Get map itself
+    // http://{s}.tiles.mapbox.com/v3/MapID/{z}/{x}/{y}.png
+    L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution:
+            'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> ' +
+            'contributors, ' + '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+            'Imagery � <a href="http://mapbox.com">Mapbox</a>',
+        maxZoom: 18
+    }).addTo(map);
+
+    // Add basic routing control
+    var control = L.Routing.control({
+        // example route
+//        waypoints: [
+//        L.latLng(53.56875, 9.98286),
+//        L.latLng(53.5571614, 10.023104)
+//        ],
+        routeWhileDragging: true,
+        geocoder: L.Control.Geocoder.nominatim(),
+        reverseWaypoints: true,
+        // Set GraphHopper as router -- IMPORTANT: Only 500 queries per day for free...!
+        router: L.Routing.graphHopper('0ed0b695-73f5-4c79-98ac-81ebf3da1d5f', { "urlParameters": {'vehicle': "bike"}})
+    });
+
+    control.addTo(map);
+
+    // Get distance from map, convert to km
+    // TODO (Marjan) atm it always picks first route option - should check which route option is the actual used one
+
+    control.addEventListener("routesfound", function(route){
+        lengthInKm = route.routes[0].summary.totalDistance / 1000;
+    });
+
+    // Unless map is initialized with route
+    var waypoints = control.getWaypoints();
+    if (waypoints[0].latLng == null || waypoints[1].latLng == null) {
+        // Find user location and move map initially
+        L.Control.Geocoder.nominatim().geocode(
+            "@{currentUserAddress}",
+            function(results){
+                // Only moves to user location if address was found
+                if (results.length > 0) {
+                    map.panTo(results[0].center);
+                    map.fitBounds(results[0].bbox);
+                }
+            });
+    }
+
+
+
+    function func() {
             var waypoints = control.getWaypoints();
 
             // Maps has too much information for backend,
@@ -147,62 +264,8 @@
             }).fail(function() {
                 alert( "Something went wrong, pls try again." );
             });
-        },
-        "Save route");
+        }
 
-    // Add button for data import
-    L.easyButton(
-        'fa-folder-open',
-        function(){/* TODO */},
-        'Open saved route');
-
-    // Get map itself
-    // http://{s}.tiles.mapbox.com/v3/MapID/{z}/{x}/{y}.png
-    L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution:
-            'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> ' +
-            'contributors, ' + '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-            'Imagery � <a href="http://mapbox.com">Mapbox</a>',
-        maxZoom: 18
-    }).addTo(map);
-
-    // Add basic routing control
-    var control = L.Routing.control({
-        // example route
-//        waypoints: [
-//        L.latLng(53.56875, 9.98286),
-//        L.latLng(53.5571614, 10.023104)
-//        ],
-        routeWhileDragging: true,
-        geocoder: L.Control.Geocoder.nominatim(),
-        reverseWaypoints: true,
-        // Set GraphHopper as router -- IMPORTANT: Only 500 queries per day for free...!
-        router: L.Routing.graphHopper('0ed0b695-73f5-4c79-98ac-81ebf3da1d5f', { "urlParameters": {'vehicle': "bike"}})
-    });
-
-    control.addTo(map);
-
-    // Get distance from map, convert to km
-    // TODO (Marjan) atm it always picks first route option - should check which route option is the actual used one
-
-    control.addEventListener("routesfound", function(route){
-        lengthInKm = route.routes[0].summary.totalDistance / 1000;
-    });
-
-    // Unless map is initialized with route
-    var waypoints = control.getWaypoints();
-    if (waypoints[0].latLng == null || waypoints[1].latLng == null) {
-        // Find user location and move map initially
-        L.Control.Geocoder.nominatim().geocode(
-            "@{currentUserAddress}",
-            function(results){
-                // Only moves to user location if address was found
-                if (results.length > 0) {
-                    map.panTo(results[0].center);
-                    map.fitBounds(results[0].bbox);
-                }
-            });
-    }
     </script>
   </div>
 }
