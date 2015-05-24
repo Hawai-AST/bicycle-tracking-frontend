@@ -15,28 +15,23 @@
 
   <div class="col-md-12 col-md-offset-1">
     <h2 class="h2">Eine neue Strecke eintragen</h2>
+      <p>Vergewissern Sie sich, dass Sie bereits ein Fahrrad auf unserer Seite eingetragen haben!</p>
     <div class="col-md-4" style="margin-top : 50 px ;">
       <div>
         @helper.form(action = routes.Tracks.saveTracks, 'class -> "form-horizontal") {
           @inputTextTrack(trackForm("name"), "Streckenname:")
-          @selectBike(trackForm("bikeId"), "Fahrrad:")
+          @selectBike(trackForm("bike"), "Fahrrad:") <!-- bikeID -->
           @inputTime(trackForm("startAt"), "Startzeit")
           @inputTime(trackForm("finishedAt"), "Endzeit")
-          @inputTextTrack(trackForm("way"), "way:")
+          <input type="hidden" name="length" value=""/>
+          <input type="hidden" name="waypoints" value="">
           @inputSubmit("Speichern")
         }
 
-        <script>
-          var myModule = require('./application/javascript');
-          var name = myModule.name;
 
-         //   var name = "hallo";
-            document.write(name);
-            document.getElementById("way").value =  name;
-        </script>
       </div>
     </div>
-    <!--<div style="background:#5cb85c; border: black solid; float:right; height:550px; width:720px;"></div>-->
+
 
 
 
@@ -104,6 +99,7 @@
                     name: value.name
                 }
             });
+            document.getElementsById("waypoints").value = waypoints;
 
             // Build route as per API spec
             // Set name of the route
@@ -181,9 +177,12 @@
 
     // Get distance from map, convert to km
     // TODO (Marjan) atm it always picks first route option - should check which route option is the actual used one
+
     control.addEventListener("routesfound", function(route){
         lengthInKm = route.routes[0].summary.totalDistance / 1000;
     });
+    lengthInKm = route.routes[0].summary.totalDistance / 1000;
+    document.getElementById("length").value = lengthInKm;
 
     // Unless map is initialized with route
     var waypoints = control.getWaypoints();

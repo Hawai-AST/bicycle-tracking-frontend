@@ -2,6 +2,7 @@ package models.utility;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import models.BikeListDTO;
 import play.libs.ws.WSResponse;
 
 import java.util.HashMap;
@@ -42,16 +43,12 @@ public class AST {
         options.put("1", "1");
         options.put("2", "2");
         JsonNode response = AST.preparedJson("http://localhost:8080/api/v1/bikes").get().map(WSResponse::asJson).get(10000);
-        ArrayNode arrayNode =  (ArrayNode) response.get("bikes");
-
-        if (arrayNode == null){
-            System.err.print("\n\n ----AST#46 didn't work----");
-            options.put("bike1", "didn't work");
-        } else {
-            System.err.print("\n\n ----AST#49 hier----");
-            options.put("bike1", "hier sollten Fahrräder stehen");
-            System.out.print(arrayNode.toString());
+        BikeListDTO bikeList = BikeListDTO.fromJson(response);
+        if (bikeList.amount == 0){
+            options.put("Bike1", "Sie haben noch keine Fahrräder");
         }
+        System.out.println(" das ist die antwort " + response);
+
         return options;
     }
 

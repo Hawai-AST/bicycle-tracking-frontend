@@ -13,9 +13,11 @@ import java.util.Date;
 public class TrackRegistration {
 
     public String name;
-    public long bikeId;
+    public long bike;
     public Date startAt;
     public Date finishedAt;
+    public long length;
+    public String waypoints;
 
     public JsonNode toJson(){
         return Json.toJson(this);
