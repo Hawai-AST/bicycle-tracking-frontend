@@ -62,7 +62,24 @@ public class AST {
         ArrayNode arrayNode =  (ArrayNode) response.get("name");
         return retval;
     }
+
+    public static String getUserAddress(){
+        String userAddress;
+
+        JsonNode response = AST.preparedJson("http://localhost:8080/api/v1/user").get().map(WSResponse::asJson).get(10000);
+
+        JsonNode street =  response.get("address").get("street");
+        JsonNode housenumber = response.get("address").get("houseNumber");
+        JsonNode city = response.get("address").get("city");
+        JsonNode postcode = response.get("address").get("postcode");
+        //concat the users address
+        userAddress = street.asText() + " " + housenumber.asText()  + ", "  + city.asText() + ", "  + postcode.asText();
+
+        return userAddress;
+    }
 }
+
+
 
 /*
   JsonNode response = AST.preparedJson("http://localhost:8080/api/v1/bikes").get().map(WSResponse::asJson).get(10000);

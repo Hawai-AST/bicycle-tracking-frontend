@@ -74,73 +74,6 @@
     // Intitialize total distance of route
     var lengthInKm;
 
-    // Add button for data export
-//    L.easyButton(
-//        'fa-floppy-o',
-//        function() {
-//            var waypoints = control.getWaypoints();
-//
-//            // Maps has too much information for backend,
-//            // therewith we build hashes with relevant information
-//            // data = array of objects, objects = hashes with lat, lng and name
-//            var data = $.map(waypoints, function(value, index){
-//                return {
-//                    lat: value.latLng.lat,
-//                    lng: value.latLng.lng,
-//                    name: value.name
-//                }
-//            });
-//
-//
-//            // Build route as per API spec
-//            // Set name of the route
-////            var routeName = window.prompt("Bitte gib den Namen deiner Route ein!");
-//
-//            var routeName = document.getElementById("name").value;
-//
-////            // User clicked cancel
-////            if (routeName === null) {
-////                return;
-////            }
-//
-//            //TODO (Louisa Marjan) leere felder abfangen
-//
-//            // User didn't type a name
-//            if (routeName === "") {
-//                window.alert("Die Route kann ohne Namen nicht gespeichert werden.");
-//                return;
-//            }
-//
-//            //get bikeId from Form
-//
-//            var bikeID = document.getElementById("bike").value;
-//            var startAt = document.getElementById("startAt").value;
-//            var finishedAt = document.getElementById("finishedAt").value;
-//
-//            var route = {
-//                name: routeName,
-//                bikeID: bikeID,
-//                lengthInKm: lengthInKm,
-//                startAt: startAt, // TODO (Marjan) get input from user
-//                finishedAt: finishedAt, // TODO (Marjan) get input from user
-//                waypoints: data
-//            }
-//
-//            console.log(route);
-//
-//            // Send information to backend
-//            $.ajax({
-//                url: "/route",
-//                type: "POST",
-//                data: route
-//            }).done(function() {
-//                // TODO wie soll Speicherung signalisiert werden?
-//            }).fail(function() {
-//                alert( "Something went wrong, pls try again." );
-//            });
-//        },
-//        "Save route");
-
     // Add button for data import
     L.easyButton(
         'fa-folder-open',
@@ -264,10 +197,13 @@
             type: "POST",
             data: route
         }).done(function() {
-            // TODO wie soll Speicherung signalisiert werden?
+            // TODO (Louisa / Marjan)  wie soll Speicherung signalisiert werden (hübscher)?
+            alert( "Die Route wurde erfolgreich gespeichert" );
+            window.location.reload();
         }).fail(function() {
             alert( "Something went wrong, pls try again." );
         });
+
     }
     </script>
   </div>

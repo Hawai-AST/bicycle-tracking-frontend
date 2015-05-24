@@ -27,7 +27,7 @@ public class Tracks extends Controller {
 
     public static Result newtracks(){
         Form<TrackRegistration> form = Form.form(TrackRegistration.class).bindFromRequest();
-        String currentUserAddress = "Berliner Tor 7, Hamburg";
+        String currentUserAddress = AST.getUserAddress();
         return ok(views.html.member.newtrack.render(form, currentUserAddress));
     }
 
@@ -44,7 +44,8 @@ public class Tracks extends Controller {
     public static Result saveTracks(){
         Form<TrackRegistration> form = Form.form(TrackRegistration.class).bindFromRequest();
         System.out.println(form.toString());
-        String currentUserAddress = "Berliner Tor 7, Hamburg";
+
+        String currentUserAddress = AST.getUserAddress();
 //        if (Application.doRequest("http://localhost:8080/api/v1/route", form.get().toJson()) != null) {
 //            flash("alert", "Strecke konnte nicht gespeichert werden");
 //            flash("alert_type", "danger");
