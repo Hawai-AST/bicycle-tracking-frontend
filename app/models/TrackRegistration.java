@@ -25,6 +25,10 @@ public class TrackRegistration {
         return Json.toJson(this);
     }
 
+    public static TrackRegistration fromJson(JsonNode node){
+        return Json.fromJson(node, TrackRegistration.class);
+    }
+
     public List<ValidationError> validate() {
         List<ValidationError> errors = new ArrayList<>();
         if (name.isEmpty()) {

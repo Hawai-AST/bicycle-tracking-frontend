@@ -27,7 +27,7 @@ public class Tracks extends Controller {
     public static Form<TrackRegistration> form = Form.form(TrackRegistration.class);
 
     public static Result tracks() {
-        Form<TrackRegistration> form = Form.form(TrackRegistration.class).bindFromRequest();
+        Form<TrackRegistration> form = Form.form(TrackRegistration.class);
         String currentUserAddress = AST.getUserAddress();
         getTrack();
         return ok(views.html.member.tracks.render(form, currentUserAddress));

@@ -3,6 +3,7 @@ package models.utility;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import models.Bike;
+import models.TrackRegistration;
 import play.libs.ws.WSResponse;
 
 import java.util.*;
@@ -45,15 +46,14 @@ public class AST {
         return bikeList;
     }
 
-    public static Map<String, String> trackNameMap() {
-        Map<String, String> retval = new HashMap<>();
-        retval.put("0", "");
-        retval.put("1", "Track 1");
-        retval.put("2", "Track 2");
-        retval.put("3", "zrack 3");
+    public static List<TrackRegistration> trackNameMap() {
+        List<TrackRegistration> trackList = new ArrayList<>();
         JsonNode response = AST.preparedJson("http://localhost:8080/api/v1/route").get().map(WSResponse::asJson).get(10000);
-        ArrayNode arrayNode =  (ArrayNode) response.get("name");
-        return retval;
+        for(JsonNode trackNode : response.get("data")){
+            trackList.add(TrackRegistration.fromJson(trackNode));
+        }
+//        ArrayNode arrayNode =  (ArrayNode) response.get("name");
+        return trackList;
     }
 
 
@@ -61,7 +61,7 @@ public class AST {
         String s = "";
         // TODO (Louisa / Marjan) use/get correct id
         JsonNode response = AST.preparedJson("http://localhost:8080/api/v1/route").get().map(WSResponse::asJson).get(10000);
-        System.out.println("these are the routes" + response);
+//        System.out.println("these are the routes" + response);
         return s;
     }
 
