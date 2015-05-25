@@ -45,6 +45,7 @@ public class AST {
         options.put("1", "1");
         options.put("2", "2");
         JsonNode response = AST.preparedJson("http://localhost:8080/api/v1/bikes").get().map(WSResponse::asJson).get(10000);
+        System.out.println("This is the BikeResponse " + response.toString());
         BikeListDTO bikeList = BikeListDTO.fromJson(response);
         if (bikeList.amount == 0){
             options.put("Bike1", "Sie haben noch keine Fahrräder");
