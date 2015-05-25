@@ -24,9 +24,9 @@
           @inputTime(trackForm("finishedAt"), "Endzeit")
           @inputTextHidden(trackForm("length"))
           @inputTextHidden(trackForm("waypointsList"))
-          @inputSubmitRoute("Speichern")
+          <!--@inputSubmitRoute("Speichern")-->
         }
-        <!--<button onclick="exportRoute()">Speichern</button>-->
+        <button onclick="exportRoute()">Speichern</button>
       </div>
     </div>
 
@@ -221,20 +221,10 @@
             console.log(JSON.stringify(route));
             alert( "Die Route wurde erfolgreich gespeichert" );
             // TODO (Louisa/ Marjan) When reloading page date fields should reload again to actual day and time
-            window.location.reload();
+            //window.location.reload();
         }).fail(function() {
             alert( "Something went wrong, pls try again." );
         });
-
-//        {
-//            //url: "/route",
-//            //type: "POST",
-//            // Internet says these two lines are mandatory but with them it's not working.... Why?!
-////            contentType: 'application/json; charset=utf-8',
-////            dataType: 'json',
-//            data: route
-           // data: JSON.stringify(route)
-//        }
    }
     </script>
   </div>
