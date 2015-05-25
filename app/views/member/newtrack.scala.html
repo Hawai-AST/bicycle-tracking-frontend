@@ -22,8 +22,11 @@
           @selectBike(trackForm("bike"), "Fahrrad:") <!-- bikeID -->
           @inputTime(trackForm("startAt"), "Startzeit")
           @inputTime(trackForm("finishedAt"), "Endzeit")
+          @inputTextHidden(trackForm("length"))
+          @inputTextHidden(trackForm("waypointsList"))
+          @inputSubmitRoute("Speichern")
         }
-        <button onclick="exportRoute()">Speichern</button>
+        <!--<button onclick="exportRoute()">Speichern</button>-->
       </div>
     </div>
 
@@ -126,6 +129,26 @@
                     map.fitBounds(results[0].bbox);
                 }
             });
+    }
+
+
+    function getMapData(){
+    var waypoints = control.getWaypoints();
+
+        // Maps has too much information for backend,
+        // therewith we build hashes with relevant information
+        // data = array of objects, objects = hashes with lat, lng and name
+        var data = $.map(waypoints, function(value, index){
+            return {
+                latitude: value.latLng.lat,
+                longitude: value.latLng.lng,
+                name: value.name
+            }
+        });
+//        console.log(JSON.stringify(data));
+      $('#length').val(lengthInKm);
+      $('#waypointsList').val(JSON.stringify(data));
+
     }
 
     // Gets called from "Speichern" button
