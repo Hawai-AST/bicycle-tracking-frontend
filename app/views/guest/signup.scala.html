@@ -7,7 +7,7 @@
 
     <div class="col-md-10 col-md-offset-1">
         <h2 class="h2">Als neuer Kunde registrieren</h2>
-        @helper.form(action = routes.Application.register, args = 'class -> "form-horizontal") {
+        @helper.form(action = routes.Authentication.register, args = 'class -> "form-horizontal") {
             @inputText(registrationForm("email"), "E-Mail")
             @inputPassword(registrationForm("password"), "Passwort")
             @inputPassword(registrationForm("passwordCheck"), "Passwort bestätigen")
@@ -24,7 +24,7 @@
             @inputText(registrationForm("address.city"), "Stadt")
             @inputText(registrationForm("address.state"), "Bundesland")
             @inputText(registrationForm("address.country"), "Land")
-            @inputSubmit("Registrieren")
+            @inputSubmit("Registrieren", "primary", "lg")
         }
     </div>
 }
