@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import models.Bike;
 import models.TrackRegistration;
 import models.utility.AST;
 import models.utility.value.Waypoints;
@@ -43,8 +44,14 @@ public class Tracks extends Controller {
      *
      * @return a list of the users bikes
      */
-    public static Map<String, String> getBikeOptions() {
-        return AST.bikeMap();
+    public static List<String> getBikeOptions() {
+        List<String> option= new ArrayList<>();
+
+        List<Bike> bikes = AST.bikeMap();
+        for (int i=0; i < bikes.size(); i++){
+            option.add(String.valueOf(bikes.get(i).frameNumber));
+        }
+        return option;
     }
 
     public static Map<String, String> getTrackName() {

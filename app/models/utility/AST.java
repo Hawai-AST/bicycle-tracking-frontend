@@ -2,13 +2,10 @@ package models.utility;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import models.BikeListDTO;
+import models.Bike;
 import play.libs.ws.WSResponse;
-import play.mvc.Result;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Factory Class
@@ -39,20 +36,13 @@ public class AST {
      *
      * @return bikes name of logged in user
      */
-    public static Map<String, String> bikeMap() {
-        Map<String, String> options = new HashMap<>();
-        options.put("", "wähle");
-        options.put("1", "1");
-        options.put("2", "2");
+    public static List<Bike> bikeMap() {
         JsonNode response = AST.preparedJson("http://localhost:8080/api/v1/bikes").get().map(WSResponse::asJson).get(10000);
-        System.out.println("This is the BikeResponse " + response.toString());
-        BikeListDTO bikeList = BikeListDTO.fromJson(response);
-        if (bikeList.amount == 0){
-            options.put("Bike1", "Sie haben noch keine Fahrräder");
+        List<Bike> bikeList = new ArrayList<Bike>();
+        for(JsonNode bikeNode : response.get("bikes")) {
+            bikeList.add(Bike.fromJson(bikeNode));
         }
-        System.out.println(" das ist die antwort " + response);
-
-        return options;
+        return bikeList;
     }
 
     public static Map<String, String> trackNameMap() {
