@@ -91,7 +91,7 @@ public class Tracks extends Controller {
 //            flash("alert_type", "success");
 //            return ok(views.html.member.newtrack.render(form, currentUserAddress));
 //        }
-        return ok(registration.toJson());
-        //return ok(views.html.member.newtrack.render(form, currentUserAddress));
+        //return ok(registration.toJson());
+        return ok(views.html.member.newtrack.render(form, currentUserAddress));
     }
 }
