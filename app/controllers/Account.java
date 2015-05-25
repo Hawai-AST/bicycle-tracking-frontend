@@ -20,6 +20,7 @@ public class Account extends Controller {
     final static Form<ChangePassword> changePasswordForm = form(ChangePassword.class);
     final static Form<ChangeUserCredentials> changeUserCredentialsForm = form(ChangeUserCredentials.class);
 
+    @RequiresLogin
     public static Result showAccount() {
         F.Promise<JsonNode> response = AST.preparedJson("http://localhost:8080/api/v1/user").get().map(WSResponse::asJson);
         JsonNode node = response.get(10000);
@@ -29,6 +30,7 @@ public class Account extends Controller {
         return ok(account.render(changePasswordForm, prefilledUserCredentialsForm));
     }
 
+    @RequiresLogin
     public static Result changePassword() {
         Form<ChangePassword> filledForm = changePasswordForm.bindFromRequest();
         if (filledForm.hasErrors()) {
@@ -56,6 +58,7 @@ public class Account extends Controller {
         }
     }
 
+    @RequiresLogin
     public static Result changeUserCredentials() {
         Form<ChangeUserCredentials> filledForm = changeUserCredentialsForm.bindFromRequest();
         if (filledForm.hasErrors()) {
