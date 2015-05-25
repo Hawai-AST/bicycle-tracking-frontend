@@ -215,15 +215,9 @@
         console.log(route);
 
         // Send information to backend
-        $.ajax({
-            url: "/route",
-            type: "POST",
-            // Internet says these two lines are mandatory but with them it's not working.... Why?!
-//            contentType: 'application/json; charset=utf-8',
-//            dataType: 'json',
-            data: JSON.stringify(route)
-        }).done(function() {
+        $.post("/route", {data: JSON.stringify(route)}).done(function() {
             // TODO (Louisa / Marjan)  wie soll Speicherung signalisiert werden (hübscher)?
+            console.log(route);
             console.log(JSON.stringify(route));
             alert( "Die Route wurde erfolgreich gespeichert" );
             // TODO (Louisa/ Marjan) When reloading page date fields should reload again to actual day and time
@@ -231,10 +225,19 @@
         }).fail(function() {
             alert( "Something went wrong, pls try again." );
         });
-    }
+
+//        {
+//            //url: "/route",
+//            //type: "POST",
+//            // Internet says these two lines are mandatory but with them it's not working.... Why?!
+////            contentType: 'application/json; charset=utf-8',
+////            dataType: 'json',
+//            data: route
+           // data: JSON.stringify(route)
+   }
     </script>
   </div>
 }
-
+}
 
 

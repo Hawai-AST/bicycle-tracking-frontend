@@ -4,11 +4,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import models.TrackRegistration;
 import models.utility.AST;
 import play.data.Form;
+import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.helper.form;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class Maps extends Controller {
     // TODO (Marjan) impl correct return
@@ -34,7 +36,15 @@ public class Maps extends Controller {
 //        }
 //    }
     public static Result create() {
-        return ok("'test'");
+        Map<String, String[]> request = request().body().asFormUrlEncoded();
+        String result = request.get("data")[0];
+        System.out.println(request);
+        System.out.println(result);
+        System.out.println(Json.parse(result));
+
+        JsonNode jsonResponse = Application.doRequest("http://localhost:8080/api/v1/route", Json.parse(result));
+
+        return ok(jsonResponse.asText());
     }
 
     /**
