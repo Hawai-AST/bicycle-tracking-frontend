@@ -23,6 +23,10 @@ public class Track {
     public String finishedAt;
     public Double lengthInKm;
     public List<Waypoints> waypoints;
+    @JsonIgnore
+    private String createdAt;
+    @JsonIgnore
+    private String updatedAt;
 
     @JsonProperty
     public String getId() {
@@ -32,6 +36,14 @@ public class Track {
     @JsonProperty
     public void setId(String id) {
         this.id = id;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public JsonNode toJson(){
