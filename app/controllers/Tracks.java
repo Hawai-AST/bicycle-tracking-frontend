@@ -41,12 +41,14 @@ public class Tracks extends Controller {
      *
      * @return a list of the users bikes
      */
-    public static List<String> getBikeOptions() {
-        List<String> option = new ArrayList<>();
+    public static Map<String, String> getBikeOptions() {
+        Map<String, String> option = new HashMap<>();
 
         List<Bike> bikes = AST.bikeMap();
-        for (int i = 0; i < bikes.size(); i++){
-            option.add(String.valueOf(bikes.get(i).id));
+        for (Bike bikeElem : bikes){
+             String id = bikeElem.id;
+             String name = bikeElem.type;
+             option.put(id, name);
         }
         return option;
     }
