@@ -43,7 +43,7 @@ public class Maps extends Controller {
         System.out.println(Json.parse(result));
 
         JsonNode jsonResponse = Application.doRequest("http://localhost:8080/api/v1/route", Json.parse(result));
-
+//        System.out.println("----Map Z 46: this is what we are sending: " + jsonResponse.toString());
         return ok(jsonResponse.asText());
     }
 

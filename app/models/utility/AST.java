@@ -1,11 +1,14 @@
 package models.utility;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import models.Bike;
 import models.TrackRegistration;
 import play.libs.ws.WSResponse;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -49,9 +52,19 @@ public class AST {
     public static List<TrackRegistration> trackNameMap() {
         List<TrackRegistration> trackList = new ArrayList<>();
         JsonNode response = AST.preparedJson("http://localhost:8080/api/v1/route").get().map(WSResponse::asJson).get(10000);
-        for(JsonNode trackNode : response.get("data")){
-            trackList.add(TrackRegistration.fromJson(trackNode));
+        System.err.println("-------AST Z55 : this is the track response: " + response.toString());
+
+        try {
+            List<TrackRegistration> myObjects = new ObjectMapper().readValue(response.toString(), new TypeReference<List<TrackRegistration>>(){});
+            System.err.println("-------AST Z59 : this is the track myObjects: " + myObjects);
+        } catch (IOException e) {
+            System.err.println("-------AST Z61 : did not work");
+            e.printStackTrace();
         }
+
+//        for(JsonNode trackNode : response.get("data")){
+//            trackList.add(TrackRegistration.fromJson(trackNode));
+//        }
 //        ArrayNode arrayNode =  (ArrayNode) response.get("name");
         return trackList;
     }

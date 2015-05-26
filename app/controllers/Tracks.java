@@ -49,13 +49,19 @@ public class Tracks extends Controller {
 
         List<Bike> bikes = AST.bikeMap();
         for (int i=0; i < bikes.size(); i++){
-            option.add(String.valueOf(bikes.get(i).frameNumber));
+            option.add(String.valueOf(bikes.get(i).id));
         }
         return option;
     }
 
-    public static Map<String, String> getTrackName() {
-        return AST.trackNameMap();
+    public static List<String> getTrackName() {
+        List<String> trackList = new ArrayList<>();
+
+        List<TrackRegistration> tracks = AST.trackNameMap();
+        for (int i=0; i < tracks.size(); i++){
+            trackList.add(tracks.get(i).name);
+        }
+        return trackList;
     }
 
     public static String getTrack(){
