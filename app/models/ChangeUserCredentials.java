@@ -10,7 +10,7 @@ import play.libs.Json;
 import java.util.ArrayList;
 import java.util.List;
 
-@JsonIgnoreProperties(ignoreUnknown=true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ChangeUserCredentials {
     public String firstName;
     public String name;
@@ -26,7 +26,7 @@ public class ChangeUserCredentials {
     }
 
     public static ChangeUserCredentials fromJson(JsonNode node){
-        return Json.fromJson(node,ChangeUserCredentials.class);
+        return Json.fromJson(node, ChangeUserCredentials.class);
     }
     public List<ValidationError> validate() {
         List<ValidationError> errors = new ArrayList<>();

@@ -53,7 +53,7 @@ public class AST {
     public static List<Track> trackNameMap() {
         List<Track> trackList = new ArrayList<>();
         JsonNode response = AST.preparedJson("http://localhost:8080/api/v1/route").get().map(WSResponse::asJson).get(10000);
-        System.err.println("-------AST Z55 : this is the track response: " + response.toString());
+        System.err.println("-------AST Z56 : this is the track response: " + response.toString());
 
         for (int i = 0; i < response.size(); i++){
             trackList.add(Track.fromJson(response.get(i)));
@@ -67,12 +67,12 @@ public class AST {
      * @param id is a UUID as a String.
      * @return a object of Track
      */
-    public static String getTrack(String id){
-        String s = "";
+    public static JsonNode getTrack(String id){
         // TODO(Louisa / Marjan) use/get correct id
-        JsonNode response = AST.preparedJson("http://localhost:8080/api/v1/route" + id).get().map(WSResponse::asJson).get(10000);
-//        System.out.println("these are the routes" + response);
-        return s;
+        JsonNode response = AST.preparedJson("http://localhost:8080/api/v1/route/" + id).get().map(WSResponse::asJson).get(10000);
+        System.out.println("-------AST Z73 : this is the route" + response);
+        Track retTrack = Track.fromJson(response);
+        return response;
     }
 
     public static String getUserAddress(){

@@ -1,4 +1,4 @@
-@(trackForm: Form[TrackRegistration], currentUserAddress: String)
+@(trackForm: Form[Track], currentUserAddress: String)
 
 @import views.html.helper.bs3._
 
@@ -117,6 +117,15 @@
             });
     }
 
+    function importRoute() {
+        var trackId = document.getElementById("name").value;
+        console.log(trackId);
+        $.post("/getTrack/" + trackId).done();
+    }
+
+
+
+
     // Gets called from "Speichern" button
     function exportRoute() {
         var waypoints = control.getWaypoints();
@@ -207,6 +216,7 @@
         @inputTime(trackForm("finishedAt"), "Endzeit")
         @inputSubmit("Änderung speichern")
       }
+        <button onclick="importRoute()">Speichern</button>
     </div>
   </div>
   <!--</div>-->

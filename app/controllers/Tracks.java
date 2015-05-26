@@ -1,6 +1,7 @@
 package controllers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import models.Bike;
 import models.Track;
@@ -25,7 +26,7 @@ public class Tracks extends Controller {
     public static Result tracks() {
         Form<Track> form = Form.form(Track.class);
         String currentUserAddress = AST.getUserAddress();
-//        getTrack();
+//        getTrack(id);
         return ok(views.html.member.tracks.render(form, currentUserAddress));
     }
 
@@ -65,8 +66,14 @@ public class Tracks extends Controller {
     }
 
 
-    public static String getTrack(String trackId){
-        return AST.getTrack(trackId);
+    public static Result getTrack(String id){
+
+        System.err.println("-------Tracks Controller Z.70 http post id: " + id);
+//        Track retTrack = AST.getTrack(trackId);
+//        System.out.println("-------Tracks Controller Z.72 this is the track: " + retTrack.toString());
+        JsonNode newJson = AST.getTrack(id);
+        System.out.println("-------Tracks Controller Z.72 this is the track: " + newJson.toString());
+        return ok();
     }
 
     public static Result saveTracks(){
