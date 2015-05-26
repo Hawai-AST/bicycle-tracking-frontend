@@ -1,14 +1,10 @@
 package models.utility;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import models.Bike;
-import models.TrackRegistration;
+import models.Track;
 import play.libs.ws.WSResponse;
 
-import java.io.IOException;
 import java.util.*;
 
 /**
@@ -30,7 +26,7 @@ public class AST {
 
     public static Map<String, String> genderMapInverse() {
         Map<String, String> inverseMap = new HashMap<>();
-        for (Map.Entry<String,String> entry : genderMap().entrySet()) {
+        for (Map.Entry<String, String> entry : genderMap().entrySet()) {
             inverseMap.put(entry.getValue(), entry.getKey());
         }
         return inverseMap;
@@ -43,37 +39,38 @@ public class AST {
     public static List<Bike> bikeMap() {
         JsonNode response = AST.preparedJson("http://localhost:8080/api/v1/bikes").get().map(WSResponse::asJson).get(10000);
         List<Bike> bikeList = new ArrayList<Bike>();
-        for(JsonNode bikeNode : response.get("bikes")) {
+        for (JsonNode bikeNode : response.get("bikes")) {
             bikeList.add(Bike.fromJson(bikeNode));
         }
         return bikeList;
     }
 
-    public static List<TrackRegistration> trackNameMap() {
-        List<TrackRegistration> trackList = new ArrayList<>();
+    /**
+     * Gets the saved tracks
+     * @return a list of the object Track. If no route was saved before
+     * return list is empty.
+     */
+    public static List<Track> trackNameMap() {
+        List<Track> trackList = new ArrayList<>();
         JsonNode response = AST.preparedJson("http://localhost:8080/api/v1/route").get().map(WSResponse::asJson).get(10000);
         System.err.println("-------AST Z55 : this is the track response: " + response.toString());
 
-        try {
-            List<TrackRegistration> myObjects = new ObjectMapper().readValue(response.toString(), new TypeReference<List<TrackRegistration>>(){});
-            System.err.println("-------AST Z59 : this is the track myObjects: " + myObjects);
-        } catch (IOException e) {
-            System.err.println("-------AST Z61 : did not work");
-            e.printStackTrace();
+        for (int i = 0; i < response.size(); i++){
+            trackList.add(Track.fromJson(response.get(i)));
         }
 
-//        for(JsonNode trackNode : response.get("data")){
-//            trackList.add(TrackRegistration.fromJson(trackNode));
-//        }
-//        ArrayNode arrayNode =  (ArrayNode) response.get("name");
         return trackList;
     }
 
-
-    public static String getTrack(){
+    /**
+     * Gets the track by id.
+     * @param id is a UUID as a String.
+     * @return a object of Track
+     */
+    public static String getTrack(String id){
         String s = "";
-        // TODO (Louisa / Marjan) use/get correct id
-        JsonNode response = AST.preparedJson("http://localhost:8080/api/v1/route").get().map(WSResponse::asJson).get(10000);
+        // TODO(Louisa / Marjan) use/get correct id
+        JsonNode response = AST.preparedJson("http://localhost:8080/api/v1/route" + id).get().map(WSResponse::asJson).get(10000);
 //        System.out.println("these are the routes" + response);
         return s;
     }

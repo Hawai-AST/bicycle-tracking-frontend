@@ -1,28 +1,23 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import models.TrackRegistration;
-import models.utility.AST;
-import play.data.Form;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
-import views.html.helper.form;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class Maps extends Controller {
-    // TODO (Marjan) impl correct return
+    // TODO(Marjan) impl correct return
 
     /**
      * Creates and saves route
      * @return
      */
 //    public static Result create(JsonNode newRoute) {
-//        // TODO (Marjan) post to BE properly
-//        // TODO statt form.get() ajax json rein
-//        Form<TrackRegistration> form = Form.form(TrackRegistration.class).bindFromRequest();
+//        // TODO(Marjan) post to BE properly
+//        // TODO(blub)statt form.get() ajax json rein
+//        Form<Track> form = Form.form(Track.class).bindFromRequest();
 //        String currentUserAddress = AST.getUserAddress();
 //
 //        if (Application.doRequest("http://localhost:8080/api/v1/route", newRoute) != null) {

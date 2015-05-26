@@ -1,32 +1,45 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import models.utility.value.Waypoints;
 import play.data.validation.ValidationError;
 import play.libs.Json;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
  * Created by Louisa on 11.05.2015.
  */
-public class TrackRegistration {
+public class Track {
 
+    @JsonIgnore
+    private String id;
     public String name;
-    public Long bike;
-    public Date startAt;
-    public Date finishedAt;
-    public Double length;
+    public String bikeID;
+    public String startAt;
+    public String finishedAt;
+    public Double lengthInKm;
     public List<Waypoints> waypoints;
+
+    @JsonProperty
+    public String getId() {
+        return id;
+    }
+
+    @JsonProperty
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public JsonNode toJson(){
         return Json.toJson(this);
     }
 
-    public static TrackRegistration fromJson(JsonNode node){
-        return Json.fromJson(node, TrackRegistration.class);
+    public static Track fromJson(JsonNode node){
+        return Json.fromJson(node, Track.class);
     }
 
     public List<ValidationError> validate() {

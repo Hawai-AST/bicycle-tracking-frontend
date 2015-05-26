@@ -1,18 +1,14 @@
 package controllers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import models.Bike;
-import models.TrackRegistration;
+import models.Track;
 import models.utility.AST;
 import models.utility.value.Waypoints;
-import play.api.libs.json.Json;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
-import play.libs.ws.WSResponse;
 
 import java.io.IOException;
 import java.util.*;
@@ -24,12 +20,12 @@ import static play.data.Form.form;
  * Created by Louisa on 11.05.2015.
  */
 public class Tracks extends Controller {
-    public static Form<TrackRegistration> form = Form.form(TrackRegistration.class);
+    public static Form<Track> form = Form.form(Track.class);
 
     public static Result tracks() {
-        Form<TrackRegistration> form = Form.form(TrackRegistration.class);
+        Form<Track> form = Form.form(Track.class);
         String currentUserAddress = AST.getUserAddress();
-        getTrack();
+//        getTrack();
         return ok(views.html.member.tracks.render(form, currentUserAddress));
     }
 
@@ -45,43 +41,48 @@ public class Tracks extends Controller {
      * @return a list of the users bikes
      */
     public static List<String> getBikeOptions() {
-        List<String> option= new ArrayList<>();
+        List<String> option = new ArrayList<>();
 
         List<Bike> bikes = AST.bikeMap();
-        for (int i=0; i < bikes.size(); i++){
+        for (int i = 0; i < bikes.size(); i++){
             option.add(String.valueOf(bikes.get(i).id));
         }
         return option;
     }
 
-    public static List<String> getTrackName() {
-        List<String> trackList = new ArrayList<>();
+    public static Map<String, String> getTrackName() {
+        Map<String, String> trackList = new HashMap<>();
 
-        List<TrackRegistration> tracks = AST.trackNameMap();
-        for (int i=0; i < tracks.size(); i++){
-            trackList.add(tracks.get(i).name);
+        List<Track> tracks = AST.trackNameMap();
+
+        for (Track trackElem : tracks){
+            String id = trackElem.getId();
+            String trackname = trackElem.name;
+            trackList.put(id, trackname);
         }
+
         return trackList;
     }
 
-    public static String getTrack(){
-        return AST.getTrack();
+
+    public static String getTrack(String trackId){
+        return AST.getTrack(trackId);
     }
 
     public static Result saveTracks(){
-        Form<TrackRegistration> formSaved = form.bindFromRequest();
+        Form<Track> formSaved = form.bindFromRequest();
         System.out.println("this is the form " + formSaved.toString());
 
         Map<String, String[]> map = request().body().asFormUrlEncoded();
         String[] checkedVal = map.get("waypointsList"); // get selected topics
         List<Waypoints> waypoints = new ArrayList<>();
         try {
-            waypoints = new ObjectMapper().readValue(checkedVal[0],new TypeReference<List<Waypoints>>(){});
+            waypoints = new ObjectMapper().readValue(checkedVal[0], new TypeReference<List<Waypoints>>(){});
             System.out.println("This are the waypoints: " + waypoints.size());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        TrackRegistration registration = formSaved.get();
+        Track registration = formSaved.get();
         registration.waypoints = waypoints;
 
         //System.out.println("this is the bike " + checkedVal.length);
