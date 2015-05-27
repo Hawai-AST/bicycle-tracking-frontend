@@ -23,6 +23,7 @@ public class Authentication extends Controller {
         return ok(views.html.guest.signup.render(Form.form(Registration.class)));
     }
 
+    @RequiresLogin
     public static Result signout() {
         // TODO(Timmay): Inform backend about user log off
         session().clear();
