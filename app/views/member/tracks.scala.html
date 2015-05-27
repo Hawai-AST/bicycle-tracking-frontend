@@ -25,6 +25,8 @@
     <div id="map"></div>
 
     <script type="application/javascript">
+    // *******************************************************************
+    // TODO (Marjan) Refactor map in general out of newtrack/ tracks - looking like...
 
     // initial view = Hamburg
     var map = L.map('map').setView([53.5502099, 9.9993636], 9);
@@ -48,7 +50,6 @@
             .setLatLng(e.latlng)
             .openOn(map);
 
-        // TODO (Marjan) Fix bug: autozoom on route working when waypoints written into box but not when clicked via map
         L.DomEvent.on(startBtn, 'click', function() {
             control.spliceWaypoints(0, 1, e.latlng);
             map.closePopup();
@@ -63,12 +64,6 @@
     // Intitialize total distance of route
     var lengthInKm;
 
-    // Add button for data import
-    L.easyButton(
-        'fa-folder-open',
-        function(){/* TODO */},
-        'Open saved route');
-
     // Get map itself
     // http://{s}.tiles.mapbox.com/v3/MapID/{z}/{x}/{y}.png
     L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -81,14 +76,13 @@
 
     // Add basic routing control
     var control = L.Routing.control({
-        // example route
-//        waypoints: [
-//        L.latLng(53.56875, 9.98286),
-//        L.latLng(53.5571614, 10.023104)
-//        ],
         routeWhileDragging: true,
         geocoder: L.Control.Geocoder.nominatim(),
         reverseWaypoints: true,
+        fitSelectedRoutes: 'truthy',
+        // Workaround => hides routing but also input
+        // TODO (Marjan) look for better solution
+        show: false,
         // Set GraphHopper as router -- IMPORTANT: Only 500 queries per day for free...!
         // TODO (Marjan) look up what happens if free queries used up
         router: L.Routing.graphHopper('0ed0b695-73f5-4c79-98ac-81ebf3da1d5f', { "urlParameters": {'vehicle': "bike"}})
@@ -105,6 +99,10 @@
     // Initialize map with user's home address unless map is initialized with route
     var waypoints = control.getWaypoints();
     if (waypoints[0].latLng == null || waypoints[1].latLng == null) {
+        findUserLocationOnMap();
+    }
+
+    function findUserLocationOnMap() {
         // Find user location and move map initially
         L.Control.Geocoder.nominatim().geocode(
             "@{currentUserAddress}",
@@ -126,25 +124,31 @@
         type: "POST",
         success: function(result) {
             // TODO (Marjan) clear old route if one already exists!
-            var waypoints = result.waypoints;
-            //map.setWaypoints(waypoints);
+            // clears window but needs condition...
+            // BUT control.getWaypoints() always undefined even when route is shown in map - so what to use??
+            //window.location.reload();
 
-            console.log(result);
-            console.log(waypoints);
+            var waypoints = result.waypoints;
             var arrayWaypoints = [];
 
             waypoints.forEach(function(waypoint) {
                 var currentLat = waypoint.latitude;
                 var currentLng = waypoint.longitude;
-                console.log(currentLat);
-                console.log(currentLng);
                 arrayWaypoints.push(L.latLng(currentLat, currentLng));
             });
 
-            console.log(arrayWaypoints);
-
             L.Routing.control({
-                waypoints: arrayWaypoints
+                waypoints: arrayWaypoints,
+                routeWhileDragging: true,
+                geocoder: L.Control.Geocoder.nominatim(),
+                reverseWaypoints: true,
+                fitSelectedRoutes: 'truthy',
+                // Workaround => hides routing but also input
+                // TODO (Marjan) look for better solution
+                show: false,
+                // Set GraphHopper as router -- IMPORTANT: Only 500 queries per day for free...!
+                // TODO (Marjan) look up what happens if free queries used up
+                router: L.Routing.graphHopper('0ed0b695-73f5-4c79-98ac-81ebf3da1d5f', { "urlParameters": {'vehicle': "bike"}})
             }).addTo(map);
         }
     });
