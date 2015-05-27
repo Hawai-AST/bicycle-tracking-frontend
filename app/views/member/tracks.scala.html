@@ -120,7 +120,34 @@
     function importRoute() {
         var trackId = document.getElementById("name").value;
         console.log(trackId);
-        $.post("/getTrack/" + trackId).done();
+        //$.post("/getTrack/" + trackId).done();
+        $.ajax({
+        url: ("/getTrack/" + trackId),
+        type: "POST",
+        success: function(result) {
+            // TODO (Marjan) clear old route if one already exists!
+            var waypoints = result.waypoints;
+            //map.setWaypoints(waypoints);
+
+            console.log(result);
+            console.log(waypoints);
+            var arrayWaypoints = [];
+
+            waypoints.forEach(function(waypoint) {
+                var currentLat = waypoint.latitude;
+                var currentLng = waypoint.longitude;
+                console.log(currentLat);
+                console.log(currentLng);
+                arrayWaypoints.push(L.latLng(currentLat, currentLng));
+            });
+
+            console.log(arrayWaypoints);
+
+            L.Routing.control({
+                waypoints: arrayWaypoints
+            }).addTo(map);
+        }
+    });
     }
 
 

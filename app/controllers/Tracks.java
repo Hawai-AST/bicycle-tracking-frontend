@@ -73,9 +73,10 @@ public class Tracks extends Controller {
         System.err.println("-------Tracks Controller Z.70 http post id: " + id);
 //        Track retTrack = AST.getTrack(trackId);
 //        System.out.println("-------Tracks Controller Z.72 this is the track: " + retTrack.toString());
+        // TODO (Marjan) send Json-Object to Frontend
         JsonNode newJson = AST.getTrack(id);
         System.out.println("-------Tracks Controller Z.72 this is the track: " + newJson.toString());
-        return ok();
+        return ok(newJson);
     }
 
     public static Result saveTracks(){
