@@ -6,8 +6,8 @@
     <select
     class="form-control"
     id="@field.id"
-    name="@field.name"
-    <option class="blank" value="">auswählen</option>
+    name="@field.name">
+    <option class="blank" value=""></option>
     @for((optionName, optionValue) <- optionMap) {
       <option id="@optionName" value="@optionName">@optionValue</option>
     }

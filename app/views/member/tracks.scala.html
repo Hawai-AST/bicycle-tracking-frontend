@@ -150,6 +150,27 @@
                 // TODO (Marjan) look up what happens if free queries used up
                 router: L.Routing.graphHopper('0ed0b695-73f5-4c79-98ac-81ebf3da1d5f', { "urlParameters": {'vehicle': "bike"}})
             }).addTo(map);
+
+            var bikeId = result.bikeID;
+            console.log(bikeId);
+//            document.getElementById("bikeId").id = bikeId;
+            document.getElementById("bikeId").value = bikeId;
+
+//TODO (Louisa) get Bike Typ from Backend
+
+//            var bikeType = result.name;
+//            console.log(bikeType);
+//            document.getElementById("bikeId").value = bikeType;
+
+            var startAt = result.startAt;
+            console.log(startAt);
+            document.getElementById("startAt").value = startAt;
+
+            var finishedAt = result.finishedAt;
+            console.log(finishedAt);
+            document.getElementById("finishedAt").value = finishedAt;
+
+
         }
     });
     }
@@ -242,9 +263,9 @@
       <!-- nice to have: dropdown menu with auto complete-->
       @helper.form(action = routes.Tracks.saveTracks, 'class -> "form-horizontal") {
         @selectTrack(trackForm("name"), "Streckenname:")
-        @selectBike(trackForm("bikeId"), "Fahrrad:")
-        @inputTime(trackForm("startAt"), "Startzeit")
-        @inputTime(trackForm("finishedAt"), "Endzeit")
+        @inputTextTrack(trackForm("bikeId"), "Fahrrad:")
+        @inputTextTrack(trackForm("startAt"), "Startzeit")
+        @inputTextTrack(trackForm("finishedAt"), "Endzeit")
         @inputSubmit("Änderung speichern")
       }
         <button onclick="importRoute()">Speichern</button>
