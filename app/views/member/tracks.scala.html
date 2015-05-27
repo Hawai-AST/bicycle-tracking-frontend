@@ -16,6 +16,20 @@
   <!--<div class="col-md-12 col-md-offset-1">
   <h2 class="h2">Strecken bearbeiten</h2> -->
 
+
+    <div class="col-md-4" style="margin-top : 50 px; float:right;">
+        <div>
+                <!-- nice to have: dropdown menu with auto complete-->
+            @helper.form(action = routes.Tracks.saveTracks, 'class -> "form-horizontal") {
+                @selectTrack(trackForm("name"), "Streckenname:")
+                @inputTextTrack(trackForm("bikeId"), "Fahrrad:")
+                @inputTextTrack(trackForm("startAt"), "Startzeit")
+                @inputTextTrack(trackForm("finishedAt"), "Endzeit")
+                @inputSubmit("Änderung speichern")
+            }
+        </div>
+    </div>
+
     <p> Home sweet home: @{currentUserAddress} </p>
 
     <style type="text/css">
@@ -115,64 +129,66 @@
             });
     }
 
-    function importRoute() {
-        var trackId = document.getElementById("name").value;
-        console.log(trackId);
-        //$.post("/getTrack/" + trackId).done();
-        $.ajax({
-        url: ("/getTrack/" + trackId),
-        type: "POST",
-        success: function(result) {
-            // TODO (Marjan) clear old route if one already exists!
-            // clears window but needs condition...
-            // BUT control.getWaypoints() always undefined even when route is shown in map - so what to use??
-            //window.location.reload();
 
-            var waypoints = result.waypoints;
-            var arrayWaypoints = [];
+   var sel = document.getElementById('name');
+   sel.onchange =   function() {
+                var trackId = document.getElementById("name").value;
+                console.log(trackId);
+                //$.post("/getTrack/" + trackId).done();
+                $.ajax({
+                url: ("/getTrack/" + trackId),
+                type: "POST",
+                success: function(result) {
+                    // TODO (Marjan) clear old route if one already exists!
+                    // clears window but needs condition...
+                    // BUT control.getWaypoints() always undefined even when route is shown in map - so what to use??
+                    //window.location.reload();
 
-            waypoints.forEach(function(waypoint) {
-                var currentLat = waypoint.latitude;
-                var currentLng = waypoint.longitude;
-                arrayWaypoints.push(L.latLng(currentLat, currentLng));
+                    var waypoints = result.waypoints;
+                    var arrayWaypoints = [];
+
+                    waypoints.forEach(function(waypoint) {
+                        var currentLat = waypoint.latitude;
+                        var currentLng = waypoint.longitude;
+                        arrayWaypoints.push(L.latLng(currentLat, currentLng));
+                    });
+
+                    L.Routing.control({
+                        waypoints: arrayWaypoints,
+                        routeWhileDragging: true,
+                        geocoder: L.Control.Geocoder.nominatim(),
+                        reverseWaypoints: true,
+                        fitSelectedRoutes: 'truthy',
+                        // Workaround => hides routing but also input
+                        // TODO (Marjan) look for better solution
+                        show: false,
+                        // Set GraphHopper as router -- IMPORTANT: Only 500 queries per day for free...!
+                        // TODO (Marjan) look up what happens if free queries used up
+                        router: L.Routing.graphHopper('0ed0b695-73f5-4c79-98ac-81ebf3da1d5f', { "urlParameters": {'vehicle': "bike"}})
+                    }).addTo(map);
+
+                    var bikeId = result.bikeID;
+                    console.log(bikeId);
+        //            document.getElementById("bikeId").id = bikeId;
+                    document.getElementById("bikeId").value = bikeId;
+
+        //TODO (Louisa) get Bike Typ from Backend
+
+        //            var bikeType = result.name;
+        //            console.log(bikeType);
+        //            document.getElementById("bikeId").value = bikeType;
+
+                    var startAt = result.startAt;
+                    console.log(startAt);
+                    document.getElementById("startAt").value = startAt;
+
+                    var finishedAt = result.finishedAt;
+                    console.log(finishedAt);
+                    document.getElementById("finishedAt").value = finishedAt;
+
+
+                }
             });
-
-            L.Routing.control({
-                waypoints: arrayWaypoints,
-                routeWhileDragging: true,
-                geocoder: L.Control.Geocoder.nominatim(),
-                reverseWaypoints: true,
-                fitSelectedRoutes: 'truthy',
-                // Workaround => hides routing but also input
-                // TODO (Marjan) look for better solution
-                show: false,
-                // Set GraphHopper as router -- IMPORTANT: Only 500 queries per day for free...!
-                // TODO (Marjan) look up what happens if free queries used up
-                router: L.Routing.graphHopper('0ed0b695-73f5-4c79-98ac-81ebf3da1d5f', { "urlParameters": {'vehicle': "bike"}})
-            }).addTo(map);
-
-            var bikeId = result.bikeID;
-            console.log(bikeId);
-//            document.getElementById("bikeId").id = bikeId;
-            document.getElementById("bikeId").value = bikeId;
-
-//TODO (Louisa) get Bike Typ from Backend
-
-//            var bikeType = result.name;
-//            console.log(bikeType);
-//            document.getElementById("bikeId").value = bikeType;
-
-            var startAt = result.startAt;
-            console.log(startAt);
-            document.getElementById("startAt").value = startAt;
-
-            var finishedAt = result.finishedAt;
-            console.log(finishedAt);
-            document.getElementById("finishedAt").value = finishedAt;
-
-
-        }
-    });
     }
 
 
@@ -258,18 +274,7 @@
     }
     </script>
 
-  <div class="col-md-4" style="margin-top : 50 px; float:right;">
-    <div>
-      <!-- nice to have: dropdown menu with auto complete-->
-      @helper.form(action = routes.Tracks.saveTracks, 'class -> "form-horizontal") {
-        @selectTrack(trackForm("name"), "Streckenname:")
-        @inputTextTrack(trackForm("bikeId"), "Fahrrad:")
-        @inputTextTrack(trackForm("startAt"), "Startzeit")
-        @inputTextTrack(trackForm("finishedAt"), "Endzeit")
-        @inputSubmit("Änderung speichern")
-      }
-        <button onclick="importRoute()">Speichern</button>
-    </div>
-  </div>
+
   <!--</div>-->
+
 }
