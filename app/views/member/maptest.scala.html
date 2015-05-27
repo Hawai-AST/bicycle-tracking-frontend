@@ -42,7 +42,7 @@
             .setLatLng(e.latlng)
             .openOn(map);
 
-        // TODO Fix bug: autozoom on route working when waypoints written into box but not when clicked via map
+        // TODO (Marjan) Fix bug: autozoom on route working when waypoints written into box but not when clicked via map
         L.DomEvent.on(startBtn, 'click', function() {
             control.spliceWaypoints(0, 1, e.latlng);
             map.closePopup();
@@ -54,13 +54,16 @@
         });
     });
 
+    // Intitialize total distance of route
+    var lengthInKm;
+
     // Add button for data export
     L.easyButton(
         'fa-floppy-o',
         function() {
             var waypoints = control.getWaypoints();
 
-            // Waypoints has too much information for backend,
+            // Maps has too much information for backend,
             // therewith we build hashes with relevant information
             // data = array of objects, objects = hashes with lat, lng and name
             var data = $.map(waypoints, function(value, index){
@@ -71,15 +74,40 @@
                 }
             });
 
-            console.log(data);
+            // Build route as per API spec
+            // Set name of the route
+            var routeName = window.prompt("Bitte gib den Namen deiner Route ein!");
+
+            // User clicked cancel
+            if (routeName === null) {
+                return;
+            }
+
+            // User didn't type a name
+            if (routeName === "") {
+                window.alert("Die Route kann ohne Namen nicht gespeichert werden.");
+                return;
+            }
+
+            // TODO (Marjan) bikeID of clicked on bike
+            var bikeID = 123;
+
+            var route = {
+                name: routeName,
+                bikeID: bikeID,
+                lengthInKm: lengthInKm,
+                rodeAt: "2015-04-25T12:35:55Z", // TODO (Marjan) get input from user
+                finishedAt: "2015-04-25T12:35:55Z", // TODO (Marjan) get input from user
+                waypoints: data
+            }
+
+            console.log(route);
 
             // Send information to backend
             $.ajax({
-                url: "/waypoints",
+                url: "/route",
                 type: "POST",
-                data: {
-                    waypoints: data
-                }
+                data: route
             }).done(function() {
                 // TODO wie soll Speicherung signalisiert werden?
             }).fail(function() {
@@ -119,6 +147,12 @@
     });
 
     control.addTo(map);
+
+    // Get distance from map, convert to km
+    // TODO (Marjan) atm it always picks first route option - should check which route option is the actual used one
+    control.addEventListener("routesfound", function(route){
+        lengthInKm = route.routes[0].summary.totalDistance / 1000;
+    });
 
     // Unless map is initialized with route
     var waypoints = control.getWaypoints();

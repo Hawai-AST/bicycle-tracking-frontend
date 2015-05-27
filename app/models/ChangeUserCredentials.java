@@ -1,5 +1,6 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.JsonNode;
 import models.utility.value.EMail;
 import models.utility.value.Address;
@@ -9,6 +10,7 @@ import play.libs.Json;
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ChangeUserCredentials {
     public String firstName;
     public String name;
@@ -24,7 +26,7 @@ public class ChangeUserCredentials {
     }
 
     public static ChangeUserCredentials fromJson(JsonNode node){
-        return Json.fromJson(node,ChangeUserCredentials.class);
+        return Json.fromJson(node, ChangeUserCredentials.class);
     }
 
     public List<ValidationError> validate() {

@@ -20,9 +20,9 @@ public class Global extends GlobalSettings {
     public Action onRequest(Http.Request request, Method method) {
         Action original = super.onRequest(request, method);
         RequiresLogin annotation = method.getAnnotation(RequiresLogin.class);
-        if (annotation != null) {
-            return new LoginCheckAction(method, original);
-        }
+        //if (annotation != null) {
+        //    return new LoginCheckAction(method, original);
+        //}
 
         return original;
     }
@@ -39,7 +39,8 @@ public class Global extends GlobalSettings {
 
         @Override
         public F.Promise<Result> call(Http.Context context) throws Throwable {
-            if (!context.session().containsKey("oauth_token")) {
+            //System.out.println(context.session());
+            if (!context.session().containsKey("access_token")) {
                 return F.Promise.pure(redirect("/"));
             } else {
                 return this.other.call(context);

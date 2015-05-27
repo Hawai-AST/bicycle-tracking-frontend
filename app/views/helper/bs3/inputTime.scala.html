@@ -1,0 +1,29 @@
+@(field: Field, label: String = "Startzeit")
+
+<div class="form-group @if(field.hasErrors) {has-error}">
+  <label class="col-sm-4 control-label">
+    @label
+  </label>
+  <div class="col-sm-6">
+      <input
+        id="@field.id"
+        class="form-control"
+        type="text" name="@field.name"
+        value="@field.value.getOrElse("")"
+      >
+      <script type="text/javascript">
+		$(function(){
+			$('*[name=@field.name]').appendDtpicker();
+		});
+      </script>
+      <span class="help-block">@{ field.error.map { error => error.message }}</span>
+  </div>
+</div>
+
+
+
+
+
+
+
+
