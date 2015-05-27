@@ -1,4 +1,6 @@
+import config.BackendConfig;
 import controllers.RequiresLogin;
+import play.Application;
 import play.GlobalSettings;
 import play.libs.F;
 import play.mvc.Action;
@@ -8,6 +10,12 @@ import play.mvc.Result;
 import java.lang.reflect.Method;
 
 public class Global extends GlobalSettings {
+    @Override
+    public void onStart(Application application) {
+        super.onStart(application);
+        BackendConfig.load();
+    }
+
     @Override
     public Action onRequest(Http.Request request, Method method) {
         Action original = super.onRequest(request, method);
