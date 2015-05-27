@@ -26,7 +26,7 @@ public class ChangeUserCredentials {
     }
 
     public static ChangeUserCredentials fromJson(JsonNode node){
-        return Json.fromJson(node,ChangeUserCredentials.class);
+        return Json.fromJson(node, ChangeUserCredentials.class);
     }
 
     public List<ValidationError> validate() {

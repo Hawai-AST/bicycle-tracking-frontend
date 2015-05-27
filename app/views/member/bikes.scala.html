@@ -1,0 +1,91 @@
+@import views.html.helper.bs3._
+@import play.data.Form.form
+@import java.util
+@(amount: Integer, bikes: util.List[Bike], bikeForm: Form[Bike] = form(classOf[Bike])))
+
+@main {
+  <script>
+    $('.tab-pane').click(function(e) {
+      e.preventDefault();
+      $(this).tab('show')
+    });
+  </script>
+
+  @for(bike <- bikes) {
+    <div class="modal fade" id="editModal-@bike.id" tabindex="-1" role="dialog" aria-labelledby="editLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+        @helper.form(action = routes.Bikes.update, 'id -> ("editBike" + bike.id)) {
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="editLabel">Fahrrad bearbeiten</h4>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" value="@bike.id" name="id" />
+            @inputText(bikeForm("type").copy(value=Some(bike.`type`)), "Typ")
+            @inputText(bikeForm("frameNumber").copy(value=Some(bike.frameNumber.toString)), "Rahmennummer")
+            @inputDate(bikeForm("purchaseDate").copy(value=Some(bike.purchaseDate)), "Kaufdatum")
+            @inputDate(bikeForm("nextMaintenance").copy(value=Some(bike.nextMaintenance)), "Nächste Wartung")
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Schlie&szlig;en</button>
+            <button type="submit" class="btn btn-primary">Speichern</button>
+          </div>
+        }
+        </div>
+      </div>
+    </div>
+  }
+
+  <h1>Meine Fahrr&auml;der</h1>
+  <a href="/bike/new" class="btn btn-success pull-right">&plus;</a>
+  <div role="tabpanel">
+    @if(bikes.isEmpty) {
+      <p>Keine Fahrr&auml;der eingetragen.</p>
+    } else {
+      <ul class="nav nav-tabs" role="tablist">
+        @for((bike, i) <- bikes.zipWithIndex) {
+          @if(i == 0) {
+            <li role="presentation" class="active"><a href="#bike-@{bike.id}" aria-controls="bike-@{bike.id}" role="tab" data-toggle="tab">@{bike.`type`}</a></li>
+          } else {
+            <li role="presentation"><a href="#bike-@{bike.id}" aria-controls="bike-@{bike.id}" role="tab" data-toggle="tab">@{bike.`type`}</a></li>
+          }
+        }
+      </ul>
+
+      <div class="tab-content">
+        @for((bike, i) <- bikes.zipWithIndex) {
+          @if(i == 0) {
+            <div role="tabpanel" class="tab-pane active" id="bike-@{bike.id}">
+          } else {
+            <div role="tabpanel" class="tab-pane" id="bike-@{bike.id}">
+          }
+
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal-@bike.id">Edit</button>
+
+            <table class="table">
+              <tbody>
+                <tr>
+                  <td>Type</td>
+                  <td>@{bike.`type`}</td>
+                </tr>
+                <tr>
+                  <td>Framenumber</td>
+                  <td>@{bike.frameNumber}</td>
+                </tr>
+                <tr>
+                  <td>Purchased at</td>
+                  <td>@{bike.purchaseDate}</td>
+                </tr>
+                <tr>
+                  <td>Next maintenance</td>
+                  <td>@{bike.purchaseDate}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
+    }
+  </div>
+}
