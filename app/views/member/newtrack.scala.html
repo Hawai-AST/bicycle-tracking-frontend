@@ -3,20 +3,11 @@
 @import views.html.helper.bs3._
 
 @main {
-  <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
-  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
-  <link rel="stylesheet" href="/assets/leaflet-routing-machine-2.3.0/leaflet-routing-machine.css" />
-  <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
-  <script src="/assets/leaflet-routing-machine-2.3.0/leaflet-routing-machine.js"></script>
-  <script src="/assets/leaflet-routing-machine-2.3.0/Control.Geocoder.js"></script>
-  <script src="/assets/leaflet-routing-machine-2.3.0/lrm-graphhopper-1.1.0.js"></script>
-  <script src="/assets/leaflet-routing-machine-2.3.0/easy-button.js"></script>
-
   <div class="col-md-12 col-md-offset-1">
-    <h2 class="h2">Eine neue Strecke eintragen</h2>
-      <p>Vergewissern Sie sich, dass Sie bereits ein Fahrrad auf unserer Seite eingetragen haben!</p>
-    <div class="col-md-4" style="margin-top : 50 px ;">
-      <div>
+    <h2 class="h2">Hier können Sie eine neue Strecke eintragen</h2>
+    <p class="hint-paragraph"> Tragen Sie <a href="/bike/new">hier</a> ein neues Fahrrad ein,<br> wenn sie es noch nicht getan haben  </p>
+    <div class="col-md-4">
+      <div class="track-form">
         @helper.form(action = routes.Tracks.saveTracks, 'class -> "form-horizontal") {
           @inputTextTrack(trackForm("name"), "Streckenname:")
           @selectBike(trackForm("bike"), "Fahrrad:") <!-- bikeID -->
@@ -26,15 +17,11 @@
           @inputTextHidden(trackForm("waypointsList"))
           <!--@inputSubmitRoute("Speichern")-->
         }
-        <button onclick="exportRoute()">Speichern</button>
+        <button class="save-btn" onclick="exportRoute()">Speichern</button>
       </div>
     </div>
 
-    <p> Home sweet home: @{currentUserAddress} </p>
-
-    <style type="text/css">
-    #map { height: 550px; width: 720px; }
-    </style>
+    <p class="current-user-addr"> Home sweet home: @{currentUserAddress} </p>
 
     <div id="map"></div>
 
@@ -110,6 +97,7 @@
     if (waypoints[0].latLng == null || waypoints[1].latLng == null) {
         findUserLocationOnMap();
     }
+
 
     function findUserLocationOnMap() {
         // Find user location and move map initially

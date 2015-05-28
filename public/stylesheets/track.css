@@ -1,0 +1,38 @@
+/*
+* offset form from the top
+*/
+div.track-form {
+    margin-top: 100px;
+}
+
+/*
+* user addres style
+*/
+p.current-user-addr{
+    color: #0431B4;
+    font-family: Arial;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/*
+* map size and style
+*/
+div#map {
+    height: 550px;
+    width: 720px;
+    float: left;
+}
+
+p.hint-paragraph{
+    color: crimson;
+    margin-left: 50px;
+    margin-top: 20px;
+    position: absolute;
+}
+
+button.save-btn{
+    margin-left: 150px;
+    margin-top: -40px;
+    position: absolute;
+}
