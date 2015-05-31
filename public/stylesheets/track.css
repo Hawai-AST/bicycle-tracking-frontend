@@ -6,7 +6,7 @@ div.track-form {
 }
 
 /*
-* user addres style
+* user address style
 */
 p.current-user-addr{
     color: #0431B4;
@@ -35,4 +35,10 @@ button.save-btn{
     margin-left: 150px;
     margin-top: -40px;
     position: absolute;
+}
+
+/* IMPORTANT: This hides the route instruction in the map
+but it still gets calculated in leaflet-routing-machine.js line 759ff*/
+body .leaflet-routing-alt {
+    display: none;
 }
