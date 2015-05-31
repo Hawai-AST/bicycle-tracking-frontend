@@ -5,10 +5,12 @@
 
 @main {
   <script>
-    $('.tab-pane').click(function(e) {
-      e.preventDefault();
-      $(this).tab('show')
-    });
+    (function() {
+      $('.tab-pane').click(function(e) {
+        e.preventDefault();
+        $(this).tab('show')
+      });
+    })();
   </script>
 
   @for(bike <- bikes) {
