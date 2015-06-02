@@ -1,6 +1,12 @@
+import com.github.play2war.plugin._
+
 name := """bicycle-tracking"""
 
 version := "1.0-SNAPSHOT"
+
+Play2WarPlugin.play2WarSettings
+
+Play2WarKeys.servletVersion := "3.1"
 
 libraryDependencies ++= Seq(
   javaCore,
@@ -15,4 +21,4 @@ libraryDependencies ++= Seq(
 lazy val root = (project in file(".")).enablePlugins(PlayJava)
 
 
-fork in run := true
+//fork in run := true

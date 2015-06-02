@@ -1,6 +1,7 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import config.BackendConfig;
 import models.ChangePassword;
 import models.ChangeUserCredentials;
 import models.utility.AST;
@@ -20,8 +21,9 @@ public class Account extends Controller {
     final static Form<ChangePassword> changePasswordForm = form(ChangePassword.class);
     final static Form<ChangeUserCredentials> changeUserCredentialsForm = form(ChangeUserCredentials.class);
 
+    @RequiresLogin
     public static Result showAccount() {
-        F.Promise<JsonNode> response = AST.preparedJson("http://localhost:8080/api/v1/user").get().map(WSResponse::asJson);
+        F.Promise<JsonNode> response = AST.preparedJson(BackendConfig.backendURL() + "/api/v1/user").get().map(WSResponse::asJson);
         JsonNode node = response.get(10000);
         ChangeUserCredentials changeUserCredentials = ChangeUserCredentials.fromJson(node);
         Form<ChangeUserCredentials> prefilledUserCredentialsForm = changeUserCredentialsForm.fill(changeUserCredentials);
@@ -29,6 +31,7 @@ public class Account extends Controller {
         return ok(account.render(changePasswordForm, prefilledUserCredentialsForm));
     }
 
+    @RequiresLogin
     public static Result changePassword() {
         Form<ChangePassword> filledForm = changePasswordForm.bindFromRequest();
         if (filledForm.hasErrors()) {
@@ -42,7 +45,7 @@ public class Account extends Controller {
             return badRequest(account.render(filledForm, changeUserCredentialsForm));
         } else {
             ChangePassword changePassword = filledForm.get();
-            JsonNode jsonResponse = Application.doRequest("http://localhost:8080/api/v1/user/password", changePassword.toJson());
+            JsonNode jsonResponse = Application.doRequest(BackendConfig.backendURL() + "/api/v1/user/password", changePassword.toJson());
             if (jsonResponse != null) {
                 flash("alert", "Passwort konnte nicht geändert werden");
                 flash("alert_type", "danger");
@@ -56,6 +59,7 @@ public class Account extends Controller {
         }
     }
 
+    @RequiresLogin
     public static Result changeUserCredentials() {
         Form<ChangeUserCredentials> filledForm = changeUserCredentialsForm.bindFromRequest();
         if (filledForm.hasErrors()) {
@@ -63,10 +67,10 @@ public class Account extends Controller {
             flash("alert_type", "danger");
             return badRequest(account.render(changePasswordForm, filledForm));
         } else {
-            if (Application.doRequest("http://localhost:8080/api/v1/user", filledForm.get().toJson()) != null) {
+            if (Application.doRequest(BackendConfig.backendURL() + "/api/v1/user", filledForm.get().toJson()) != null) {
                 flash("alert", "Daten konnten nicht gespeichert werden");
                 flash("alert_type", "danger");
-                return badRequest(Application.doRequest("http://localhost:8080/api/v1/user", filledForm.get().toJson()));//account.render(changePasswordForm, filledForm));
+                return badRequest(Application.doRequest(BackendConfig.backendURL() + "/api/v1/user", filledForm.get().toJson()));//account.render(changePasswordForm, filledForm));
             } else {
                 flash("alert", "Daten wurden geändert");
                 flash("alert_type", "success");

@@ -15,8 +15,14 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li><a href="http://localhost:9000/#">Übersicht</a></li>
-                <li><a href="http://localhost:9000/maptest">Map</a></li>
+                <li><a href="/">Übersicht</a></li>
+                <li class="dropdown">
+                    <a href="tracks" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Strecken</a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="/tracks">Strecken anzeigen</a></li>
+                        <li><a href="/newtracks">Neue Strecke</a></li>
+                    </ul>
+                </li>
                 <li><a href="/bikes">Meine Fahrr&auml;der</a></li>
             </ul>
 
