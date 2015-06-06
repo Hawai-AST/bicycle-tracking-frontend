@@ -47,8 +47,8 @@ public class Maps extends Controller {
      * @param id
      * @return
      */
-    public static Result update(Integer id) {
-        System.err.println("----Map Z. 51 you are in the route update methode with this trackId " + id.toString());
+    public static Result update(String id) {
+        System.err.println("----Map Z. 51 you are in the route update methode with this trackId " + id);
         Map<String, String[]> request = request().body().asFormUrlEncoded();
         String result = request.get("data")[0];
 
@@ -62,7 +62,7 @@ public class Maps extends Controller {
      * @return
      */
     public static Result index() {
-        return ok("'test'");
+        return ok("'test_index'");
     }
 
     /**
@@ -70,8 +70,8 @@ public class Maps extends Controller {
      * @param id
      * @return
      */
-    public static Result show(Integer id) {
-        return ok("'test'");
+    public static Result show(String id) {
+        return ok("'test_show'");
     }
 
     /**
@@ -79,7 +79,7 @@ public class Maps extends Controller {
      * @param id
      * @return
      */
-    public static Result delete(Integer id) {
-        return ok("'test'");
+    public static Result delete(String id) {
+        return ok("'test_delete'");
     }
 }

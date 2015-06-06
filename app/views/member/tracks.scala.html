@@ -250,16 +250,16 @@
         console.log(tourID);
 
         // Send information to backend
-//        $.post("/route/" + tourID, {data: JSON.stringify(route)}).done(function() {
-//            // TODO (Louisa / Marjan)  wie soll Speicherung signalisiert werden (hübscher)?
-//            console.log(route);
-//            console.log(JSON.stringify(route));
-//            alert( "Die Route wurde erfolgreich gespeichert" );
-//            // TODO (Louisa/ Marjan) When reloading page date fields should reload again to actual day and time
-//            window.location.reload();
-//        }).fail(function() {
-//            alert( "Something went wrong, pls try again." );
-//        });
+        $.post("/route/" + tourID, {data: JSON.stringify(route)}).done(function() {
+            // TODO (Louisa / Marjan)  wie soll Speicherung signalisiert werden (hübscher)?
+            console.log(route);
+            console.log(JSON.stringify(route));
+            alert( "Die Route wurde erfolgreich geupdated" );
+            // TODO (Louisa/ Marjan) When reloading page date fields should reload again to actual day and time
+            window.location.reload();
+        }).fail(function() {
+            alert( "Something went wrong, pls try again." );
+        });
     }
     </script>
 
