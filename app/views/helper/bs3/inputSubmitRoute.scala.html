@@ -1,7 +1,7 @@
-@(label: String, button_type: String = "UTF-8")
+@(label: String, button_type: String = "default", size: String = "md", offset: String = "2")
 
 <div class="form-group">
-  <div class="col-sm-offset-2 col-sm-10">
-    <button type="submit" class="btn btn-@button_type" onclick="getMapData()">@label</button>
+  <div class="col-sm-offset-@offset col-sm-10">
+    <button type="submit" class="btn btn-@size btn-@button_type" onclick="exportRoute()">@label</button>
   </div>
 </div>

@@ -8,11 +8,17 @@
             <!-- nice to have: dropdown menu with auto complete-->
             @helper.form(action = routes.Tracks.saveTracks, 'class -> "form-horizontal") {
                 @selectTrack(trackForm("name"), "Streckenname:")
-                @inputTextTrack(trackForm("bikeId"), "Fahrrad:")
+                @selectBike(trackForm("bike"), "Fahrrad:")
                 @inputTextTrack(trackForm("startAt"), "Startzeit")
                 @inputTextTrack(trackForm("finishedAt"), "Endzeit")
-                @inputSubmit("Änderung speichern")
+                <!-- @inputSubmit("Änderung speichern", offset="4") -->
             }
+
+            <div class="form-group">
+                <div class="col-sm-offset-4 col-sm-10">
+                    <button type="submit" class="btn btn-md btn-default" onclick="updateRoute()">Änderung Speichern</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -153,9 +159,8 @@
                     var bikeId = result.bikeID;
                     console.log(bikeId);
         //            document.getElementById("bikeId").id = bikeId;
-                    document.getElementById("bikeId").value = bikeId;
+                    document.getElementById("bike").value = bikeId;
 
-        //TODO (Louisa) get Bike Typ from Backend
 
         //            var bikeType = result.name;
         //            console.log(bikeType);
@@ -178,8 +183,9 @@
 
 
     // Gets called from "Änderung speichern" button
-    function exportRoute() {
-        var waypoints = control.getWaypoints();
+    function updateRoute() {
+       var waypoints = control.getWaypoints();
+       console.log(waypoints);
 
         // Maps has too much information for backend,
         // therewith we build hashes with relevant information
@@ -240,20 +246,20 @@
 
         console.log(route);
 
+        var tourID = document.getElementById("name").value;
+        console.log(tourID);
+
         // Send information to backend
-        $.ajax({
-            url: "/route",
-            type: "POST",
-            //dataType: 'json',
-            data: JSON.stringify(route)
-        }).done(function() {
-            // TODO (Louisa / Marjan)  wie soll Speicherung signalisiert werden (hÃ¼bscher)?
-            console.log(JSON.stringify(route));
-            alert( "Die Route wurde erfolgreich gespeichert" );
-            window.location.reload();
-        }).fail(function() {
-            alert( "Something went wrong, pls try again." );
-        });
+//        $.post("/route/" + tourID, {data: JSON.stringify(route)}).done(function() {
+//            // TODO (Louisa / Marjan)  wie soll Speicherung signalisiert werden (hübscher)?
+//            console.log(route);
+//            console.log(JSON.stringify(route));
+//            alert( "Die Route wurde erfolgreich gespeichert" );
+//            // TODO (Louisa/ Marjan) When reloading page date fields should reload again to actual day and time
+//            window.location.reload();
+//        }).fail(function() {
+//            alert( "Something went wrong, pls try again." );
+//        });
     }
     </script>
 

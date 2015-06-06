@@ -15,9 +15,14 @@
           @inputTime(trackForm("finishedAt"), "Endzeit")
           @inputTextHidden(trackForm("length"))
           @inputTextHidden(trackForm("waypointsList"))
-          <!--@inputSubmitRoute("Speichern")-->
+          <!--@inputSubmitRoute("Speichern") -->
         }
-        <button class="save-btn" onclick="exportRoute()">Speichern</button>
+          <div class="form-group">
+              <div class="col-sm-offset-4 col-sm-10">
+                  <button type="submit" class="btn btn-md btn-default" onclick="exportRoute()">Speichern</button>
+              </div>
+          </div>
+
       </div>
     </div>
 

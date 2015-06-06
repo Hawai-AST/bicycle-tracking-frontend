@@ -48,7 +48,13 @@ public class Maps extends Controller {
      * @return
      */
     public static Result update(Integer id) {
-        return ok("'test'");
+        System.err.println("----Map Z. 51 you are in the route update methode with this trackId " + id.toString());
+        Map<String, String[]> request = request().body().asFormUrlEncoded();
+        String result = request.get("data")[0];
+
+        JsonNode jsonResponse = Application.doRequest("http://localhost:8080/api/v1/route/" + id, Json.parse(result));
+//
+        return ok(jsonResponse.toString());
     }
 
     /**
