@@ -1,7 +1,7 @@
 @import views.html.helper.bs3._
 @import play.data.Form.form
 @import java.util
-@(amount: Integer, bikes: util.List[Bike], bikeForm: Form[Bike] = form(classOf[Bike])))
+@(amount: Integer, bikes: util.List[Bike], bikeForm: Form[Bike] = form(classOf[Bike]), types: Array[BikeTypes.BikeType])
 
 @main {
   <script>
@@ -24,7 +24,7 @@
           </div>
           <div class="modal-body">
             <input type="hidden" value="@bike.id" name="id" />
-            @inputText(bikeForm("type").copy(value=Some(bike.`type`)), "Typ")
+            @select(bikeForm("type").copy(value=Some(bike.`type`)), "Typ", optionMap = types.map(t => t.name -> t.name).toMap.asJava))
             @inputText(bikeForm("frameNumber").copy(value=Some(bike.frameNumber.toString)), "Rahmennummer")
             @inputDate(bikeForm("purchaseDate").copy(value=Some(bike.purchaseDate)), "Kaufdatum")
             @inputDate(bikeForm("nextMaintenance").copy(value=Some(bike.nextMaintenance)), "Nächste Wartung")

@@ -6,7 +6,7 @@
 
   @helper.form(action = routes.Bikes.update, 'id -> "addBike"){
     <input type="hidden" name="id" value="">
-    @select(bikeForm("type"), "Typ", optionMap = types.map(t => t.name -> t.name).toMap)
+    @select(bikeForm("type"), "Typ", optionMap = types.map(t => t.name -> t.name).toMap.asJava)
     @inputText(bikeForm("frameNumber"), "Rahmennummer")
     @inputDate(bikeForm("purchaseDate"), "Kaufdatum")
     @inputDate(bikeForm("nextMaintenance"), "Nächste Wartung")
