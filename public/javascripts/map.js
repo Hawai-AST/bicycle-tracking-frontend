@@ -1,9 +1,6 @@
-function loadMap() {
+window.loadMap = function(currentUserAddress) {
     // initial view = Hamburg
     var map = setViewToHamburg();
-    function setViewToHamburg() {
-        L.map('map').setView([53.5502099, 9.9993636], 9);
-    }
 
     // Create pop-up for setting waypoints in map
     function createButton(label, container) {
@@ -79,7 +76,7 @@ function loadMap() {
     function findUserLocationOnMap() {
         // Find user location and move map initially
         L.Control.Geocoder.nominatim().geocode(
-            "@{currentUserAddress}",
+            currentUserAddress,
             function(results){
                 // Only moves to user location if address was found
                 if (results.length > 0) {
@@ -107,6 +104,10 @@ function loadMap() {
         $('#waypointsList').val(JSON.stringify(data));
 
     }
+}
+
+window.setViewToHamburg = function() {
+    return L.map('map').setView([53.5502099, 9.9993636], 9);
 }
 
 //function setViewToHamburg() {

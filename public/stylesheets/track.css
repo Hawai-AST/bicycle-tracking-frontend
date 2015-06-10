@@ -39,8 +39,6 @@ button.save-btn{
 
 /* IMPORTANT: This hides the route instruction in the map
 but it still gets calculated in leaflet-routing-machine.js line 759ff*/
-/* TODO Clarify if distance and time should be shown in container or not
-if yes => edit selector to "body .leaflet-routing-alt table" */
-body .leaflet-routing-alt {
+body .leaflet-routing-alt table {
     display: none;
 }
