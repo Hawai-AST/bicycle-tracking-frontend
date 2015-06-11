@@ -119,7 +119,7 @@ public class Authentication extends Controller {
         WSRequestHolder wsRequestHolder = WS.url(BackendConfig.backendURL() + "/oauth/token")
                 .setHeader("Authorization", "Basic REVWLTEwMTpERVZTRUNSRVQ=");
         wsRequestHolder.setContentType("application/x-www-form-urlencoded");
-
+        
         int responseTimeoutInMs = 10000;
 
         F.Promise<JsonNode> jsonPromise = null;

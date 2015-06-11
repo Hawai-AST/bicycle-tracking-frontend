@@ -1,6 +1,9 @@
 package models;
 
+import java.util.UUID;
+
 import com.fasterxml.jackson.databind.JsonNode;
+
 import play.libs.Json;
 
 public class BikeTypes {
@@ -16,8 +19,9 @@ public class BikeTypes {
     }
 
     public static class BikeType {
+    	public UUID id;
         public String name;
         public String description;
-        public String inspectionInterval;
+        public String inspectionIntervalInWeeks;
     }
 }

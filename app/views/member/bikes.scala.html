@@ -1,7 +1,7 @@
 @import views.html.helper.bs3._
 @import play.data.Form.form
 @import java.util
-@(amount: Integer, bikes: util.List[Bike], bikeForm: Form[Bike] = form(classOf[Bike]), types: Array[BikeTypes.BikeType])
+@(amount: Integer, bikes: util.List[Bike], bikeForm: Form[Bike] = form(classOf[Bike]), types: Array[BikeTypes.BikeType], bikeTypeIdToName: util.Map[String, String])
 
 @main {
   <script>
@@ -24,7 +24,7 @@
           </div>
           <div class="modal-body">
             <input type="hidden" value="@bike.id" name="id" />
-            @select(bikeForm("type").copy(value=Some(bike.`type`)), "Typ", optionMap = types.map(t => t.name -> t.name).toMap.asJava))
+            @select(bikeForm("type").copy(value=Some(bike.`type`)), "Typ", optionMap = types.map(t => t.id.toString() -> t.name).toMap.asJava)
             @inputText(bikeForm("frameNumber").copy(value=Some(bike.frameNumber.toString)), "Rahmennummer")
             @inputDate(bikeForm("purchaseDate").copy(value=Some(bike.purchaseDate)), "Kaufdatum")
             @inputDate(bikeForm("nextMaintenance").copy(value=Some(bike.nextMaintenance)), "Nächste Wartung")
@@ -48,9 +48,9 @@
       <ul class="nav nav-tabs" role="tablist">
         @for((bike, i) <- bikes.zipWithIndex) {
           @if(i == 0) {
-            <li role="presentation" class="active"><a href="#bike-@{bike.id}" aria-controls="bike-@{bike.id}" role="tab" data-toggle="tab">@{bike.`type`}</a></li>
+            <li role="presentation" class="active"><a href="#bike-@{bike.id}" aria-controls="bike-@{bike.id}" role="tab" data-toggle="tab">@{bikeTypeIdToName.get(bike.`type`)}</a></li>
           } else {
-            <li role="presentation"><a href="#bike-@{bike.id}" aria-controls="bike-@{bike.id}" role="tab" data-toggle="tab">@{bike.`type`}</a></li>
+            <li role="presentation"><a href="#bike-@{bike.id}" aria-controls="bike-@{bike.id}" role="tab" data-toggle="tab">@{bikeTypeIdToName.get(bike.`type`)}</a></li>
           }
         }
       </ul>
@@ -69,7 +69,7 @@
               <tbody>
                 <tr>
                   <td>Typ</td>
-                  <td>@{bike.`type`}</td>
+                  <td>@{bikeTypeIdToName.get(bike.`type`)}</td>
                 </tr>
                 <tr>
                   <td>Framenumber</td>

@@ -12,6 +12,8 @@ import java.util.List;
 public class Bike {
     @JsonIgnore
     public String id;
+    @JsonIgnore
+    public String name;
     public String type;
     public String purchaseDate;
     public String nextMaintenance;
