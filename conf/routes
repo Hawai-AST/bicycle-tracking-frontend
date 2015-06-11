@@ -12,7 +12,7 @@ GET           /route                        controllers.Maps.index
 GET           /tracks                       controllers.Tracks.tracks
 GET           /newtracks                    controllers.Tracks.newtracks
 GET           /profile                      controllers.Account.showAccount
-#POST           /route/:id                    controllers.Maps.update(id:String)
+POST          /route/:id                    controllers.Maps.update(id:String)
 POST          /changePassword               controllers.Account.changePassword
 POST          /changeUserCredentials        controllers.Account.changeUserCredentials
 POST          /saveTracks                   controllers.Tracks.saveTracks

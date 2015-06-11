@@ -51,6 +51,7 @@ public class Maps extends Controller {
         System.err.println("----Map Z. 51 you are in the route update methode with this trackId " + id);
         Map<String, String[]> request = request().body().asFormUrlEncoded();
         String result = request.get("data")[0];
+        System.out.println("----Maps Z. 54 this is what we send after update track: " + Json.parse(result).toString());
 
         JsonNode jsonResponse = Application.doRequest("http://localhost:8080/api/v1/route/" + id, Json.parse(result));
 //

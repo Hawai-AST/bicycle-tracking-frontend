@@ -142,19 +142,9 @@
                         arrayWaypoints.push(L.latLng(currentLat, currentLng));
                     });
 
-                    L.Routing.control({
-                        waypoints: arrayWaypoints,
-                        routeWhileDragging: true,
-                        geocoder: L.Control.Geocoder.nominatim(),
-                        reverseWaypoints: true,
-                        fitSelectedRoutes: 'truthy',
-                        // Workaround => hides routing but also input
-                        // TODO (Marjan) look for better solution
-                        //show: false,
-                        // Set GraphHopper as router -- IMPORTANT: Only 500 queries per day for free...!
-                        // TODO (Marjan) look up what happens if free queries used up
-                        router: L.Routing.graphHopper('0ed0b695-73f5-4c79-98ac-81ebf3da1d5f', { "urlParameters": {'vehicle': "bike"}})
-                    }).addTo(map);
+
+                   // add waypoint of track to map
+                   control.setWaypoints(arrayWaypoints);
 
                     var bikeId = result.bikeID;
                     console.log(bikeId);
@@ -200,7 +190,8 @@
 
         // Build route as per API spec
         // Set name of the route
-        var routeName = document.getElementById("name").value;
+        var nameSelect = document.getElementById('name');
+        var routeName = nameSelect.options[nameSelect.selectedIndex].innerHTML;
 
         // Catch if user didn't type a name
         if (routeName === "") {
