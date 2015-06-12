@@ -28,10 +28,33 @@
     <script type="application/javascript">
 
     // initialize and load map
-    var map = loadMap("@{currentUserAddress}");
+    var control = addControl();
+    var map = loadMap("@{currentUserAddress}", control);
+
+
+//    function getMapData(){
+//        var waypoints = control.getWaypoints();
+//
+//        // Maps has too much information for backend,
+//        // therewith we build hashes with relevant information
+//        // data = array of objects, objects = hashes with lat, lng and name
+//        var data = $.map(waypoints, function(value, index){
+//            return {
+//                latitude: value.latLng.lat,
+//                longitude: value.latLng.lng,
+//                name: value.name
+//            }
+//        });
+//
+//        $('#length').val(lengthInKm);
+//        $('#waypointsList').val(JSON.stringify(data));
+//
+//    }
 
     // Gets called from "Speichern" button
     function exportRoute() {
+        // TODO control geht so nicht....
+        //var waypoints = L.Routing.control.getWaypoints();
         var waypoints = control.getWaypoints();
 
         // Maps has too much information for backend,

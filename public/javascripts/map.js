@@ -1,4 +1,4 @@
-window.loadMap = function(currentUserAddress) {
+window.loadMap = function(currentUserAddress, control) {
     // initial view = Hamburg
     var map = setViewToHamburg();
 
@@ -45,19 +45,6 @@ window.loadMap = function(currentUserAddress) {
         maxZoom: 18
     }).addTo(map);
 
-    // Add basic routing control
-    var control = L.Routing.control({
-        routeWhileDragging: true,
-        geocoder: L.Control.Geocoder.nominatim(),
-        reverseWaypoints: true,
-        fitSelectedRoutes: 'truthy',
-        // Hides routing but also input
-        //show: false,
-        // Set GraphHopper as router -- IMPORTANT: Only 500 queries per day for free...!
-        // TODO (Marjan) look up what happens if free queries used up
-        router: L.Routing.graphHopper('0ed0b695-73f5-4c79-98ac-81ebf3da1d5f', { "urlParameters": {'vehicle': "bike"}})
-    });
-
     control.addTo(map);
 
     // Get distance from map, convert to km
@@ -68,41 +55,15 @@ window.loadMap = function(currentUserAddress) {
 
     // Initialize map with user's home address unless map is initialized with route
     // TODO (Marjan) check if the problem with reloading in tracks can be solved here
+    //var waypoints = control.getWaypoints();
+    //if (waypoints[0].latLng == null || waypoints[1].latLng == null) {
+    //    findUserLocationOnMap(map, currentUserAddress);
+    //}
     var waypoints = control.getWaypoints();
     if (waypoints[0].latLng == null || waypoints[1].latLng == null) {
-        findUserLocationOnMap();
-    }
-
-    function findUserLocationOnMap() {
-        // Find user location and move map initially
-        L.Control.Geocoder.nominatim().geocode(
-            currentUserAddress,
-            function(results){
-                // Only moves to user location if address was found
-                if (results.length > 0) {
-                    map.panTo(results[0].center);
-                    map.fitBounds(results[0].bbox);
-                }
-            });
-    }
-
-    function getMapData(){
-        var waypoints = control.getWaypoints();
-
-        // Maps has too much information for backend,
-        // therewith we build hashes with relevant information
-        // data = array of objects, objects = hashes with lat, lng and name
-        var data = $.map(waypoints, function(value, index){
-            return {
-                latitude: value.latLng.lat,
-                longitude: value.latLng.lng,
-                name: value.name
-            }
-        });
-
-        $('#length').val(lengthInKm);
-        $('#waypointsList').val(JSON.stringify(data));
-
+        return findUserLocationOnMap(map, currentUserAddress);
+    } else {
+        return map;
     }
 }
 
@@ -110,19 +71,29 @@ window.setViewToHamburg = function() {
     return L.map('map').setView([53.5502099, 9.9993636], 9);
 }
 
-//function setViewToHamburg() {
-//    L.map('map').setView([53.5502099, 9.9993636], 9);
-//}
-//
-//function findUserLocationOnMap() {
-//    // Find user location and move map initially
-//    L.Control.Geocoder.nominatim().geocode(
-//        "@{currentUserAddress}",
-//        function(results){
-//            // Only moves to user location if address was found
-//            if (results.length > 0) {
-//                map.panTo(results[0].center);
-//                map.fitBounds(results[0].bbox);
-//            }
-//        });
-//}
+window.findUserLocationOnMap = function(map, currentUserAddress) {
+    // Find user location and move map initially
+    return L.Control.Geocoder.nominatim().geocode(
+        currentUserAddress,
+        function(results){
+            // Only moves to user location if address was found
+            if (results.length > 0) {
+                map.panTo(results[0].center);
+                map.fitBounds(results[0].bbox);
+            }
+        });
+}
+
+window.addControl = function() {
+    return L.Routing.control({
+        routeWhileDragging: true,
+        geocoder: L.Control.Geocoder.nominatim(),
+        reverseWaypoints: true,
+        fitSelectedRoutes: 'truthy',
+        // Hides routing but also input
+        //show: false,
+        // Set GraphHopper as router -- IMPORTANT: Only 500 queries per day for free...!
+        // TODO (Marjan) look up what happens if free queries used up
+        router: L.Routing.graphHopper('0ed0b695-73f5-4c79-98ac-81ebf3da1d5f', { "urlParameters": {'vehicle': "bike"}})
+    });
+}
