@@ -25,6 +25,7 @@
           <div class="modal-body">
             <input type="hidden" value="@bike.id" name="id" />
             @select(bikeForm("type").copy(value=Some(bike.`type`)), "Typ", optionMap = types.map(t => t.name -> t.name).toMap.asJava))
+            @inputText(bikeForm("name").copy(value=Some(bike.name)), "Name")
             @inputText(bikeForm("frameNumber").copy(value=Some(bike.frameNumber.toString)), "Rahmennummer")
             @inputDate(bikeForm("purchaseDate").copy(value=Some(bike.purchaseDate)), "Kaufdatum")
             @inputDate(bikeForm("nextMaintenance").copy(value=Some(bike.nextMaintenance)), "Nächste Wartung")
@@ -48,9 +49,9 @@
       <ul class="nav nav-tabs" role="tablist">
         @for((bike, i) <- bikes.zipWithIndex) {
           @if(i == 0) {
-            <li role="presentation" class="active"><a href="#bike-@{bike.id}" aria-controls="bike-@{bike.id}" role="tab" data-toggle="tab">@{bike.`type`}</a></li>
+            <li role="presentation" class="active"><a href="#bike-@{bike.id}" aria-controls="bike-@{bike.id}" role="tab" data-toggle="tab">@{bike.name}</a></li>
           } else {
-            <li role="presentation"><a href="#bike-@{bike.id}" aria-controls="bike-@{bike.id}" role="tab" data-toggle="tab">@{bike.`type`}</a></li>
+            <li role="presentation"><a href="#bike-@{bike.id}" aria-controls="bike-@{bike.id}" role="tab" data-toggle="tab">@{bike.name}</a></li>
           }
         }
       </ul>
@@ -68,8 +69,8 @@
             <table class="table">
               <tbody>
                 <tr>
-                  <td>Typ</td>
-                  <td>@{bike.`type`}</td>
+                  <td>Name</td>
+                  <td>@{bike.name}</td>
                 </tr>
                 <tr>
                   <td>Framenumber</td>

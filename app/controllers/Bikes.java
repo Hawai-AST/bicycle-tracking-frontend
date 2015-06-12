@@ -49,7 +49,7 @@ public class Bikes extends Controller {
         } else {
             boolean found = false;
             for(BikeTypes.BikeType type : lastResponse) {
-                if(type.name.equals(b.type)) {
+                if(type.id.equals(b.type)) {
                     found = true;
                     break;
                 }

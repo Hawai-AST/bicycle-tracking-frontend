@@ -12,6 +12,7 @@ import java.util.List;
 public class Bike {
     @JsonIgnore
     public String id;
+    public String name;
     public String type;
     public String purchaseDate;
     public String nextMaintenance;
@@ -37,6 +38,9 @@ public class Bike {
         List<ValidationError> errors = new ArrayList<>();
         if (type == null || type.isEmpty()) {
             errors.add(new ValidationError("type", "Bitte geben sie den Fahrradtyp an"));
+        }
+        if (name == null || name.isEmpty()) {
+            errors.add(new ValidationError("type", "Bitte geben sie einen Namen an"));
         }
         if (purchaseDate == null) {
             errors.add(new ValidationError("purchaseDate", "Bitte geben Sie das Kaufdatum an"));

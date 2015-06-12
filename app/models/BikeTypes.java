@@ -16,8 +16,9 @@ public class BikeTypes {
     }
 
     public static class BikeType {
+        public String id;
         public String name;
         public String description;
-        public String inspectionInterval;
+        public int inspectionIntervalInWeeks;
     }
 }
