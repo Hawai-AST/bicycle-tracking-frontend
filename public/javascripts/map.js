@@ -1,4 +1,4 @@
-window.loadMap = function(currentUserAddress, control) {
+window.loadMap = function(currentUserAddress, control, lengthInKm) {
     // initial view = Hamburg
     var map = setViewToHamburg();
 
@@ -31,9 +31,6 @@ window.loadMap = function(currentUserAddress, control) {
             map.closePopup();
         });
     });
-
-    // Intitialize total distance of route
-    var lengthInKm;
 
     // Get map itself
     // http://{s}.tiles.mapbox.com/v3/MapID/{z}/{x}/{y}.png
