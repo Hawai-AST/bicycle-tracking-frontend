@@ -5,7 +5,6 @@
 @main {
   <div class="col-md-12 col-md-offset-1">
     <h2 class="h2">Hier können Sie eine neue Strecke eintragen</h2>
-    <p class="hint-paragraph"> Tragen Sie <a href="/bike/new">hier</a> ein neues Fahrrad ein,<br> wenn sie es noch nicht getan haben  </p>
     <div class="col-md-4">
       <div class="track-form">
         @helper.form(action = routes.Tracks.saveTracks, 'class -> "form-horizontal") {
@@ -21,21 +20,22 @@
       </div>
     </div>
 
+    <p class="hint-paragraph"> Tragen Sie <a href="../bike/new">hier</a> ein neues Fahrrad ein,<br> wenn sie es noch nicht getan haben  </p>
+
     <p class="current-user-addr"> Home sweet home: @{currentUserAddress} </p>
 
     <div id="map"></div>
 
     <script type="application/javascript">
-
     // Initialize routing control for map
     var control = addControl();
     // Intitialize total distance of route
     var lengthInKm = 0;
     // Initialize and load map
     var map = loadMap("@{currentUserAddress}", control, lengthInKm);
-
     </script>
-  </div>
+
+    </div>
 }
 
 
