@@ -78,4 +78,13 @@ public class Bikes extends Controller {
             lastCheck = System.currentTimeMillis();
         }
     }
+
+    public static String getBikeNameFromId(String inID) {
+        for(BikeTypes.BikeType type : lastResponse) {
+            if(type.id.equals(inID)) {
+                return type.name;
+            }
+        }
+        return "";
+    }
 }

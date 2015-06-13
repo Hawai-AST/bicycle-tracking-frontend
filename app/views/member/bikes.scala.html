@@ -24,7 +24,7 @@
           </div>
           <div class="modal-body">
             <input type="hidden" value="@bike.id" name="id" />
-            @select(bikeForm("type").copy(value=Some(bike.`type`)), "Typ", optionMap = types.map(t => t.name -> t.name).toMap.asJava))
+            @select(bikeForm("type"), "Typ", optionMap = types.map(t => t.id -> t.name).toMap.asJava, selected = bike.`type`)
             @inputText(bikeForm("name").copy(value=Some(bike.name)), "Name")
             @inputText(bikeForm("frameNumber").copy(value=Some(bike.frameNumber.toString)), "Rahmennummer")
             @inputDate(bikeForm("purchaseDate").copy(value=Some(bike.purchaseDate)), "Kaufdatum")
@@ -71,6 +71,10 @@
                 <tr>
                   <td>Name</td>
                   <td>@{bike.name}</td>
+                </tr>
+                <tr>
+                  <td>Typ</td>
+                  <td>@{Bikes.getBikeNameFromId(bike.`type`)}</td>
                 </tr>
                 <tr>
                   <td>Framenumber</td>
