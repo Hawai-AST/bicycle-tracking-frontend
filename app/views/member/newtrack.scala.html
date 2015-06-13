@@ -17,7 +17,7 @@
           @inputTextHidden(trackForm("waypointsList"))
           <!--@inputSubmitRoute("Speichern")-->
         }
-        <button class="save-btn" onclick="exportRoute()">Speichern</button>
+        <button class="save-btn" onclick="exportRoute(control, lengthInKm)">Speichern</button>
       </div>
     </div>
 
@@ -34,81 +34,6 @@
     // Initialize and load map
     var map = loadMap("@{currentUserAddress}", control, lengthInKm);
 
-    // Gets called from "Speichern" button
-    function exportRoute() {
-        var waypoints = control.getWaypoints();
-
-        // Maps has too much information for backend,
-        // therewith we build hashes with relevant information
-        // data = array of objects, objects = hashes with lat, lng and name
-        var data = $.map(waypoints, function(value, index){
-            return {
-                latitude: value.latLng.lat,
-                longitude: value.latLng.lng,
-                name: value.name
-            }
-        });
-
-        // Build route as per API spec
-        // Set name of the route
-        var routeName = document.getElementById("name").value;
-
-        // Catch if user didn't type a name
-        if (routeName === "") {
-            window.alert("Die Route kann ohne Namen nicht gespeichert werden.");
-            return;
-        }
-
-        // Get information from Form
-        var bikeID = document.getElementById("bike").value;
-
-        if (bikeID === "") {
-            window.alert("Bitte w\u00e4hle ein Fahhrad aus.");
-            return;
-        }
-
-        var startAt = document.getElementById("startAt").value;
-
-        // Catch if user deleted default date and didn't enter new
-        if (startAt === "") {
-            window.alert("Bitte w\u00e4hle einen Startzeitpunkt.");
-            return;
-        }
-
-        var finishedAt = document.getElementById("finishedAt").value;
-
-        // Catch if user deleted default date and didn't enter new
-        if (finishedAt === "") {
-            window.alert("Bitte w\u00e4hle einen Endzeitpunkt.");
-            return;
-        }
-
-        // TODO (Marjan / Louisa) Catch if format of date is wrong -> disable to write into field only click?
-        // TODO (Marjan / Louisa) Catch if finishedAt is before startAt
-
-        var route = {
-            name: routeName,
-            bikeID: bikeID,
-            lengthInKm: lengthInKm,
-            startAt: startAt,
-            finishedAt: finishedAt,
-            waypoints: data
-        }
-
-        console.log(route);
-
-        // Send information to backend
-        $.post("/route", {data: JSON.stringify(route)}).done(function() {
-            // TODO (Louisa / Marjan)  wie soll Speicherung signalisiert werden (hübscher)?
-            console.log(route);
-            console.log(JSON.stringify(route));
-            alert( "Die Route wurde erfolgreich gespeichert" );
-            // TODO (Louisa/ Marjan) When reloading page date fields should reload again to actual day and time
-            window.location.reload();
-        }).fail(function() {
-            alert( "Something went wrong, pls try again." );
-        });
-   }
     </script>
   </div>
 }
