@@ -2,6 +2,7 @@ package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+
 import config.BackendConfig;
 import models.Bike;
 import models.BikeTypes;
@@ -14,7 +15,9 @@ import views.html.member.bikes;
 import views.html.member.bike;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static play.data.Form.form;
 
@@ -56,18 +59,19 @@ public class Bikes extends Controller {
             }
 
             if(!found) {
+//            	You are using status code '200' with flashing, which should only be used with a redirect status!
                 flash("alert", "Der gegebene Typ existiert nicht");
                 flash("alert_type", "danger");
                 return index();
             }
         }
 
+        JsonNode response;
         if(b.id == null || b.id.isEmpty() || b.id.equals("-1")) {
-            JsonNode response = AST.preparedJson(BackendConfig.backendURL() + "/api/v1/bike").post(b.toJson()).get(10000);
+            response = AST.preparedJson(BackendConfig.backendURL() + "/api/v1/bike").post(b.toJson()).get(10000);
         } else {
-            JsonNode response = AST.preparedJson(BackendConfig.backendURL() + "/api/v1/bike/" + b.id).post(b.toJson()).get(10000);
+            response = AST.preparedJson(BackendConfig.backendURL() + "/api/v1/bike/" + b.id).post(b.toJson()).get(10000);
         }
-
         return redirect("/bikes");
     }
 

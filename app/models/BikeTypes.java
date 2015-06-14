@@ -1,6 +1,7 @@
 package models;
 
 import com.fasterxml.jackson.databind.JsonNode;
+
 import play.libs.Json;
 
 public class BikeTypes {
