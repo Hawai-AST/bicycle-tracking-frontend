@@ -22,9 +22,9 @@ public class ASTPreparedJson implements PreparedJson {
     }
 
     protected ASTPreparedJson(String url, String token) {
-    	wsRequestHolder = WS.url(url)
-		.setHeader("Authorization", "Bearer " + token)
-		.setContentType("application/json");
+        wsRequestHolder = WS.url(url)
+                .setHeader("Authorization", "Bearer " + token)
+                .setContentType("application/json");
     }
 
     /**

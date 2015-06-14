@@ -1,0 +1,17 @@
+@(bikeForm: Form[Bike], types: Array[BikeTypes.BikeType])
+@import views.html.helper.bs3._
+
+@main {
+  <h1>Fahrrad hinzufügen</h1>
+
+  @helper.form(action = routes.Bikes.update, 'id -> "addBike"){
+    <input type="hidden" name="id" value="">
+    @select(bikeForm("type"), "Typ", optionMap = types.map(t => t.id -> t.name).toMap.asJava)
+    @inputText(bikeForm("name"), "Name")
+    @inputText(bikeForm("frameNumber"), "Rahmennummer")
+    @inputDate(bikeForm("purchaseDate"), "Kaufdatum")
+    @inputDate(bikeForm("nextMaintenance"), "Nächste Wartung")
+
+    @inputSubmit("Hinzufügen")
+  }
+}

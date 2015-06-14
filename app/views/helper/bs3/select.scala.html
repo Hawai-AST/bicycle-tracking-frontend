@@ -1,4 +1,4 @@
-@(field: Field, label: String = "", optionMap: Map[String, String] = Application.getGenderOptions(), help: String = "")
+@(field: Field, label: String = "", optionMap: Map[String, String] = Application.getGenderOptions(), help: String = "", selected: String = "")
 
 <div class="form-group @if(field.hasErrors) {has-error}">
     <label class="col-sm-2 control-label" for="@field.id">@label</label>
@@ -9,7 +9,7 @@
         name="@field.name"
         <option class="blank" value="">auswählen</option>
         @for((optionName, optionValue) <- optionMap) {
-            <option id="@optionName" value="@optionName">@optionValue</option>
+            <option id="@optionName" value="@optionName" @(if(selected == optionName) "selected" else "")>@optionValue</option>
         }
         </select>
         <span class="help-block">@help</span>
