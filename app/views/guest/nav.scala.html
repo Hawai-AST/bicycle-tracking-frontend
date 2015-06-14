@@ -1,8 +1,10 @@
 @()
 
-<!-- Fixierte Navbar -->
-<nav class="navbar navbar-inverse navbar-fixed-top">
+
+
+<nav class="navbar navbar-default" role="navigation">
     <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed"
             data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -11,15 +13,20 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
+                <!-- navbar-brand is hidden on larger screens, but visible when the menu is collapsed -->
             <a class="navbar-brand" href="@routes.Application.index">HAWAI-AST</a>
         </div>
-        <div id="navbar" class="navbar-collapse collapse">
+            <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="http://localhost:9000/#">Start</a></li>
+                <li class="active"><a href="/#">Start</a></li>
             </ul>
 
             @views.html.guest.loginform()
 
-        </div><!--/.nav-collapse -->
+        </div>
+            <!-- /.navbar-collapse -->
     </div>
+        <!-- /.container -->
 </nav>
+

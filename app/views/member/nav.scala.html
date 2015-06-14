@@ -1,38 +1,85 @@
 @()
 
-<!-- Fixierte Navbar -->
-<nav class="navbar navbar-inverse navbar-fixed-top">
+
+
+<nav class="navbar navbar-default" role="navigation">
+    <div class="userbar">
+        @fragments.userbar()
+    </div>
     <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed"
-            data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
                 <span class="sr-only">Navigation ein-/ausblenden</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
+                <!-- navbar-brand is hidden on larger screens, but visible when the menu is collapsed -->
             <a class="navbar-brand" href="@routes.Application.index">HAWAI-AST</a>
         </div>
-        <div id="navbar" class="navbar-collapse collapse">
+            <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li><a href="http://localhost:9000/#">Übersicht</a></li>
-                <li><a href="http://localhost:9000/maptest">Map</a></li>
-                <li class="dropdown">
+                <li>
+                    <a href="/#">Übersicht</a>
+                </li>
+                <li>
+                    <a href="/maptest">Map</a>
+                </li>
+                <li>
                     <a href="tracks" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Strecken</a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="/tracks">Strecken anzeigen</a></li>
                         <li><a href="/newtracks">Neue Strecke</a></li>
                     </ul>
                 </li>
-                <li><a href="/bikes">Meine Fahrr&auml;der</a></li>
+                <li>
+                    <a href="/bikes">Meine Fahrr&auml;der</a>
+                </li>
             </ul>
 
-            @fragments.userbar()
-
-        </div><!--/.nav-collapse -->
+        </div>
+            <!-- /.navbar-collapse -->
     </div>
-
+        <!-- /.container -->
 </nav>
+
+
+@*<!-- Fixierte Navbar -->*@
+@*<nav class="navbar navbar-inverse navbar-fixed-top">*@
+    @*<div class="container">*@
+        @*<div class="navbar-header">*@
+            @*<button type="button" class="navbar-toggle collapsed"*@
+            @*data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">*@
+                @*<span class="sr-only">Navigation ein-/ausblenden</span>*@
+                @*<span class="icon-bar"></span>*@
+                @*<span class="icon-bar"></span>*@
+                @*<span class="icon-bar"></span>*@
+            @*</button>*@
+            @*<a class="navbar-brand" href="@routes.Application.index">HAWAI-AST</a>*@
+        @*</div>*@
+        @*<div id="navbar" class="navbar-collapse collapse">*@
+            @*<ul class="nav navbar-nav">*@
+                @*<li><a href="http://localhost:9000/#">Übersicht</a></li>*@
+                @*<li><a href="http://localhost:9000/maptest">Map</a></li>*@
+                @*<li class="dropdown">*@
+                    @*<a href="tracks" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Strecken</a>*@
+                    @*<ul class="dropdown-menu" role="menu">*@
+                        @*<li><a href="/tracks">Strecken anzeigen</a></li>*@
+                        @*<li><a href="/newtracks">Neue Strecke</a></li>*@
+                    @*</ul>*@
+                @*</li>*@
+                @*<li><a href="/bikes">Meine Fahrr&auml;der</a></li>*@
+            @*</ul>*@
+
+
+
+        @*</div><!--/.nav-collapse -->*@
+    @*</div>*@
+
+@*</nav>*@
 
 
 <!--

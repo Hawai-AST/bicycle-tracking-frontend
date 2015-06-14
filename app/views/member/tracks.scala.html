@@ -3,9 +3,21 @@
 @import views.html.helper.bs3._
 
 @main {
-    <div class="col-md-4" style="float:right;">
+
+
+    <div class="col-md-8">
+            <!-- Map -->
+        <div class="map-box">
+            <p class="current-user-addr"> Home sweet home: @{currentUserAddress} </p>
+
+            <div id="map"></div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+
         <div id="track-dropdown">
-        @selectTrack(trackForm("name"), "Wählen Sie eine Strecke:")
+            @selectTrack(trackForm("name"), "Wählen Sie eine Strecke:")
         </div>
 
         <div class="track-form border-track-form">
@@ -27,12 +39,6 @@
         </div>
     </div>
 
-    <!-- Map -->
-    <div class="map-box">
-        <p class="current-user-addr"> Home sweet home: @{currentUserAddress} </p>
-
-        <div id="map"></div>
-    </div>
 
     <script type="application/javascript">
     // *******************************************************************
