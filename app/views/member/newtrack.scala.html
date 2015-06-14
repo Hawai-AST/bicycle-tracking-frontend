@@ -7,15 +7,15 @@
     <h2 class="h2">Hier können Sie eine neue Strecke eintragen</h2>
     <p class="hint-paragraph"> Tragen Sie <a href="/bike/new">hier</a> ein neues Fahrrad ein,<br> wenn sie es noch nicht getan haben  </p>
     <div class="col-md-4">
-      <div class="track-form">
+      <div class="track-form border-track-form">
         @helper.form(action = routes.Tracks.saveTracks, 'class -> "form-horizontal") {
           @inputTextTrack(trackForm("name"), "Streckenname:")
           @selectBike(trackForm("bike"), "Fahrrad:") <!-- bikeID -->
           @inputTime(trackForm("startAt"), "Startzeit")
           @inputTime(trackForm("finishedAt"), "Endzeit")
+          <!--
           @inputTextHidden(trackForm("length"))
-          @inputTextHidden(trackForm("waypointsList"))
-          <!--@inputSubmitRoute("Speichern") -->
+          @inputTextHidden(trackForm("waypointsList")) -->
         }
           <div class="form-group">
               <div class="col-sm-offset-4 col-sm-10">
@@ -26,9 +26,11 @@
       </div>
     </div>
 
-    <p class="current-user-addr"> Home sweet home: @{currentUserAddress} </p>
+    <div class="map-box-1">
+      <p class="current-user-addr"> Home sweet home: @{currentUserAddress} </p>
 
-    <div id="map"></div>
+      <div id="map"></div>
+    </div>
 
     <script type="application/javascript">
 
