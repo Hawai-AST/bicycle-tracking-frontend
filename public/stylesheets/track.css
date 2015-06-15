@@ -1,8 +1,4 @@
 
-h2.h2{
-    margin: auto;
-}
-
 
 div#track-dropdown {
     height: 100px;
@@ -16,36 +12,22 @@ div.track-form {
     margin-top: 100px;
 }
 
-div.border-track-form {
-    /*background: #b9def0;*/
-    border: 2px solid #b9def0;
-    -moz-border-radius: 40px;
-    -webkit-border-radius: 40px;
-    border-radius: 40px;
-    height: 320px;
-    padding: 20px 0px 20px 20px;
-    width: 360px;
-}
 
-
-div.map-box-1 {
+div.map-box-newtrack {
     height: 600px;
-    margin-left: 380px;
-    position: relative;
-    width: 750px;
+    width: 100%;
 }
 
- div.map-box {
-     height: 600px;
-     position: relative;
-     width: 750px;
- }
+div.map-box-track {
+    height: 600px;
+    width: 100%;
+}
 
 /*
 * user address style
 */
 p.current-user-addr{
-    color: #0431B4;
+    color: #265a88;
     font-family: Arial;
     font-size: 16px;
     margin-left: 20px;
@@ -57,16 +39,15 @@ p.current-user-addr{
 * map size and style
 */
 div#map {
-    float: left;
     height: 550px;
-    margin-left: 20px;
-    width: 720px;
+    width: 100%;
 }
 
 p.hint-paragraph{
     color: crimson;
+    font-size: 14px;
     margin-left: 50px;
-    margin-top: 20px;
+    margin-top: 30px;
     position: absolute;
 }
 

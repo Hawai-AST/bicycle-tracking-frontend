@@ -3,35 +3,34 @@
 @import views.html.helper.bs3._
 
 @main {
-    <div class="col-md-4" style="float:right;">
+    <div class="col-md-8">
+            <!-- Map -->
+        <div class="map-box-track">
+            <p class="current-user-addr"> Home sweet home: @{currentUserAddress} </p>
+
+            <div id="map"></div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
         <div id="track-dropdown">
         @selectTrack(trackForm("name"), "Wählen Sie eine Strecke:")
         </div>
 
-        <div class="track-form border-track-form">
-            <!-- nice to have: dropdown menu with auto complete-->
+        <div class="track-form">
             @helper.form(action = routes.Tracks.saveTracks, 'class -> "form-horizontal") {
                 @inputTextTrack(trackForm("streckenname"), "Streckenname:")
                 @selectBike(trackForm("bike"), "Fahrrad:")
-                @inputTextTrack(trackForm("startAt"), "Startzeit")
-                @inputTextTrack(trackForm("finishedAt"), "Endzeit")
+                @inputTextTrack(trackForm("startAt"), "Startzeit:")
+                @inputTextTrack(trackForm("finishedAt"), "Endzeit:")
                 <!-- @inputSubmit("Änderung speichern", offset="4") -->
-            }
+        }
             <div class="form-group">
                 <div class="col-sm-offset-4 col-sm-10">
                     <button type="submit" class="btn btn-md btn-default" onclick="updateRoute()">Änderung Speichern</button>
                 </div>
             </div>
-
-
         </div>
-    </div>
-
-    <!-- Map -->
-    <div class="map-box">
-        <p class="current-user-addr"> Home sweet home: @{currentUserAddress} </p>
-
-        <div id="map"></div>
     </div>
 
     <script type="application/javascript">

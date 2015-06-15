@@ -21,6 +21,8 @@
         <link href="@routes.Assets.at("bootstrap/css/bootstrap.min.css")" rel="stylesheet">
         <!-- Bootstrap-Theme -->
         <link href="@routes.Assets.at("bootstrap/css/bootstrap-theme.min.css")" rel="stylesheet">
+        <!-- Bootstrap-business-casual-theme-->
+        <link href="@routes.Assets.at("stylesheets/business-casual.css")" rel="stylesheet" href=""/>
 
         <!-- Bootstrap Datepicker CSS -->
         <link href="@routes.Assets.at("stylesheets/datepicker.css")" rel="stylesheet" href=""/>
@@ -52,15 +54,25 @@
     </head>
 
     <body role="document">
+
+        <div class="brand">After Sales Tracker</div>
+        <div class="address-bar"> Let's Go For A Ride </div>
+
         @if(controllers.Application.isUserLoggedIn) {
             @member.nav()
         } else {
             @guest.nav()
         }
 
-        <div class="container theme-showcase" role="main">
-            @content
+        @*<div class="container theme-showcase" role="main">*@
+        <div class="container">
+            <div class="row">
+                <div class="box">
+                @content
+                </div>
+            </div>
         </div> <!-- /container -->
+
 
         <!-- Bootstrap-JavaScript
         ================================================== -->
