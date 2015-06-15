@@ -47,7 +47,7 @@ public class Tracks extends Controller {
         List<Bike> bikes = AST.bikeMap();
         for (Bike bikeElem : bikes){
              String id = bikeElem.id;
-             String name = bikeElem.type;
+             String name = bikeElem.name;
              option.put(id, name);
         }
         return option;

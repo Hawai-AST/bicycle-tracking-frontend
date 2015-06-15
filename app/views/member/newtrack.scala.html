@@ -10,8 +10,8 @@
         @helper.form(action = routes.Tracks.saveTracks, 'class -> "form-horizontal") {
           @inputTextTrack(trackForm("name"), "Streckenname:")
           @selectBike(trackForm("bike"), "Fahrrad:") <!-- bikeID -->
-          @inputTime(trackForm("startAt"), "Startzeit")
-          @inputTime(trackForm("finishedAt"), "Endzeit")
+          @inputTime(trackForm("startAt"), "Startzeit:")
+          @inputTime(trackForm("finishedAt"), "Endzeit:")
           <!--
           @inputTextHidden(trackForm("length"))
           @inputTextHidden(trackForm("waypointsList")) -->

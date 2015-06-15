@@ -13,8 +13,8 @@
             @helper.form(action = routes.Tracks.saveTracks, 'class -> "form-horizontal") {
                 @inputTextTrack(trackForm("streckenname"), "Streckenname:")
                 @selectBike(trackForm("bike"), "Fahrrad:")
-                @inputTextTrack(trackForm("startAt"), "Startzeit")
-                @inputTextTrack(trackForm("finishedAt"), "Endzeit")
+                @inputTextTrack(trackForm("startAt"), "Startzeit:")
+                @inputTextTrack(trackForm("finishedAt"), "Endzeit:")
                 <!-- @inputSubmit("Änderung speichern", offset="4") -->
             }
             <div class="form-group">

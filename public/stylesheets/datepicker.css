@@ -40,6 +40,11 @@
   top: -6px;
   left: 7px;
 }
+
+.datepicker.dropdown-menu {
+  z-index: 1200 !important;
+}
+
 .datepicker > div {
   display: none;
 }

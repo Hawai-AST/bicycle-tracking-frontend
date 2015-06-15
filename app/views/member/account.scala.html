@@ -28,7 +28,7 @@
             @inputText(changeUserCredentialsForm("firstName"), "Vorname")
             @inputText(changeUserCredentialsForm("name"), "Nachname")
             @inputDate(changeUserCredentialsForm("birthdate"), "Geburtsdatum")
-            @select(changeUserCredentialsForm("gender"), "Geschlecht")
+            @select(changeUserCredentialsForm("gender"), "Geschlecht", selected = changeUserCredentialsForm("gender").value)
             <br/>
             @inputText(changeUserCredentialsForm("address.street"), "Straße")
             @inputText(changeUserCredentialsForm("address.houseNumber"), "Hausnummer")

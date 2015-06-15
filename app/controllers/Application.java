@@ -12,7 +12,7 @@ import java.util.Map;
 public class Application extends Controller {
 
     public static Result index() {
-        if (isUserLoggedIn()) {
+        if (Authentication.isUserLoggedIn()) {
             return ok(views.html.member.index.render());
         } else {
             return ok(views.html.guest.index.render());
@@ -57,15 +57,6 @@ public class Application extends Controller {
             // store key value pairs from request in session
             session(field, jsonNode.get(field).asText());
         }
-    }
-
-    /**
-     * Checks whether the user is logged in or not
-     *
-     * @return true, if user is logged in
-     */
-    public static boolean isUserLoggedIn() {
-        return session("access_token") != null;
     }
 
     /**

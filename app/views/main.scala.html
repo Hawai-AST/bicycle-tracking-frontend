@@ -52,7 +52,7 @@
     </head>
 
     <body role="document">
-        @if(controllers.Application.isUserLoggedIn) {
+        @if(controllers.Authentication.isUserLoggedIn) {
             @member.nav()
         } else {
             @guest.nav()

@@ -6,6 +6,11 @@ import models.Track;
 import play.libs.ws.WSResponse;
 
 import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import com.fasterxml.jackson.databind.JsonNode;
+import config.BackendConfig;
+import play.libs.ws.WSResponse;
 
 /**
  * Factory Class
@@ -79,7 +84,6 @@ public class AST {
         String userAddress;
 
         JsonNode response = AST.preparedJson("http://localhost:8080/api/v1/user").get().map(WSResponse::asJson).get(10000);
-
         JsonNode street =  response.get("address").get("street");
         JsonNode housenumber = response.get("address").get("houseNumber");
         JsonNode city = response.get("address").get("city");

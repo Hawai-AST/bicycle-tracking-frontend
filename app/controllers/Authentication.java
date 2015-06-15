@@ -1,6 +1,7 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import config.BackendConfig;
 import models.Login;
 import models.Registration;
 import play.data.Form;
@@ -23,6 +24,7 @@ public class Authentication extends Controller {
         return ok(views.html.guest.signup.render(Form.form(Registration.class)));
     }
 
+    @RequiresLogin
     public static Result signout() {
         // TODO(Timmay): Inform backend about user log off
         session().clear();
@@ -46,7 +48,7 @@ public class Authentication extends Controller {
 
         Registration registration = form.get();
 
-        JsonNode jsonResponse = doRequest("http://localhost:8080/api/v1/register", registration.toJson());
+        JsonNode jsonResponse = doRequest(BackendConfig.backendURL() + "/api/v1/register", registration.toJson());
 
         // temp response and error handling - not to seriously review at this time
         if (jsonResponse.get("email") != null) {
@@ -114,10 +116,10 @@ public class Authentication extends Controller {
 
         Login login = form.get();
 
-        WSRequestHolder wsRequestHolder = WS.url("http://localhost:8080/oauth/token")
+        WSRequestHolder wsRequestHolder = WS.url(BackendConfig.backendURL() + "/oauth/token")
                 .setHeader("Authorization", "Basic REVWLTEwMTpERVZTRUNSRVQ=");
         wsRequestHolder.setContentType("application/x-www-form-urlencoded");
-
+        
         int responseTimeoutInMs = 10000;
 
         F.Promise<JsonNode> jsonPromise = null;
@@ -172,5 +174,14 @@ public class Authentication extends Controller {
 
         }
         return redirect("/");
+    }
+
+    /**
+     * Checks whether the user is logged in or not
+     *
+     * @return true, if user is logged in
+     */
+    public static boolean isUserLoggedIn() {
+        return session("access_token") != null;
     }
 }

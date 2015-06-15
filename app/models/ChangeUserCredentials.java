@@ -28,6 +28,7 @@ public class ChangeUserCredentials {
     public static ChangeUserCredentials fromJson(JsonNode node){
         return Json.fromJson(node, ChangeUserCredentials.class);
     }
+
     public List<ValidationError> validate() {
         List<ValidationError> errors = new ArrayList<>();
         if (firstName.isEmpty()) {
@@ -47,6 +48,9 @@ public class ChangeUserCredentials {
         }
         if (address.postcode.isEmpty()) {
             errors.add(new ValidationError("address.postcode", "Bitte geben Sie Ihre Postleitzahl an"));
+        }
+        if (!address.postcode.matches("(([a-z]|[A-Z])([a-z]|[A-Z]))?[0-9]+")) {
+            errors.add(new ValidationError("address.postcode", "Es sind nur Zahlen erlaubt"));
         }
         if (address.state.isEmpty()) {
             errors.add(new ValidationError("address.state", "Bitte geben Sie Ihr Bundesland an"));
