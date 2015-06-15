@@ -135,11 +135,6 @@
                 url: ("/getTrack/" + trackId),
                 type: "POST",
                 success: function(result) {
-                    // TODO (Marjan) clear old route if one already exists!
-                    // clears window but needs condition...
-                    // BUT control.getWaypoints() always undefined even when route is shown in map - so what to use??
-                    //window.location.reload();
-
                     var waypoints = result.waypoints;
                     var arrayWaypoints = [];
 
@@ -149,10 +144,8 @@
                         arrayWaypoints.push(L.latLng(currentLat, currentLng));
                     });
 
-
-                   // add waypoint of track to map
-                   control.setWaypoints(arrayWaypoints);
-
+                    // add waypoint of track to map
+                    control.setWaypoints(arrayWaypoints);
 
                     var streckenname = result.name;
                     console.log(streckenname)
@@ -175,14 +168,9 @@
                     var finishedAt = result.finishedAt;
                     console.log(finishedAt);
                     document.getElementById("finishedAt").value = finishedAt;
-
-
                 }
             });
     }
-
-
-
 
     // Gets called from "Änderung speichern" button
     function updateRoute() {
