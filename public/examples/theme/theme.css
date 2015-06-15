@@ -1,7 +1,3 @@
-body {
-  padding-top: 70px;
-  padding-bottom: 30px;
-}
 
 .theme-dropdown .dropdown-menu {
   position: static;
@@ -15,4 +11,14 @@ body {
 
 .theme-showcase .navbar .container {
   width: auto;
+}
+
+.userbar .navbar-right {
+  padding-top: 16px;
+  margin-right: 10px;
+}
+
+
+h2 {
+  text-transform: none;
 }

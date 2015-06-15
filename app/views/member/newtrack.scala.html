@@ -4,15 +4,21 @@
 
 @main {
   <div class="col-md-12">
-    <h2 class="h2">Hier können Sie eine neue Strecke eintragen</h2>
+    <h2>Hier können Sie eine neue Strecke eintragen</h2>
     <div class="col-md-4">
       <div class="track-form border-track-form">
         @helper.form(action = routes.Tracks.saveTracks, 'class -> "form-horizontal") {
           @inputTextTrack(trackForm("name"), "Streckenname:")
           @selectBike(trackForm("bike"), "Fahrrad:") <!-- bikeID -->
+<<<<<<< HEAD
           @inputTime(trackForm("startAt"), "Startzeit:")
           @inputTime(trackForm("finishedAt"), "Endzeit:")
           <!--
+=======
+          @inputTime(trackForm("startAt"), "Startzeit")
+          @inputTime(trackForm("finishedAt"), "Endzeit")
+            <!--
+>>>>>>> origin/AST-93
           @inputTextHidden(trackForm("length"))
           @inputTextHidden(trackForm("waypointsList")) -->
         }
@@ -25,12 +31,14 @@
       </div>
     </div>
 
-    <p class="hint-paragraph">Tragen Sie <a href="/bike/new">hier</a> ein neues Fahrrad ein,<br>falls Sie es noch nicht getan haben.</p>
+   <p class="hint-paragraph">Tragen Sie <a href="/bike/new">hier</a> ein neues Fahrrad ein,<br>falls Sie es noch nicht getan haben.</p>
 
-    <div class="map-box-1">
-      <p class="current-user-addr"> Home sweet home: @{currentUserAddress} </p>
+    <div class="col-md-8">
+      <div class="map-box-newtrack">
+        <p class="current-user-addr"> Home sweet home: @{currentUserAddress} </p>
 
-      <div id="map"></div>
+        <div id="map"></div>
+      </div>
     </div>
 
     <script type="application/javascript">

@@ -20,15 +20,6 @@ public class Application extends Controller {
     }
 
     /**
-     * Temp. view on map
-     */
-    public static Result maptest() {
-        // TODO get real current user address
-        String currentUserAddress = "Berliner Tor 7, Hamburg";
-        return ok(views.html.member.maptest.render(currentUserAddress));
-    }
-
-    /**
      * Runs procedures neccessary to perform a request and returns the response
      *
      * @param url      URL to call
