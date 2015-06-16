@@ -138,11 +138,23 @@ window.exportRoute = function(control, lengthInKm) {
         return;
     }
 
+    // Catch if startAt is wrong format
+    if (!validateDateFormat(startAt)) {
+        window.alert("Das Startdatum hat das falsche Format, bitte w\u00e4hle es aus dem Kalender aus.");
+        return;
+    }
+
     var finishedAt = document.getElementById("finishedAt").value;
 
     // Catch if user deleted default date and didn't enter new
     if (finishedAt === "") {
         window.alert("Bitte w\u00e4hle einen Endzeitpunkt.");
+        return;
+    }
+
+    // Catch if finshedAt is wrong format
+    if (!validateDateFormat(finishedAt)) {
+        window.alert("Das Enddatum hat das falsche Format, bitte w\u00e4hle es aus dem Kalender aus.");
         return;
     }
 
@@ -153,10 +165,6 @@ window.exportRoute = function(control, lengthInKm) {
         window.alert("Der Startzeitpunkt muss vor dem Endzeitpunkt der Fahrt liegen.");
         return;
     }
-
-    // TODO (Marjan / Louisa) Catch if format of date is wrong -> disable to write into field only click?
-    //  ATTENTION: atm it shows "success" although route has only been SENT successfully but it doesnt't
-    //  show if route was really SAVED successfully => with wrong date format it is sent but not accepted...
 
     var route = {
         name: routeName,
@@ -174,6 +182,8 @@ window.exportRoute = function(control, lengthInKm) {
         // TODO (Louisa / Marjan)  wie soll Speicherung signalisiert werden (hübscher)?
         console.log(route);
         console.log(JSON.stringify(route));
+        // TODO atm it shows "success" when route has been SENT successfully but it doesnt't
+        // check if route was really SAVED successfully
         alert( "Die Route wurde erfolgreich gespeichert" );
         // TODO (Louisa/ Marjan) When reloading page date fields should reload again to actual day and time
         window.location.reload();
@@ -184,10 +194,10 @@ window.exportRoute = function(control, lengthInKm) {
 }
 
 // Returns true if format is yyyy-mm-dd hh:mm
-// TODO (Marjan) implement
 window.validateDateFormat = function(date) {
-    var bool = true;
-    return bool;
+    //            yyyy -       MM      -       dd           hh     :   mm
+    var regex = /^\d{4}-(0[1-9]|1[0-2])-([0-2]\d|3[01]) (0\d|1[01]):[0-5]\d$/;
+    return regex.test(date);
 }
 
 // Returns -1 if dateOne is smaller, 0 when they are the same and +1 if dateOne is bigger
