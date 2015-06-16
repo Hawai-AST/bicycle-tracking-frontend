@@ -46,6 +46,7 @@ window.loadMap = function(currentUserAddress, control, lengthInKm) {
 
     // Get distance from map, convert to km
     // TODO (Marjan) atm it always picks first route option - should check which route option is the actual used one
+    // TODO this doesn't work anymore since refactoring !!
     control.addEventListener("routesfound", function(route){
         lengthInKm = route.routes[0].summary.totalDistance / 1000;
     });
@@ -145,8 +146,17 @@ window.exportRoute = function(control, lengthInKm) {
         return;
     }
 
+    var comparisonDates = compareTwoDateStrings(startAt, finishedAt);
+
+    // Catch if finishedAt is prior to startAt
+    if (comparisonDates === 1) {
+        window.alert("Der Startzeitpunkt muss vor dem Endzeitpunkt der Fahrt liegen.");
+        return;
+    }
+
     // TODO (Marjan / Louisa) Catch if format of date is wrong -> disable to write into field only click?
-    // TODO (Marjan / Louisa) Catch if finishedAt is before startAt
+    //  ATTENTION: atm it shows "success" although route has only been SENT successfully but it doesnt't
+    //  show if route was really SAVED successfully => with wrong date format it is sent but not accepted...
 
     var route = {
         name: routeName,
@@ -161,7 +171,7 @@ window.exportRoute = function(control, lengthInKm) {
 
     // Send information to backend
     $.post("/route", {data: JSON.stringify(route)}).done(function() {
-        // TODO (Louisa / Marjan)  wie soll Speicherung signalisiert werden (h?bscher)?
+        // TODO (Louisa / Marjan)  wie soll Speicherung signalisiert werden (hübscher)?
         console.log(route);
         console.log(JSON.stringify(route));
         alert( "Die Route wurde erfolgreich gespeichert" );
@@ -171,4 +181,21 @@ window.exportRoute = function(control, lengthInKm) {
         alert( "Something went wrong, pls try again." );
     });
 
+}
+
+// Returns true if format is yyyy-mm-dd hh:mm
+// TODO (Marjan) implement
+window.validateDateFormat = function(date) {
+    var bool = true;
+    return bool;
+}
+
+// Returns -1 if dateOne is smaller, 0 when they are the same and +1 if dateOne is bigger
+window.compareTwoDateStrings = function(dateOne, dateTwo) {
+    // DateOne is smaller
+    if (dateOne  <  dateTwo) return -1;
+    // Both dates have same value
+    if (dateOne === dateTwo) return  0;
+    // (else) DateOne is bigger
+    return  1;
 }
