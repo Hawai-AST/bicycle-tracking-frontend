@@ -57,7 +57,7 @@
         <div class="brand">After Sales Tracker</div>
         <div class="address-bar"> Let's Go For A Ride </div>
 
-        @if(controllers.Application.isUserLoggedIn) {
+        @if(controllers.Authentication.isUserLoggedIn) {
             @member.nav()
         } else {
             @guest.nav()
