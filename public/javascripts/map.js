@@ -44,12 +44,12 @@ window.loadMap = function(currentUserAddress, control, lengthInKm) {
 
     control.addTo(map);
 
-    // Get distance from map, convert to km
-    // TODO (Marjan) atm it always picks first route option - should check which route option is the actual used one
-    // TODO this doesn't work anymore since refactoring !!
-    control.addEventListener("routesfound", function(route){
-        lengthInKm = route.routes[0].summary.totalDistance / 1000;
-    });
+    //// Get distance from map, convert to km
+    //// TODO (Marjan) atm it always picks first route option - should check which route option is the actual used one
+    //// TODO this doesn't work anymore since refactoring !!
+    //control.addEventListener("routesfound", function(route){
+    //    lengthInKm = route.routes[0].summary.totalDistance / 1000;
+    //});
 
     // Initialize map with user's home address unless map is initialized with route
     // TODO (Marjan) check if the problem with reloading in tracks can be solved here
@@ -183,7 +183,7 @@ window.exportRoute = function(control, lengthInKm) {
         // check if route was really SAVED successfully
         alert( "Die Route wurde erfolgreich gespeichert" );
         // TODO (Louisa/ Marjan) When reloading page date fields should reload again to actual day and time
-        window.location.reload();
+        //window.location.reload();
     }).fail(function() {
         alert( "Something went wrong, pls try again." );
     });
@@ -278,7 +278,7 @@ window.updateRoute = function(control, lengthInKm) {
         // check if route was really UPDATED successfully
         alert( "Die Route wurde erfolgreich geupdated" );
         // TODO (Louisa/ Marjan) When reloading page date fields should reload again to actual day and time
-        window.location.reload();
+        //window.location.reload();
     }).fail(function() {
         alert( "Something went wrong, pls try again." );
     });
@@ -299,4 +299,12 @@ window.compareTwoDateStrings = function(dateOne, dateTwo) {
     if (dateOne === dateTwo) return  0;
     // (else) DateOne is bigger
     return  1;
+}
+
+// Get distance from map, convert to km
+// TODO (Marjan) atm it always picks first route option - should check which route option is the actual used one
+window.getLengthInKm = function(control) {
+    control.addEventListener("routesfound", function(route){
+        return lengthInKm = route.routes[0].summary.totalDistance / 1000;
+    });
 }
