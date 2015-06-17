@@ -39,13 +39,11 @@
 
     // Initialize routing control for map
     var control = addControl();
-    // Intitialize total distance of route
-    var lengthInKm = 0;
+    // Get total distance from map
+    var lengthInKm = getLengthInKm(control);
     // Initialize and load map
     var map = loadMap("@{currentUserAddress}", control, lengthInKm);
 
     </script>
   </div>
 }
-
-

@@ -44,12 +44,12 @@ window.loadMap = function(currentUserAddress, control, lengthInKm) {
 
     control.addTo(map);
 
-    // Get distance from map, convert to km
-    // TODO (Marjan) atm it always picks first route option - should check which route option is the actual used one
-    // TODO this doesn't work anymore since refactoring !!
-    control.addEventListener("routesfound", function(route){
-        lengthInKm = route.routes[0].summary.totalDistance / 1000;
-    });
+    //// Get distance from map, convert to km
+    //// TODO (Marjan) atm it always picks first route option - should check which route option is the actual used one
+    //// TODO this doesn't work anymore since refactoring !!
+    //control.addEventListener("routesfound", function(route){
+    //    lengthInKm = route.routes[0].summary.totalDistance / 1000;
+    //});
 
     // Initialize map with user's home address unless map is initialized with route
     // TODO (Marjan) check if the problem with reloading in tracks can be solved here
@@ -88,110 +88,24 @@ window.addControl = function() {
         geocoder: L.Control.Geocoder.nominatim(),
         reverseWaypoints: true,
         fitSelectedRoutes: 'truthy',
-        // Hides routing but also input
-        //show: false,
         // Set GraphHopper as router -- IMPORTANT: Only 500 queries per day for free...!
         // TODO (Marjan) look up what happens if free queries used up
         router: L.Routing.graphHopper('0ed0b695-73f5-4c79-98ac-81ebf3da1d5f', { "urlParameters": {'vehicle': "bike"}})
     });
 }
 
-
 // Gets called from "Speichern" button in newtracks
 window.exportRoute = function(control, lengthInKm) {
-    var waypoints = control.getWaypoints();
-
-    // Maps has too much information for backend,
-    // therewith we build hashes with relevant information
-    // data = array of objects, objects = hashes with lat, lng and name
-    var data = $.map(waypoints, function(value, index){
-        return {
-            latitude: value.latLng.lat,
-            longitude: value.latLng.lng,
-            name: value.name
-        }
-    });
-
-    // Build route as per API spec
-    // Set name of the route
-    var routeName = document.getElementById("name").value;
-
-    // Catch if user didn't type a name
-    if (routeName === "") {
-        window.alert("Die Route kann ohne Namen nicht gespeichert werden.");
-        return;
-    }
-
-    // Get information from Form
-    var bikeID = document.getElementById("bike").value;
-
-    if (bikeID === "") {
-        window.alert("Bitte w\u00e4hle ein Fahhrad aus.");
-        return;
-    }
-
-    var startAt = document.getElementById("startAt").value;
-
-    // Catch if user deleted default date and didn't enter new
-    if (startAt === "") {
-        window.alert("Bitte w\u00e4hle einen Startzeitpunkt.");
-        return;
-    }
-
-    // Catch if startAt is wrong format
-    if (!validateDateFormat(startAt)) {
-        window.alert("Das Startdatum hat das falsche Format, bitte w\u00e4hle es aus dem Kalender aus.");
-        return;
-    }
-
-    var finishedAt = document.getElementById("finishedAt").value;
-
-    // Catch if user deleted default date and didn't enter new
-    if (finishedAt === "") {
-        window.alert("Bitte w\u00e4hle einen Endzeitpunkt.");
-        return;
-    }
-
-    // Catch if finshedAt is wrong format
-    if (!validateDateFormat(finishedAt)) {
-        window.alert("Das Enddatum hat das falsche Format, bitte w\u00e4hle es aus dem Kalender aus.");
-        return;
-    }
-
-    var comparisonDates = compareTwoDateStrings(startAt, finishedAt);
-
-    // Catch if finishedAt is prior to startAt
-    if (comparisonDates === 1) {
-        window.alert("Der Startzeitpunkt muss vor dem Endzeitpunkt der Fahrt liegen.");
-        return;
-    }
-
-    var route = {
-        name: routeName,
-        bikeID: bikeID,
-        lengthInKm: lengthInKm,
-        startAt: startAt,
-        finishedAt: finishedAt,
-        waypoints: data
-    }
-
-    // Send information to backend
-    $.post("/route", {data: JSON.stringify(route)}).done(function() {
-        // TODO (Louisa / Marjan)  wie soll Speicherung signalisiert werden (hübscher)?
-        console.log(route);
-        // TODO atm it shows "success" when route has been SENT successfully but it doesnt't
-        // check if route was really SAVED successfully
-        alert( "Die Route wurde erfolgreich gespeichert" );
-        // TODO (Louisa/ Marjan) When reloading page date fields should reload again to actual day and time
-        window.location.reload();
-    }).fail(function() {
-        alert( "Something went wrong, pls try again." );
-    });
-
+    return saveRoute(control, lengthInKm, 'export');
 }
 
 // Gets called from "Änderung speichern" button in tracks
 window.updateRoute = function(control, lengthInKm) {
+    return saveRoute(control, lengthInKm, 'update');
+}
+
+// Gets called from exportRoute and updateRoute, typeOfPost can be 'export' or 'update'
+var saveRoute = function(control, lengthInKm, typeOfPost) {
     var waypoints = control.getWaypoints();
 
     // Maps has too much information for backend,
@@ -207,7 +121,15 @@ window.updateRoute = function(control, lengthInKm) {
 
     // Build route as per API spec
     // Set name of the route
-    var routeName = document.getElementById('streckenname').value;
+    var routeName;
+    if (typeOfPost === 'export') {
+        routeName = document.getElementById("name").value
+    } else if (typeOfPost === 'update') {
+        routeName = document.getElementById('streckenname').value;
+    } else {
+        window.alert("Deine Anfrage ist weder eine neue Route anlegen noch eine Vorhandene ändern. Das Programm zerstört sich selbst in 3...2...1.")
+        return;
+    }
 
     // Catch if user didn't type a name
     if (routeName === "") {
@@ -268,20 +190,39 @@ window.updateRoute = function(control, lengthInKm) {
         waypoints: data
     }
 
-    var tourID = document.getElementById("name").value;
+    if (typeOfPost === 'update') {
+        var tourID = document.getElementById("name").value;
+    }
 
     // Send information to backend
-    $.post("/route/" + tourID, {data: JSON.stringify(route)}).done(function() {
-        // TODO (Louisa / Marjan)  wie soll Speicherung signalisiert werden (hübscher)?
-        console.log(route);
-        // TODO atm it shows "success" when route has been SENT successfully but it doesnt't
-        // check if route was really UPDATED successfully
-        alert( "Die Route wurde erfolgreich geupdated" );
-        // TODO (Louisa/ Marjan) When reloading page date fields should reload again to actual day and time
-        window.location.reload();
-    }).fail(function() {
-        alert( "Something went wrong, pls try again." );
-    });
+    if (typeOfPost === 'export') {
+        $.post("/route", {data: JSON.stringify(route)}).done(function() {
+            // TODO (Louisa / Marjan)  wie soll Speicherung signalisiert werden (hübscher)?
+            console.log(route);
+            // TODO atm it shows "success" when route has been SENT successfully but it doesnt't
+            // check if route was really SAVED successfully
+            alert( "Die Route wurde erfolgreich gespeichert" );
+            // TODO (Louisa/ Marjan) When reloading page date fields should reload again to actual day and time
+            //window.location.reload();
+        }).fail(function() {
+            alert( "Something went wrong, pls try again." );
+        });
+    } else if (typeOfPost === 'update') {
+        $.post("/route/" + tourID, {data: JSON.stringify(route)}).done(function() {
+            // TODO (Louisa / Marjan)  wie soll Speicherung signalisiert werden (hübscher)?
+            console.log(route);
+            // TODO atm it shows "success" when route has been SENT successfully but it doesnt't
+            // check if route was really UPDATED successfully
+            alert( "Die Route wurde erfolgreich geupdated" );
+            // TODO (Louisa/ Marjan) When reloading page date fields should reload again to actual day and time
+            //window.location.reload();
+        }).fail(function() {
+            alert( "Something went wrong, pls try again." );
+        });
+    } else {
+        window.alert("Deine Anfrage ist weder eine neue Route anlegen noch eine Vorhandene ändern. Das Programm zerstört sich selbst in 3...2...1.")
+        return;
+    }
 }
 
 // Returns true if format is yyyy-mm-dd hh:mm
@@ -299,4 +240,12 @@ window.compareTwoDateStrings = function(dateOne, dateTwo) {
     if (dateOne === dateTwo) return  0;
     // (else) DateOne is bigger
     return  1;
+}
+
+// Get distance from map, convert to km
+// TODO (Marjan) atm it always picks first route option - should check which route option is the actual used one
+window.getLengthInKm = function(control) {
+    control.addEventListener("routesfound", function(route){
+        return lengthInKm = route.routes[0].summary.totalDistance / 1000;
+    });
 }
