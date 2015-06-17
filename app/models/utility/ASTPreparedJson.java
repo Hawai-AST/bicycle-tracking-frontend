@@ -1,6 +1,8 @@
 package models.utility;
 
+import akka.japi.Pair;
 import com.fasterxml.jackson.databind.JsonNode;
+import config.BackendConfig;
 import play.libs.F;
 import play.libs.ws.WS;
 import play.libs.ws.WSRequestHolder;
@@ -12,20 +14,34 @@ public class ASTPreparedJson implements PreparedJson {
 
     private WSRequestHolder wsRequestHolder;
 
-    protected ASTPreparedJson(String url) {
+    // base function
+    protected ASTPreparedJson(String url, ContentType contentType) {
         wsRequestHolder = WS.url(url)
-                .setHeader("Authorization", "Basic REVWLTEwMTpERVZTRUNSRVQ=")
-                .setContentType("application/json");
-        if (session("access_token") != null) {
-            wsRequestHolder.setHeader("Authorization", "Bearer " + session("access_token"));
+                .setContentType(contentType.value());
+
+        // check for client-sided authentication state
+        if (session("access_token") != null) { // logged in state
+            wsRequestHolder.setHeader(BackendConfig.authHeader().first(), "Bearer " + session("access_token"));
+        } else { // logged off state
+            wsRequestHolder.setHeader(BackendConfig.authHeader().first(), BackendConfig.authHeader().second());
         }
     }
 
-    protected ASTPreparedJson(String url, String token) {
-        wsRequestHolder = WS.url(url)
-                .setHeader("Authorization", "Bearer " + token)
-                .setContentType("application/json");
+    // standard function for logged in state
+    protected ASTPreparedJson(String url) {
+        this(url, ContentType.APP_JSON);
     }
+
+    // used for login
+    protected ASTPreparedJson() {
+        this(BackendConfig.oAuthToken(), ContentType.APP_FORM_ENC);
+    }
+
+//    protected ASTPreparedJson(String url, String token) {
+//        wsRequestHolder = WS.url(url)
+//                .setHeader(BackendConfig.authHeader().first(), "Bearer " + token)
+//                .setContentType(ContentType.APP_JSON.value());
+//    }
 
     /**
      * Sets the url for the request
@@ -66,21 +82,28 @@ public class ASTPreparedJson implements PreparedJson {
      * Posts the given json body to the specified url
      *
      * @param body Body of JSON node to post
-     * @return Promised response from post call
+     * @return Promised response from post call and a status code
      */
     @Override
-    public F.Promise<JsonNode> post(JsonNode body) {
-        try {
-            return wsRequestHolder.post(body).map(WSResponse::asJson).recover(new F.Function<Throwable, JsonNode>() {
-                // if null response is returned, recover it and return 'java' null properly
-                @Override
-                public JsonNode apply(Throwable throwable) throws Throwable {
-                    return null;
+    public F.Promise<Pair<JsonNode, Integer>> post(JsonNode body) {
+        return wsRequestHolder.post(body).map(
+                response -> {
+                    JsonNode json = response.asJson();
+                    Integer status = response.getStatus();
+                    return new Pair(json, status);
                 }
-            });
-        } catch (RuntimeException e) {
-            return null;
-        }
+        );
+    }
+
+    @Override
+    public F.Promise<Pair<JsonNode, Integer>> post(String paramters) {
+        return wsRequestHolder.post(paramters).map(
+                response -> {
+                    JsonNode json = response.asJson();
+                    Integer status = response.getStatus();
+                    return new Pair(json, status);
+                }
+        );
     }
 
     /**
