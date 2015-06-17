@@ -175,13 +175,10 @@ window.exportRoute = function(control, lengthInKm) {
         waypoints: data
     }
 
-    console.log(route);
-
     // Send information to backend
     $.post("/route", {data: JSON.stringify(route)}).done(function() {
         // TODO (Louisa / Marjan)  wie soll Speicherung signalisiert werden (hübscher)?
         console.log(route);
-        console.log(JSON.stringify(route));
         // TODO atm it shows "success" when route has been SENT successfully but it doesnt't
         // check if route was really SAVED successfully
         alert( "Die Route wurde erfolgreich gespeichert" );
@@ -193,10 +190,104 @@ window.exportRoute = function(control, lengthInKm) {
 
 }
 
+// Gets called from "Änderung speichern" button in tracks
+window.updateRoute = function(control, lengthInKm) {
+    var waypoints = control.getWaypoints();
+
+    // Maps has too much information for backend,
+    // therewith we build hashes with relevant information
+    // data = array of objects, objects = hashes with lat, lng and name
+    var data = $.map(waypoints, function(value, index){
+        return {
+            latitude: value.latLng.lat,
+            longitude: value.latLng.lng,
+            name: value.name
+        }
+    });
+
+    // Build route as per API spec
+    // Set name of the route
+    var routeName = document.getElementById('streckenname').value;
+
+    // Catch if user didn't type a name
+    if (routeName === "") {
+        window.alert("Die Route kann ohne Namen nicht gespeichert werden.");
+        return;
+    }
+
+    // Get information from Form
+    var bikeID = document.getElementById("bike").value;
+
+    if (bikeID === "") {
+        window.alert("Bitte w\u00e4hle ein Fahhrad aus.");
+        return;
+    }
+
+    var startAt = document.getElementById("startAt").value;
+
+    // Catch if user deleted default date and didn't enter new
+    if (startAt === "") {
+        window.alert("Bitte w\u00e4hle einen Startzeitpunkt.");
+        return;
+    }
+
+    // Catch if startAt is wrong format
+    if (!validateDateFormat(startAt)) {
+        window.alert("Das Startdatum hat das falsche Format, bitte w\u00e4hle es aus dem Kalender aus.");
+        return;
+    }
+
+    var finishedAt = document.getElementById("finishedAt").value;
+
+    // Catch if user deleted default date and didn't enter new
+    if (finishedAt === "") {
+        window.alert("Bitte w\u00e4hle einen Endzeitpunkt.");
+        return;
+    }
+
+    // Catch if finshedAt is wrong format
+    if (!validateDateFormat(finishedAt)) {
+        window.alert("Das Enddatum hat das falsche Format, bitte w\u00e4hle es aus dem Kalender aus.");
+        return;
+    }
+
+    var comparisonDates = compareTwoDateStrings(startAt, finishedAt);
+
+    // Catch if finishedAt is prior to startAt
+    if (comparisonDates === 1) {
+        window.alert("Der Startzeitpunkt muss vor dem Endzeitpunkt der Fahrt liegen.");
+        return;
+    }
+
+    var route = {
+        name: routeName,
+        bikeID: bikeID,
+        lengthInKm: lengthInKm,
+        startAt: startAt,
+        finishedAt: finishedAt,
+        waypoints: data
+    }
+
+    var tourID = document.getElementById("name").value;
+
+    // Send information to backend
+    $.post("/route/" + tourID, {data: JSON.stringify(route)}).done(function() {
+        // TODO (Louisa / Marjan)  wie soll Speicherung signalisiert werden (hübscher)?
+        console.log(route);
+        // TODO atm it shows "success" when route has been SENT successfully but it doesnt't
+        // check if route was really UPDATED successfully
+        alert( "Die Route wurde erfolgreich geupdated" );
+        // TODO (Louisa/ Marjan) When reloading page date fields should reload again to actual day and time
+        window.location.reload();
+    }).fail(function() {
+        alert( "Something went wrong, pls try again." );
+    });
+}
+
 // Returns true if format is yyyy-mm-dd hh:mm
 window.validateDateFormat = function(date) {
     //            yyyy -       MM      -       dd           hh     :   mm
-    var regex = /^\d{4}-(0[1-9]|1[0-2])-([0-2]\d|3[01]) (0\d|1[01]):[0-5]\d$/;
+    var regex = /^\d{4}-(0[1-9]|1[0-2])-([0-2]\d|3[01]) ([01]\d|2[013]):[0-5]\d$/;
     return regex.test(date);
 }
 
