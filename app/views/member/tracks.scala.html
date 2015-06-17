@@ -41,45 +41,41 @@
     var lengthInKm = getLengthInKm(control);
     // Initialize and load map
     var map = loadMap("@{currentUserAddress}", control, lengthInKm);
+    // Get name of selected route
+    var selectedRoute = document.getElementById('name');
+    // Refresh all values onchange
+    selectedRoute.onchange = function() {
+        var trackId = document.getElementById("name").value;
+        //$.post("/getTrack/" + trackId).done();
+        return $.ajax({
+            url: ("/getTrack/" + trackId),
+            type: "POST",
+            success: function(result) {
+                var waypoints = result.waypoints;
+                var arrayWaypoints = [];
 
-   var sel = document.getElementById('name');
-   sel.onchange =   function() {
-                var trackId = document.getElementById("name").value;
-                //$.post("/getTrack/" + trackId).done();
-                $.ajax({
-                url: ("/getTrack/" + trackId),
-                type: "POST",
-                success: function(result) {
-                    var waypoints = result.waypoints;
-                    var arrayWaypoints = [];
+                waypoints.forEach(function(waypoint) {
+                    var currentLat = waypoint.latitude;
+                    var currentLng = waypoint.longitude;
+                    arrayWaypoints.push(L.latLng(currentLat, currentLng));
+                });
 
-                    waypoints.forEach(function(waypoint) {
-                        var currentLat = waypoint.latitude;
-                        var currentLng = waypoint.longitude;
-                        arrayWaypoints.push(L.latLng(currentLat, currentLng));
-                    });
+                // add waypoint of track to map
+                control.setWaypoints(arrayWaypoints);
 
-                    // add waypoint of track to map
-                    control.setWaypoints(arrayWaypoints);
+                var streckenname = result.name;
+                document.getElementById("streckenname").value = streckenname;
 
-                    var streckenname = result.name;
-                    document.getElementById("streckenname").value = streckenname;
+                var bikeId = result.bikeID;
+                document.getElementById("bike").value = bikeId;
 
-                    var bikeId = result.bikeID;
-        //            document.getElementById("bikeId").id = bikeId;
-                    document.getElementById("bike").value = bikeId;
+                var startAt = result.startAt;
+                document.getElementById("startAt").value = startAt;
 
-
-        //            var bikeType = result.name;
-        //            document.getElementById("bikeId").value = bikeType;
-
-                    var startAt = result.startAt;
-                    document.getElementById("startAt").value = startAt;
-
-                    var finishedAt = result.finishedAt;
-                    document.getElementById("finishedAt").value = finishedAt;
-                }
-            });
-    }
+                var finishedAt = result.finishedAt;
+                document.getElementById("finishedAt").value = finishedAt;
+            }
+        });
+    };
     </script>
 }
