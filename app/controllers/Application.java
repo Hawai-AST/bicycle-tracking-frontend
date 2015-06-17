@@ -2,7 +2,6 @@ package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import models.utility.AST;
-import play.libs.F;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -17,22 +16,6 @@ public class Application extends Controller {
         } else {
             return ok(views.html.guest.index.render());
         }
-    }
-
-    /**
-     * Runs procedures neccessary to perform a request and returns the response
-     *
-     * @param url      URL to call
-     * @param jsonNode Acutal request content
-     * @return Response of the request
-     */
-    public static JsonNode doRequest(String url, JsonNode jsonNode) {
-        int responseTimeoutInMs = 10000;
-
-        F.Promise<JsonNode> jsonPromise = AST.preparedJson(url).post(jsonNode);
-
-        // TODO(Timmay): Create general pages for no-OK (200) responses and implement proper handling
-        return jsonPromise.get(responseTimeoutInMs);
     }
 
     /**

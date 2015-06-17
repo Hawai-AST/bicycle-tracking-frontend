@@ -1,22 +1,20 @@
 package controllers;
 
+import akka.japi.Pair;
 import com.fasterxml.jackson.databind.JsonNode;
 import config.BackendConfig;
 import models.Login;
 import models.Registration;
 import play.data.Form;
-import play.libs.F;
-import play.libs.ws.WS;
-import play.libs.ws.WSRequestHolder;
-import play.libs.ws.WSResponse;
 import play.mvc.Controller;
 import play.mvc.Result;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-import static controllers.Application.doRequest;
 import static controllers.Application.storeValuesInSessionFrom;
+import static models.utility.AST.doPostRequest;
+import static models.utility.AST.performLogin;
 
 public class Authentication extends Controller {
 
@@ -48,46 +46,33 @@ public class Authentication extends Controller {
 
         Registration registration = form.get();
 
-        JsonNode jsonResponse = doRequest(BackendConfig.backendURL() + "/api/v1/register", registration.toJson());
+        Pair<JsonNode, Integer> response = doPostRequest(BackendConfig.registerURL(), registration.toJson());
 
-        // temp response and error handling - not to seriously review at this time
-        if (jsonResponse.get("email") != null) {
-            if (jsonResponse.get("email").asText().equals(registration.email)) {
-                flash("alert", "Sie haben sich erfolgreich registriert!");
-                flash("alert_type", "success");
-                storeValuesInSessionFrom(jsonResponse);
-            } else {
-                // duplicate code - structure just for temporary error handling
-                switch (jsonResponse.get("status").asText()) {
-                    default:
-                        flash("alert", "Registrierung fehlgeschlagen. " +
-                                jsonResponse.get("error").asText() + "\n" +
-                                jsonResponse.get("message").asText() + "\n" +
-                                "STATUS: " + jsonResponse.get("status").asText());
-                        flash("alert_type", "danger");
-                }
-            }
-        } else {
-            if (jsonResponse.get("status") != null) {
-                // duplicate code - structure just for temporary error handling
-                switch (jsonResponse.get("status").asText()) {
-                    default:
-                        flash("alert", "Registrierung fehlgeschlagen. " +
-                                jsonResponse.get("error").asText() + "\n" +
-                                jsonResponse.get("message").asText() + "\n" +
-                                "STATUS: " + jsonResponse.get("status").asText());
-                        flash("alert_type", "danger");
-                        return badRequest(views.html.guest.signup.render(form));
-                }
-            }
+        // TODO(Timmay): error handling
+        switch (response.second()) {
+            case 400: flash("danger", response.second() + ": " + "Eines der Inputs war nicht im richtigen Format"); break;
+            case 404: flash("danger", response.second() + ": " + "Kundennr existiert nicht"); break;
+            case 409: flash("danger", response.second() + ": " + "Benutzer existiert bereits"); break;
+            case 500: flash("danger", response.second() + ": " + "Server Error"); break;
+            case 200: flash("success", "200: Registrierung erfolgreich. Sie können sich nun eingeloggen!"); break;
         }
+
+        if (flash("danger") != null) {
+            return badRequest(views.html.guest.signup.render(form));
+        }
+
+//        JsonNode jsonResponse = response.first();
+//
+//        if (jsonResponse.get("email") != null) {
+//            if (jsonResponse.get("email").asText().equals(registration.email)) {
+//                flash("success", "Sie haben sich erfolgreich registriert!");
+//                storeValuesInSessionFrom(jsonResponse);
+//            }
+//        }
 
         return redirect("/");
     }
 
-    /**
-     * WARNING: Contains temporary solutions in order to supply a rudimental error handling
-     */
     public static Result authenticate() {
         // Determine which button of the form was pressed
         String[] postAction = request().body().asFormUrlEncoded().get("action");
@@ -109,70 +94,47 @@ public class Authentication extends Controller {
         Form<Login> form = Form.form(Login.class).bindFromRequest();
 
         if (form.hasErrors()) {
-            flash("alert", "Anmeldung fehlgeschlagen. Bitte geben Sie E-Mail UND Passwort an!");
-            flash("alert_type", "danger");
+            flash("danger", "Anmeldung fehlgeschlagen. Bitte geben Sie E-Mail UND Passwort an!");
             return redirect("/");
         }
 
         Login login = form.get();
 
-        WSRequestHolder wsRequestHolder = WS.url(BackendConfig.backendURL() + "/oauth/token")
-                .setHeader("Authorization", "Basic REVWLTEwMTpERVZTRUNSRVQ=");
-        wsRequestHolder.setContentType("application/x-www-form-urlencoded");
-        
-        int responseTimeoutInMs = 10000;
+        Pair<JsonNode, Integer> response = null;
 
-        F.Promise<JsonNode> jsonPromise = null;
         try {
-            jsonPromise = wsRequestHolder.post("username=" + URLEncoder.encode(login.email, "UTF-8") + "&" +
+            response = performLogin(
+                    "username=" + URLEncoder.encode(login.email, "UTF-8") + "&" +
                     "grant_type=password&" +
                     "password=" + URLEncoder.encode(login.code, "UTF-8") + "&" +
-                    "scope=read write").map(WSResponse::asJson);
+                    "scope=read write");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
 
-        JsonNode jsonResponse = jsonPromise.get(responseTimeoutInMs);
+        // TODO(Timmay): Error handling
+        String danger = null;
 
-        // TODO(Timmay): Interpret response and react appropriately
-        // temp response and error handling - not to seriously review at this time
+        switch (response.second()) {
+            case 400: danger = "Eines der Inputs war nicht im richtigen Format"; break;
+            case 401: danger = "Falscher Autorisierungscode"; break;
+            case 404: danger = "Benutzer existiert nicht" ; break;
+            case 500: danger = "Server Error" ; break;
+            case 200: flash("success", "200: Anmeldung erfolgreich! Herzlich willkommen!"); break;
+        }
+
+        if (danger != null) {
+            flash("danger", response.second() + ": " + danger);
+        }
+
+        JsonNode jsonResponse = response.first();
+
         if (jsonResponse.get("access_token") != null) {
             storeValuesInSessionFrom(jsonResponse);
-            session("token", session("access_token"));
+            session("access_token", session("access_token"));
             session("email", login.email);
-            /*
-            if (jsonResponse.get("email").asText().equals(login.email)) {
-                flash("alert", "Sie haben sich erfolgreich eingeloggt!");
-                flash("alert_type", "success");
-
-            } else {
-                // temp alerting if a wild unexpected email error on login appears
-                return badRequest("Debug: Login war laut Backend erfolgreich, jedoch stimmen die Email Adressen nicht " +
-                                "überein\n" +
-                                "Backend: " + jsonResponse.get("email").asText() + "\n" +
-                                "Login Model: " + login.email
-                );
-            }*/
-        } else {
-            if (jsonResponse.get("status") != null) {
-                switch (jsonResponse.get("status").asText()) {
-                    case "404":
-                    case "500":
-                        flash("alert", "Anmeldung fehlgeschlagen. " +
-                                "E-Mail oder Passwort sind nicht korrekt. \n" +
-                                "STATUS: " + jsonResponse.get("status").asText());
-                        flash("alert_type", "danger");
-                        break;
-                    default:
-                        flash("alert", "Anmeldung fehlgeschlagen. " +
-                                jsonResponse.get("error").asText() + "\n" +
-                                jsonResponse.get("message").asText() + "\n" +
-                                "STATUS: " + jsonResponse.get("status").asText());
-                        flash("alert_type", "danger");
-                }
-            }
-
         }
+
         return redirect("/");
     }
 

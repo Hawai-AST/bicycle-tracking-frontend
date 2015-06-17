@@ -1,5 +1,6 @@
 package controllers;
 
+import akka.japi.Pair;
 import com.fasterxml.jackson.databind.JsonNode;
 import config.BackendConfig;
 import models.ChangePassword;
@@ -7,7 +8,6 @@ import models.ChangeUserCredentials;
 import models.utility.AST;
 import play.data.Form;
 import play.data.validation.ValidationError;
-import play.libs.F;
 import play.libs.ws.WSResponse;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -15,6 +15,7 @@ import views.html.member.account;
 
 import java.util.List;
 
+import static models.utility.AST.doPostRequest;
 import static play.data.Form.form;
 
 public class Account extends Controller {
@@ -23,9 +24,16 @@ public class Account extends Controller {
 
     @RequiresLogin
     public static Result showAccount() {
-        F.Promise<JsonNode> response = AST.preparedJson(BackendConfig.backendURL() + "/api/v1/user").get().map(WSResponse::asJson);
-        JsonNode node = response.get(10000);
-        ChangeUserCredentials changeUserCredentials = ChangeUserCredentials.fromJson(node);
+        WSResponse response = AST.doGetRequest(BackendConfig.userURL());
+
+        // TODO(Timmay): error handling
+        switch (response.getStatus()) {
+            case 403: flash("danger", response.getStatus() + ": " + "Nicht eingeloggt"); break;
+            case 500: flash("danger", response.getStatus() + ": " + "Server Error"); break;
+        }
+
+        JsonNode jsonResponse = response.asJson();
+        ChangeUserCredentials changeUserCredentials = ChangeUserCredentials.fromJson(jsonResponse);
         Form<ChangeUserCredentials> prefilledUserCredentialsForm = changeUserCredentialsForm.fill(changeUserCredentials);
 
         return ok(account.render(changePasswordForm, prefilledUserCredentialsForm));
@@ -38,21 +46,31 @@ public class Account extends Controller {
             for (String key : filledForm.errors().keySet()) {
                 List<ValidationError> currentError = filledForm.errors().get(key);
                 for (ValidationError error : currentError) {
-                    flash("alert", error.message());
+                    flash("danger", error.message());
                 }
             }
-            flash("alert_type", "danger");
             return badRequest(account.render(filledForm, changeUserCredentialsForm));
         } else {
             ChangePassword changePassword = filledForm.get();
-            JsonNode jsonResponse = Application.doRequest(BackendConfig.backendURL() + "/api/v1/user/password", changePassword.toJson());
+            Pair<JsonNode, Integer> response = doPostRequest(BackendConfig.userPasswordURL(), changePassword.toJson());
+
+            // TODO(Timmay): error handling
+            switch (response.second()) {
+                case 403: flash("danger", response.second() + ": " + "Nicht eingeloggt"); break;
+                case 400: flash("danger", response.second() + ": " + "Password kann nicht gesetzt werden"); break;
+                case 500: flash("danger", response.second() + ": " + "Server Error"); break;
+                case 200: flash("success", "200: Passwort erfolgreich geändert!"); break;
+            }
+
+            flash("info", "changePassword " + response.second().toString());
+
+            JsonNode jsonResponse = response.first();
+
             if (jsonResponse != null) {
-                flash("alert", "Passwort konnte nicht geändert werden");
-                flash("alert_type", "danger");
+//                flash("danger", "Passwort konnte nicht geändert werden");
                 return ok(jsonResponse.asText());
             } else {
-                flash("alert", "Passwort wurde erfolgreich geändert");
-                flash("alert_type", "success");
+//                flash("success", "Passwort wurde erfolgreich geändert");
                 return ok(account.render(filledForm, changeUserCredentialsForm));
             }
 
@@ -63,17 +81,31 @@ public class Account extends Controller {
     public static Result changeUserCredentials() {
         Form<ChangeUserCredentials> filledForm = changeUserCredentialsForm.bindFromRequest();
         if (filledForm.hasErrors()) {
-            flash("alert", "Daten konnten nicht gespeichert werden");
-            flash("alert_type", "danger");
+            flash("danger", "Daten konnten nicht gespeichert werden");
             return badRequest(account.render(changePasswordForm, filledForm));
         } else {
-            if (Application.doRequest(BackendConfig.backendURL() + "/api/v1/user", filledForm.get().toJson()) != null) {
-                flash("alert", "Daten konnten nicht gespeichert werden");
-                flash("alert_type", "danger");
-                return badRequest(Application.doRequest(BackendConfig.backendURL() + "/api/v1/user", filledForm.get().toJson()));//account.render(changePasswordForm, filledForm));
+            Pair<JsonNode, Integer> response = doPostRequest(BackendConfig.userURL(), filledForm.get().toJson());
+
+            if (response != null) {
+
+                // TODO(Timmay): error handling
+                switch (response.second()) {
+                    case 400: flash("danger", response.second() + ": " + "Eines der Inputs war nicht im richtigen Format"); break;
+                    case 403: flash("danger", response.second() + ": " + "Nicht eingeloggt"); break;
+                    case 409: flash("danger", response.second() + ": " + "Customer ID existiert bereits"); break;
+                    case 500: flash("danger", response.second() + ": " + "Server Error"); break;
+
+                    case 200: flash("success", "200: Benutzerdaten erfolgreich geändert!"); break;
+                }
+
+                flash("info", "changeUserCredentials: " + response.second().toString());
+
+                JsonNode jsonResponse = response.first();
+
+//                flash("danger", "Daten konnten nicht gespeichert werden");
+                return badRequest(account.render(changePasswordForm, filledForm));//account.render(changePasswordForm, filledForm));
             } else {
-                flash("alert", "Daten wurden geändert");
-                flash("alert_type", "success");
+//                flash("success", "Daten wurden geändert");
                 return ok(account.render(changePasswordForm, filledForm));
             }
         }
