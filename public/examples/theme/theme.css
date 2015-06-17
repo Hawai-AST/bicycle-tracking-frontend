@@ -29,3 +29,7 @@ img#logo-img {
   margin-left: 15px;
   height: 70px;
 }
+
+div#myCarousel {
+  margin-right: 30px;
+}
