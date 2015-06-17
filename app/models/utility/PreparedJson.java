@@ -1,5 +1,6 @@
 package models.utility;
 
+import akka.japi.Pair;
 import com.fasterxml.jackson.databind.JsonNode;
 import play.libs.F;
 import play.libs.ws.WSRequestHolder;
@@ -12,7 +13,9 @@ public interface PreparedJson {
 
     WSRequestHolder setContentType(String contentType);
 
-    F.Promise<JsonNode> post(JsonNode body);
+    F.Promise<Pair<JsonNode,Integer>> post(JsonNode body);
+
+    F.Promise<Pair<JsonNode,Integer>> post(String parameters);
 
     F.Promise<WSResponse> get();
 }

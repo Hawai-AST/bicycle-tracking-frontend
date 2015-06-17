@@ -12,9 +12,10 @@ import play.mvc.Controller;
 import play.mvc.Result;
 
 import java.io.IOException;
-import java.util.*;
-
-import static play.data.Form.form;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -23,14 +24,15 @@ import static play.data.Form.form;
 public class Tracks extends Controller {
     public static Form<Track> form = Form.form(Track.class);
 
+    @RequiresLogin
     public static Result tracks() {
         Form<Track> form = Form.form(Track.class);
         String currentUserAddress = AST.getUserAddress();
-//        getTrack(id);
         return ok(views.html.member.tracks.render(form, currentUserAddress));
     }
 
-    public static Result newtracks(){
+    @RequiresLogin
+    public static Result newtracks() {
 
         System.out.println(form.toString());
         String currentUserAddress = AST.getUserAddress();
@@ -41,11 +43,12 @@ public class Tracks extends Controller {
      *
      * @return a list of the users bikes
      */
+    @RequiresLogin
     public static Map<String, String> getBikeOptions() {
         Map<String, String> option = new HashMap<>();
 
         List<Bike> bikes = AST.bikeMap();
-        for (Bike bikeElem : bikes){
+        for (Bike bikeElem : bikes) {
              String id = bikeElem.id;
              String name = bikeElem.name;
              option.put(id, name);
@@ -53,12 +56,13 @@ public class Tracks extends Controller {
         return option;
     }
 
+    @RequiresLogin
     public static Map<String, String> getTrackName() {
         Map<String, String> trackList = new HashMap<>();
 
         List<Track> tracks = AST.trackNameMap();
 
-        for (Track trackElem : tracks){
+        for (Track trackElem : tracks) {
             String id = trackElem.getId();
             String trackname = trackElem.name;
             trackList.put(id, trackname);
@@ -67,8 +71,8 @@ public class Tracks extends Controller {
         return trackList;
     }
 
-
-    public static Result getTrack(String id){
+    @RequiresLogin
+    public static Result getTrack(String id) {
 
         System.err.println("-------Tracks Controller Z.70 http post id: " + id);
 //        Track retTrack = AST.getTrack(trackId);
@@ -79,7 +83,8 @@ public class Tracks extends Controller {
         return ok(newJson);
     }
 
-    public static Result saveTracks(){
+    @RequiresLogin
+    public static Result saveTracks() {
         Form<Track> formSaved = form.bindFromRequest();
         System.out.println("this is the form " + formSaved.toString());
 
