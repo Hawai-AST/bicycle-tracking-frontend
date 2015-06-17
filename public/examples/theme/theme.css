@@ -22,3 +22,10 @@
 h2 {
   text-transform: none;
 }
+
+img#logo-img {
+  float: left;
+  margin-top: 12px;
+  margin-left: 15px;
+  height: 70px;
+}
