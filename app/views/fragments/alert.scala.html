@@ -1,9 +1,30 @@
 @()
 
-@if(Application.getFlash("alert") != null) {
-    @if(!Application.getFlash("alert").isEmpty) {
-        <div class="alert alert-@Application.getFlash("alert_type")" role="alert">
-            @Application.getFlash("alert")
+@if(Application.getFlash("danger") != null) {
+    @if(!Application.getFlash("danger").isEmpty) {
+        <div class="alert alert-danger" role="alert">
+        @Application.getFlash("danger")
+        </div>
+    }
+}
+@if(Application.getFlash("warning") != null) {
+    @if(!Application.getFlash("warning").isEmpty) {
+        <div class="alert alert-warning" role="alert">
+        @Application.getFlash("warning")
+        </div>
+    }
+}
+@if(Application.getFlash("success") != null) {
+    @if(!Application.getFlash("success").isEmpty) {
+        <div class="alert alert-success" role="alert">
+        @Application.getFlash("success")
+        </div>
+    }
+}
+@if(Application.getFlash("info") != null) {
+    @if(!Application.getFlash("info").isEmpty) {
+        <div class="alert alert-alert-info" role="alert">
+        @Application.getFlash("info")
         </div>
     }
 }
