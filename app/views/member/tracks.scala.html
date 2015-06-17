@@ -100,30 +100,13 @@
     control.addTo(map);
 
     // Get distance from map, convert to km
-    // TODO (Marjan) atm it always picks first route option - should check which route option is the actual used one
-    control.addEventListener("routesfound", function(route){
-        lengthInKm = route.routes[0].summary.totalDistance / 1000;
-    });
+    lengthInKm = getLengthInKm(control);
 
     // Initialize map with user's home address unless map is initialized with route
     var waypoints = control.getWaypoints();
     if (waypoints[0].latLng == null || waypoints[1].latLng == null) {
-        findUserLocationOnMap();
+        findUserLocationOnMap(map, "@{currentUserAddress}");
     }
-
-    function findUserLocationOnMap() {
-        // Find user location and move map initially
-        L.Control.Geocoder.nominatim().geocode(
-            "@{currentUserAddress}",
-            function(results){
-                // Only moves to user location if address was found
-                if (results.length > 0) {
-                    map.panTo(results[0].center);
-                    map.fitBounds(results[0].bbox);
-                }
-            });
-    }
-
 
    var sel = document.getElementById('name');
    sel.onchange =   function() {
@@ -165,6 +148,4 @@
             });
     }
     </script>
-
-
 }
