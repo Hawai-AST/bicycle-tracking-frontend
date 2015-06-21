@@ -88,7 +88,12 @@ public class ASTPreparedJson implements PreparedJson {
     public F.Promise<Pair<JsonNode, Integer>> post(JsonNode body) {
         return wsRequestHolder.post(body).map(
                 response -> {
-                    JsonNode json = response.asJson();
+                    JsonNode json = null;
+                    try {
+                        json = response.asJson();
+                    } catch (RuntimeException e) {
+                        //e.printStackTrace();
+                    }
                     Integer status = response.getStatus();
                     return new Pair(json, status);
                 }
@@ -99,7 +104,12 @@ public class ASTPreparedJson implements PreparedJson {
     public F.Promise<Pair<JsonNode, Integer>> post(String paramters) {
         return wsRequestHolder.post(paramters).map(
                 response -> {
-                    JsonNode json = response.asJson();
+                    JsonNode json = null;
+                    try {
+                        json = response.asJson();
+                    } catch (RuntimeException e) {
+                        //e.printStackTrace();
+                    }
                     Integer status = response.getStatus();
                     return new Pair(json, status);
                 }
