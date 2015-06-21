@@ -44,19 +44,7 @@ window.loadMap = function(currentUserAddress, control, lengthInKm) {
 
     control.addTo(map);
 
-    //// Get distance from map, convert to km
-    //// TODO (Marjan) atm it always picks first route option - should check which route option is the actual used one
-    //// TODO this doesn't work anymore since refactoring !!
-    //control.addEventListener("routesfound", function(route){
-    //    lengthInKm = route.routes[0].summary.totalDistance / 1000;
-    //});
-
     // Initialize map with user's home address unless map is initialized with route
-    // TODO (Marjan) check if the problem with reloading in tracks can be solved here
-    //var waypoints = control.getWaypoints();
-    //if (waypoints[0].latLng == null || waypoints[1].latLng == null) {
-    //    findUserLocationOnMap(map, currentUserAddress);
-    //}
     var waypoints = control.getWaypoints();
     if (waypoints[0].latLng == null || waypoints[1].latLng == null) {
         return findUserLocationOnMap(map, currentUserAddress);
