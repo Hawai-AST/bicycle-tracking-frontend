@@ -7,7 +7,10 @@ import models.utility.value.Address;
 import play.data.validation.ValidationError;
 import play.libs.Json;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -26,7 +29,10 @@ public class ChangeUserCredentials {
     }
 
     public static ChangeUserCredentials fromJson(JsonNode node){
-        return Json.fromJson(node, ChangeUserCredentials.class);
+        ChangeUserCredentials tmp = Json.fromJson(node, ChangeUserCredentials.class);
+        DateFormat DEFAULT_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+        tmp.birthdate = DEFAULT_FORMAT.format(new Date(Long.valueOf(tmp.birthdate)));
+        return tmp;
     }
 
     public List<ValidationError> validate() {
