@@ -127,7 +127,7 @@ var saveRoute = function(control, lengthInKm, typeOfPost) {
     } else if (typeOfPost === 'update') {
         routeName = document.getElementById('streckenname').value;
     } else {
-        window.alert("Deine Anfrage ist weder eine neue Route anlegen noch eine Vorhandene ändern. Das Programm zerstört sich selbst in 3...2...1.")
+        window.alert("Deine Anfrage ist weder eine neue Route anlegen noch eine Vorhandene \u00e4ndern. Das Programm zerst\u00f6rt sich selbst in 3...2...1.")
         return;
     }
 
@@ -153,9 +153,9 @@ var saveRoute = function(control, lengthInKm, typeOfPost) {
         return;
     }
 
-    // Catch if startAt is wrong format
-    if (!validateDateFormat(startAt)) {
-        window.alert("Das Startdatum hat das falsche Format, bitte w\u00e4hle es aus dem Kalender aus.");
+    // Catch if startAt is invalid or wrong format
+    if (!validateDateFormat(startAt) || !validateDate(startAt)) {
+        window.alert("Das Startdatum ist ung\u00fcltig oder hat das falsche Format, bitte w\u00e4hle es aus dem Kalender aus.");
         return;
     }
 
@@ -167,9 +167,9 @@ var saveRoute = function(control, lengthInKm, typeOfPost) {
         return;
     }
 
-    // Catch if finshedAt is wrong format
-    if (!validateDateFormat(finishedAt)) {
-        window.alert("Das Enddatum hat das falsche Format, bitte w\u00e4hle es aus dem Kalender aus.");
+    // Catch if finshedAt is invalid or wrong format
+    if (!validateDateFormat(finishedAt) || !validateDate(finishedAt)) {
+        window.alert("Das Enddatum ist ung\u00fcltig oder hat das falsche Format, bitte w\u00e4hle es aus dem Kalender aus.");
         return;
     }
 
@@ -203,11 +203,12 @@ var saveRoute = function(control, lengthInKm, typeOfPost) {
             // check if route was really SAVED successfully
             alert( "Die Route wurde erfolgreich gespeichert" );
             // TODO (Louisa/ Marjan) When reloading page date fields should reload again to actual day and time
-            //window.location.reload();
+            window.location.reload();
         }).fail(function() {
             alert( "Something went wrong, pls try again." );
         });
     } else if (typeOfPost === 'update') {
+
         $.post("/route/" + tourID, {data: JSON.stringify(route)}).done(function() {
             // TODO (Louisa / Marjan)  wie soll Speicherung signalisiert werden (hübscher)?
             console.log(route);
@@ -215,20 +216,42 @@ var saveRoute = function(control, lengthInKm, typeOfPost) {
             // check if route was really UPDATED successfully
             alert( "Die Route wurde erfolgreich geupdated" );
             // TODO (Louisa/ Marjan) When reloading page date fields should reload again to actual day and time
-            //window.location.reload();
+            window.location.reload();
         }).fail(function() {
             alert( "Something went wrong, pls try again." );
         });
     } else {
-        window.alert("Deine Anfrage ist weder eine neue Route anlegen noch eine Vorhandene ändern. Das Programm zerstört sich selbst in 3...2...1.")
+        window.alert("Deine Anfrage ist weder eine neue Route anlegen noch eine Vorhandene \u00e4ndern. Das Programm zerst\u00f6rt sich selbst in 3...2...1.")
         return;
     }
 }
 
+// Returns true if date is valid
+// This is not really pretty but "new Date()" automatically casts to a valid one so
+// this is the only solution I could come up with
+window.validateDate = function(_date) {
+    // Get day from input date string and convert to integer
+    var dayOfParamDate = +_date.substring(8, 10);
+    // Replace all occurances of "-" with "/" else it doesn't work in Firefox
+    var castDate = _date.replace(/-/g,'/');
+    // Cast to valid date if possible
+    var date = new Date(castDate);
+    // Get day from casted date
+    var dayOfDate = date.getDate();
+    // Check if days of input and cast are the same otherwise input date wasn't valid
+    if (dayOfDate !== dayOfParamDate) {
+        return false;
+    }
+
+    return !(date == "Invalid Date");
+}
+
 // Returns true if format is yyyy-mm-dd hh:mm
 window.validateDateFormat = function(date) {
+    console.log("input date in regex: " + date);
     //            yyyy -       MM      -       dd           hh     :   mm
-    var regex = /^\d{4}-(0[1-9]|1[0-2])-([0-2]\d|3[01]) ([01]\d|2[013]):[0-5]\d$/;
+    var regex = /^\d{4}-(0[1-9]|1[0-2])-([0-2]\d|3[01]) ([01]\d|2[0-3]):[0-5]\d$/;
+    console.log("regex.test(date): " + regex.test(date));
     return regex.test(date);
 }
 
