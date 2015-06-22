@@ -1,3 +1,5 @@
+var errorHandlerPost = alert("Something went wrong, please try again");
+
 window.loadMap = function(currentUserAddress, control, lengthInKm) {
     // initial view = Hamburg
     var map = setViewToHamburg();
@@ -193,7 +195,7 @@ var saveRoute = function(control, lengthInKm, typeOfPost) {
             // TODO (Louisa/ Marjan) When reloading page date fields should reload again to actual day and time
             window.location.reload();
         }).fail(function() {
-            alert( "Something went wrong, pls try again." );
+            errorHandlerPost();
         });
     } else if (typeOfPost === 'update') {
 
@@ -206,7 +208,7 @@ var saveRoute = function(control, lengthInKm, typeOfPost) {
             // TODO (Louisa/ Marjan) When reloading page date fields should reload again to actual day and time
             window.location.reload();
         }).fail(function() {
-            alert( "Something went wrong, pls try again." );
+            errorHandlerPost();
         });
     } else {
         window.alert("Deine Anfrage ist weder eine neue Route anlegen noch eine Vorhandene \u00e4ndern. Das Programm zerst\u00f6rt sich selbst in 3...2...1.")
@@ -236,10 +238,8 @@ window.validateDate = function(_date) {
 
 // Returns true if format is yyyy-mm-dd hh:mm
 window.validateDateFormat = function(date) {
-    console.log("input date in regex: " + date);
     //            yyyy -       MM      -       dd           hh     :   mm
     var regex = /^\d{4}-(0[1-9]|1[0-2])-([0-2]\d|3[01]) ([01]\d|2[0-3]):[0-5]\d$/;
-    console.log("regex.test(date): " + regex.test(date));
     return regex.test(date);
 }
 
