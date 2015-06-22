@@ -86,30 +86,59 @@ window.addControl = function() {
 window.exportRoute = function(control, lengthInKm) {
     // Set name of the route
     var routeName = document.getElementById("name").value;
-    // Catch if user didn't type a valid name
-    if (!validateRouteName(routeName)) {
-        errorHandlerRouteName();
+    var route = buildRoute(control, lengthInKm, routeName);
+
+    var listOfErrors = getRouteDataErrors(route);
+
+    if (!validateRouteData(listOfErrors)) {
+        // TODO make display of errors "more pretty"
+        alert(listOfErrors);
         return;
     }
 
-    return saveRoute(control, lengthInKm, routeName, 'export');
+    // Send information to backend
+    return $.post("/route", {data: JSON.stringify(route)}).done(function() {
+            // TODO (Louisa / Marjan)  wie soll Speicherung signalisiert werden (hübscher)?
+            console.log(route);
+            // TODO atm it shows "success" when route has been SENT successfully but it doesnt't
+            // check if route was really SAVED successfully
+            alert( "Die Route wurde erfolgreich gespeichert" );
+            //window.location.reload();
+        }).fail(function() {
+            errorHandlerPost();
+        });
 }
 
 // Gets called from "Änderung speichern" button in tracks
 window.updateRoute = function(control, lengthInKm) {
     // Set name of the route
     var routeName = document.getElementById('streckenname').value;
-    // Catch if user didn't type a valid name
-    if (!validateRouteName(routeName)) {
-        errorHandlerRouteName();
+    var route = buildRoute(control, lengthInKm, routeName);
+    var listOfErrors = getRouteDataErrors(route);
+
+    if (!validateRouteData(listOfErrors)) {
+        // TODO make display of errors "more pretty"
+        alert(listOfErrors);
         return;
     }
 
-    return saveRoute(control, lengthInKm, routeName, 'update');
+    var tourID = document.getElementById("name").value;
+
+    // Send information to backend
+    return $.post("/route/" + tourID, {data: JSON.stringify(route)}).done(function() {
+        // TODO (Louisa / Marjan)  wie soll Speicherung signalisiert werden (hübscher)?
+        console.log(route);
+        // TODO atm it shows "success" when route has been SENT successfully but it doesnt't
+        // check if route was really UPDATED successfully
+        alert( "Die Route wurde erfolgreich geupdated" );
+        //window.location.reload();
+    }).fail(function() {
+        errorHandlerPost();
+    });
 }
 
-// Gets called from exportRoute and updateRoute, typeOfPost can be 'export' or 'update'
-var saveRoute = function(control, lengthInKm, routeName, typeOfPost) {
+// Returns route saved as Hash
+function buildRoute(control, lengthInKm, routeName) {
     var waypoints = control.getWaypoints();
 
     // Maps has too much information for backend,
@@ -126,49 +155,10 @@ var saveRoute = function(control, lengthInKm, routeName, typeOfPost) {
     // Build route as per API spec
     // Get information from Form
     var bikeID = document.getElementById("bike").value;
-
-    if (bikeID === "") {
-        window.alert("Bitte w\u00e4hle ein Fahhrad aus.");
-        return;
-    }
-
     var startAt = document.getElementById("startAt").value;
-
-    // Catch if user deleted default date and didn't enter new
-    if (startAt === "") {
-        window.alert("Bitte w\u00e4hle einen Startzeitpunkt.");
-        return;
-    }
-
-    // Catch if startAt is invalid or wrong format
-    if (!validateDateFormat(startAt) || !validateDate(startAt)) {
-        window.alert("Das Startdatum ist ung\u00fcltig oder hat das falsche Format, bitte w\u00e4hle es aus dem Kalender aus.");
-        return;
-    }
-
     var finishedAt = document.getElementById("finishedAt").value;
 
-    // Catch if user deleted default date and didn't enter new
-    if (finishedAt === "") {
-        window.alert("Bitte w\u00e4hle einen Endzeitpunkt.");
-        return;
-    }
-
-    // Catch if finshedAt is invalid or wrong format
-    if (!validateDateFormat(finishedAt) || !validateDate(finishedAt)) {
-        window.alert("Das Enddatum ist ung\u00fcltig oder hat das falsche Format, bitte w\u00e4hle es aus dem Kalender aus.");
-        return;
-    }
-
-    var comparisonDates = compareTwoDateStrings(startAt, finishedAt);
-
-    // Catch if finishedAt is prior to startAt
-    if (comparisonDates === 1) {
-        window.alert("Der Startzeitpunkt muss vor dem Endzeitpunkt der Fahrt liegen.");
-        return;
-    }
-
-    var route = {
+    return {
         name: routeName,
         bikeID: bikeID,
         lengthInKm: lengthInKm,
@@ -176,39 +166,40 @@ var saveRoute = function(control, lengthInKm, routeName, typeOfPost) {
         finishedAt: finishedAt,
         waypoints: data
     }
+}
 
-    if (typeOfPost === 'update') {
-        var tourID = document.getElementById("name").value;
+// Returns list of errorHandlers (Strings) if route data is invalid, else returns empty list
+function getRouteDataErrors(route) {
+    var occurredErrors = [];
+
+    // Catch if user didn't type a valid name
+    if (!validateRouteName(route.name)) {
+        occurredErrors.push(errorHandlerRouteName());
     }
 
-    // Send information to backend
-    if (typeOfPost === 'export') {
-        $.post("/route", {data: JSON.stringify(route)}).done(function() {
-            // TODO (Louisa / Marjan)  wie soll Speicherung signalisiert werden (hübscher)?
-            console.log(route);
-            // TODO atm it shows "success" when route has been SENT successfully but it doesnt't
-            // check if route was really SAVED successfully
-            alert( "Die Route wurde erfolgreich gespeichert" );
-            window.location.reload();
-        }).fail(function() {
-            errorHandlerPost();
-        });
-    } else if (typeOfPost === 'update') {
-
-        $.post("/route/" + tourID, {data: JSON.stringify(route)}).done(function() {
-            // TODO (Louisa / Marjan)  wie soll Speicherung signalisiert werden (hübscher)?
-            console.log(route);
-            // TODO atm it shows "success" when route has been SENT successfully but it doesnt't
-            // check if route was really UPDATED successfully
-            alert( "Die Route wurde erfolgreich geupdated" );
-            window.location.reload();
-        }).fail(function() {
-            errorHandlerPost();
-        });
-    } else {
-        window.alert("Deine Anfrage ist weder eine neue Route anlegen noch eine Vorhandene \u00e4ndern. Das Programm zerst\u00f6rt sich selbst in 3...2...1.")
-        return;
+    // Catch if user didn't select a bike
+    if (!validateBikeId(route.bikeID)) {
+        occurredErrors.push(errorHandlerBikeId());
     }
+
+    // Catch if startAt is empty, invalid or wrong format
+    if ((route.startAt === "") || !validateDateFormat(route.startAt) || !validateDate(route.startAt)) {
+        occurredErrors.push(errorHandlerStartAt());
+    }
+
+    // Catch if finshedAt is empty, invalid or wrong format
+    if ((route.finishedAt === "") || !validateDateFormat(route.finishedAt) || !validateDate(route.finishedAt)) {
+        occurredErrors.push(errorHandlerFinishedAt());
+    }
+
+    var comparisonDates = compareTwoDateStrings(route.startAt, route.finishedAt);
+
+    // Catch if finishedAt is prior to startAt
+    if (comparisonDates === 1) {
+        occurredErrors.push(errorHandlerComparisonDates());
+    }
+
+    return occurredErrors;
 }
 
 // Returns -1 if dateOne is smaller, 0 when they are the same and +1 if dateOne is bigger
@@ -233,12 +224,19 @@ window.getLengthInKm = function(control) {
 //////////////////////////////////////////////////////////////////////////
 // Validation functions
 //////////////////////////////////////////////////////////////////////////
-// Returns true if entered route name is valid
-var validateRouteName = function(routeName) {
+// Returns boolean: true if entered route name is valid
+function validateRouteName(routeName) {
     if (routeName === "") {
         return false;
     }
+    return true;
+}
 
+// Returns boolean: true if entered bikeID is valid
+function validateBikeId(bikeID) {
+    if (bikeID === "") {
+        return false;
+    }
     return true;
 }
 
@@ -269,6 +267,11 @@ window.validateDateFormat = function(date) {
     return regex.test(date);
 }
 
+// Returns boolean: true if no errors occurred
+function validateRouteData(listOfErrors) {
+    return (listOfErrors.length === 0);
+}
+
 
 //////////////////////////////////////////////////////////////////////////
 // Error handler
@@ -278,5 +281,21 @@ function errorHandlerPost() {
 }
 
 function errorHandlerRouteName() {
-    return alert("Die Route kann ohne Namen nicht gespeichert werden.");
+    return "Die Route kann ohne Namen nicht gespeichert werden.";
+}
+
+function errorHandlerBikeId() {
+    return "Bitte w\u00e4hle ein Fahhrad aus.";
+}
+
+function errorHandlerStartAt() {
+    return "Der Startzeitpunkt ist ung\u00fcltig oder hat das falsche Format, bitte w\u00e4hle ihn aus dem Kalender aus.";
+}
+
+function errorHandlerFinishedAt() {
+    return "Der Endzeitpunkt ist ung\u00fcltig oder hat das falsche Format, bitte w\u00e4hle ihn aus dem Kalender aus.";
+}
+
+function errorHandlerComparisonDates() {
+    return "Der Startzeitpunkt muss vor dem Endzeitpunkt der Fahrt liegen.";
 }
