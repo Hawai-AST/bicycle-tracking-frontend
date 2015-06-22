@@ -1,5 +1,3 @@
-var errorHandlerPost = alert("Something went wrong, please try again");
-
 window.loadMap = function(currentUserAddress, control, lengthInKm) {
     // initial view = Hamburg
     var map = setViewToHamburg();
@@ -86,16 +84,32 @@ window.addControl = function() {
 
 // Gets called from "Speichern" button in newtracks
 window.exportRoute = function(control, lengthInKm) {
-    return saveRoute(control, lengthInKm, 'export');
+    // Set name of the route
+    var routeName = document.getElementById("name").value;
+    // Catch if user didn't type a valid name
+    if (!validateRouteName(routeName)) {
+        errorHandlerRouteName();
+        return;
+    }
+
+    return saveRoute(control, lengthInKm, routeName, 'export');
 }
 
 // Gets called from "Änderung speichern" button in tracks
 window.updateRoute = function(control, lengthInKm) {
-    return saveRoute(control, lengthInKm, 'update');
+    // Set name of the route
+    var routeName = document.getElementById('streckenname').value;
+    // Catch if user didn't type a valid name
+    if (!validateRouteName(routeName)) {
+        errorHandlerRouteName();
+        return;
+    }
+
+    return saveRoute(control, lengthInKm, routeName, 'update');
 }
 
 // Gets called from exportRoute and updateRoute, typeOfPost can be 'export' or 'update'
-var saveRoute = function(control, lengthInKm, typeOfPost) {
+var saveRoute = function(control, lengthInKm, routeName, typeOfPost) {
     var waypoints = control.getWaypoints();
 
     // Maps has too much information for backend,
@@ -110,23 +124,6 @@ var saveRoute = function(control, lengthInKm, typeOfPost) {
     });
 
     // Build route as per API spec
-    // Set name of the route
-    var routeName;
-    if (typeOfPost === 'export') {
-        routeName = document.getElementById("name").value
-    } else if (typeOfPost === 'update') {
-        routeName = document.getElementById('streckenname').value;
-    } else {
-        window.alert("Deine Anfrage ist weder eine neue Route anlegen noch eine Vorhandene \u00e4ndern. Das Programm zerst\u00f6rt sich selbst in 3...2...1.")
-        return;
-    }
-
-    // Catch if user didn't type a name
-    if (routeName === "") {
-        window.alert("Die Route kann ohne Namen nicht gespeichert werden.");
-        return;
-    }
-
     // Get information from Form
     var bikeID = document.getElementById("bike").value;
 
@@ -192,7 +189,6 @@ var saveRoute = function(control, lengthInKm, typeOfPost) {
             // TODO atm it shows "success" when route has been SENT successfully but it doesnt't
             // check if route was really SAVED successfully
             alert( "Die Route wurde erfolgreich gespeichert" );
-            // TODO (Louisa/ Marjan) When reloading page date fields should reload again to actual day and time
             window.location.reload();
         }).fail(function() {
             errorHandlerPost();
@@ -205,7 +201,6 @@ var saveRoute = function(control, lengthInKm, typeOfPost) {
             // TODO atm it shows "success" when route has been SENT successfully but it doesnt't
             // check if route was really UPDATED successfully
             alert( "Die Route wurde erfolgreich geupdated" );
-            // TODO (Louisa/ Marjan) When reloading page date fields should reload again to actual day and time
             window.location.reload();
         }).fail(function() {
             errorHandlerPost();
@@ -214,6 +209,37 @@ var saveRoute = function(control, lengthInKm, typeOfPost) {
         window.alert("Deine Anfrage ist weder eine neue Route anlegen noch eine Vorhandene \u00e4ndern. Das Programm zerst\u00f6rt sich selbst in 3...2...1.")
         return;
     }
+}
+
+// Returns -1 if dateOne is smaller, 0 when they are the same and +1 if dateOne is bigger
+window.compareTwoDateStrings = function(dateOne, dateTwo) {
+    // DateOne is smaller
+    if (dateOne  <  dateTwo) return -1;
+    // Both dates have same value
+    if (dateOne === dateTwo) return  0;
+    // (else) DateOne is bigger
+    return  1;
+}
+
+// Get distance from map, convert to km
+// TODO (Marjan) atm it always picks first route option - should check which route option is the actual used one
+window.getLengthInKm = function(control) {
+    control.addEventListener("routesfound", function(route){
+        return lengthInKm = route.routes[0].summary.totalDistance / 1000;
+    });
+}
+
+
+//////////////////////////////////////////////////////////////////////////
+// Validation functions
+//////////////////////////////////////////////////////////////////////////
+// Returns true if entered route name is valid
+var validateRouteName = function(routeName) {
+    if (routeName === "") {
+        return false;
+    }
+
+    return true;
 }
 
 // Returns true if date is valid
@@ -243,20 +269,14 @@ window.validateDateFormat = function(date) {
     return regex.test(date);
 }
 
-// Returns -1 if dateOne is smaller, 0 when they are the same and +1 if dateOne is bigger
-window.compareTwoDateStrings = function(dateOne, dateTwo) {
-    // DateOne is smaller
-    if (dateOne  <  dateTwo) return -1;
-    // Both dates have same value
-    if (dateOne === dateTwo) return  0;
-    // (else) DateOne is bigger
-    return  1;
+
+//////////////////////////////////////////////////////////////////////////
+// Error handler
+//////////////////////////////////////////////////////////////////////////
+function errorHandlerPost() {
+    return alert("Something went wrong, please try again");
 }
 
-// Get distance from map, convert to km
-// TODO (Marjan) atm it always picks first route option - should check which route option is the actual used one
-window.getLengthInKm = function(control) {
-    control.addEventListener("routesfound", function(route){
-        return lengthInKm = route.routes[0].summary.totalDistance / 1000;
-    });
+function errorHandlerRouteName() {
+    return alert("Die Route kann ohne Namen nicht gespeichert werden.");
 }
