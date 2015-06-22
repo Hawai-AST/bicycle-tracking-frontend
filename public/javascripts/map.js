@@ -87,12 +87,15 @@ window.exportRoute = function(control, lengthInKm) {
     // Set name of the route
     var routeName = document.getElementById("name").value;
     var route = buildRoute(control, lengthInKm, routeName);
-
     var listOfErrors = getRouteDataErrors(route);
+    var alertString = "";
 
     if (!validateRouteData(listOfErrors)) {
-        // TODO make display of errors "more pretty"
-        alert(listOfErrors);
+        for (var i = 0, length = listOfErrors.length; i < length; i++) {
+            alertString = alertString + (i+1).toString() + ".) " + translate(listOfErrors[i]) + "\n";
+        }
+
+        alert(alertString);
         return;
     }
 
@@ -103,7 +106,7 @@ window.exportRoute = function(control, lengthInKm) {
             // TODO atm it shows "success" when route has been SENT successfully but it doesnt't
             // check if route was really SAVED successfully
             alert( "Die Route wurde erfolgreich gespeichert" );
-            //window.location.reload();
+            window.location.reload();
         }).fail(function() {
             errorHandlerPost();
         });
@@ -115,10 +118,14 @@ window.updateRoute = function(control, lengthInKm) {
     var routeName = document.getElementById('streckenname').value;
     var route = buildRoute(control, lengthInKm, routeName);
     var listOfErrors = getRouteDataErrors(route);
+    var alertString = "";
 
     if (!validateRouteData(listOfErrors)) {
-        // TODO make display of errors "more pretty"
-        alert(listOfErrors);
+        for (var i = 0, length = listOfErrors.length; i < length; i++) {
+            alertString = alertString + (i+1).toString() + ".) " + translate(listOfErrors[i]) + "\n";
+        }
+
+        alert(alertString);
         return;
     }
 
@@ -131,7 +138,7 @@ window.updateRoute = function(control, lengthInKm) {
         // TODO atm it shows "success" when route has been SENT successfully but it doesnt't
         // check if route was really UPDATED successfully
         alert( "Die Route wurde erfolgreich geupdated" );
-        //window.location.reload();
+        window.location.reload();
     }).fail(function() {
         errorHandlerPost();
     });
@@ -168,48 +175,22 @@ function buildRoute(control, lengthInKm, routeName) {
     }
 }
 
-// Returns list of errorHandlers (Strings) if route data is invalid, else returns empty list
+// Returns list of errorHandlers (keys) if route data is invalid, else returns empty list
 function getRouteDataErrors(route) {
     var occurredErrors = [];
+    // List of all validation functions which needs to get called
+    var validators = [validateRouteName, validateBikeId, validateStartAt, validateFinishedAt, validateStartAtBeforeFinishedAt];
 
-    // Catch if user didn't type a valid name
-    if (!validateRouteName(route.name)) {
-        occurredErrors.push(errorHandlerRouteName());
-    }
-
-    // Catch if user didn't select a bike
-    if (!validateBikeId(route.bikeID)) {
-        occurredErrors.push(errorHandlerBikeId());
-    }
-
-    // Catch if startAt is empty, invalid or wrong format
-    if ((route.startAt === "") || !validateDateFormat(route.startAt) || !validateDate(route.startAt)) {
-        occurredErrors.push(errorHandlerStartAt());
-    }
-
-    // Catch if finshedAt is empty, invalid or wrong format
-    if ((route.finishedAt === "") || !validateDateFormat(route.finishedAt) || !validateDate(route.finishedAt)) {
-        occurredErrors.push(errorHandlerFinishedAt());
-    }
-
-    var comparisonDates = compareTwoDateStrings(route.startAt, route.finishedAt);
-
-    // Catch if finishedAt is prior to startAt
-    if (comparisonDates === 1) {
-        occurredErrors.push(errorHandlerComparisonDates());
-    }
+    validators.forEach(function(validator) {
+            var error = validator(route);
+            // "if (error)" is short for "if error is defined"
+            if (error) {
+                occurredErrors.push(error);
+            }
+        }
+    );
 
     return occurredErrors;
-}
-
-// Returns -1 if dateOne is smaller, 0 when they are the same and +1 if dateOne is bigger
-window.compareTwoDateStrings = function(dateOne, dateTwo) {
-    // DateOne is smaller
-    if (dateOne  <  dateTwo) return -1;
-    // Both dates have same value
-    if (dateOne === dateTwo) return  0;
-    // (else) DateOne is bigger
-    return  1;
 }
 
 // Get distance from map, convert to km
@@ -224,20 +205,32 @@ window.getLengthInKm = function(control) {
 //////////////////////////////////////////////////////////////////////////
 // Validation functions
 //////////////////////////////////////////////////////////////////////////
-// Returns boolean: true if entered route name is valid
-function validateRouteName(routeName) {
-    if (routeName === "") {
-        return false;
+// Returns errorHandler if name is invalid else undefined
+function validateRouteName(route) {
+    if (route.name === "") {
+        return 'error_handler_route_name';
     }
-    return true;
 }
 
-// Returns boolean: true if entered bikeID is valid
-function validateBikeId(bikeID) {
-    if (bikeID === "") {
-        return false;
+// Returns errorHandler if bikeId is invalid else undefined
+function validateBikeId(route) {
+    if (route.bikeID === "") {
+        return 'error_handler_bike_id';
     }
-    return true;
+}
+
+// Returns errorHandler if startAt is invalid else undefined
+function validateStartAt(route) {
+    if (!validateDateFormat(route.startAt) || !validateDate(route.startAt)) {
+        return 'error_handler_start_at';
+    }
+}
+
+// Returns errorHandler if finishedAt is invalid else undefined
+function validateFinishedAt(route) {
+    if (!validateDateFormat(route.finishedAt) || !validateDate(route.finishedAt)) {
+        return 'error_handler_finished_at';
+    }
 }
 
 // Returns true if date is valid
@@ -272,6 +265,13 @@ function validateRouteData(listOfErrors) {
     return (listOfErrors.length === 0);
 }
 
+// Returns errorHandler if startAt is before finishedAt else undefined
+function validateStartAtBeforeFinishedAt(route) {
+    if (route.startAt && route.finishedAt && route.startAt > route.finishedAt) {
+        return 'error_handler_comparison_dates';
+    }
+}
+
 
 //////////////////////////////////////////////////////////////////////////
 // Error handler
@@ -280,22 +280,16 @@ function errorHandlerPost() {
     return alert("Something went wrong, please try again");
 }
 
-function errorHandlerRouteName() {
-    return "Die Route kann ohne Namen nicht gespeichert werden.";
+var locale = 'de';
+var i18n = {
+    'de': {
+        'error_handler_route_name': "Die Route kann ohne Namen nicht gespeichert werden.",
+        'error_handler_bike_id': "Bitte w\u00e4hle ein Fahrrad aus.",
+        'error_handler_start_at': "Der Startzeitpunkt ist ung\u00fcltig oder hat das falsche Format, bitte w\u00e4hle ihn aus dem Kalender aus.",
+        'error_handler_finished_at': "Der Endzeitpunkt ist ung\u00fcltig oder hat das falsche Format, bitte w\u00e4hle ihn aus dem Kalender aus.",
+        'error_handler_comparison_dates': "Der Startzeitpunkt muss vor dem Endzeitpunkt der Fahrt liegen."
+    }
 }
-
-function errorHandlerBikeId() {
-    return "Bitte w\u00e4hle ein Fahhrad aus.";
-}
-
-function errorHandlerStartAt() {
-    return "Der Startzeitpunkt ist ung\u00fcltig oder hat das falsche Format, bitte w\u00e4hle ihn aus dem Kalender aus.";
-}
-
-function errorHandlerFinishedAt() {
-    return "Der Endzeitpunkt ist ung\u00fcltig oder hat das falsche Format, bitte w\u00e4hle ihn aus dem Kalender aus.";
-}
-
-function errorHandlerComparisonDates() {
-    return "Der Startzeitpunkt muss vor dem Endzeitpunkt der Fahrt liegen.";
+var translate = function(key) {
+    return i18n[locale][key];
 }
