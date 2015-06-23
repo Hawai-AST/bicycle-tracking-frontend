@@ -178,10 +178,11 @@ function buildRoute(control, lengthInKm, routeName) {
 // Returns list of errorHandlers (keys) if route data is invalid, else returns empty list
 function getRouteDataErrors(route) {
     var occurredErrors = [];
-    // List of all validation functions which needs to get called
+    // List of all validation functions which need to get called, here is the place to add new ones if needed
     var validators = [validateRouteName, validateBikeId, validateStartAt, validateFinishedAt, validateStartAtBeforeFinishedAt];
 
     validators.forEach(function(validator) {
+            // Calls each validation function, if data is invalid errorHandler is returned else "undefined"
             var error = validator(route);
             // "if (error)" is short for "if error is defined"
             if (error) {
@@ -233,6 +234,13 @@ function validateFinishedAt(route) {
     }
 }
 
+// Returns true if format is yyyy-mm-dd hh:mm
+window.validateDateFormat = function(date) {
+    //            yyyy -       MM      -       dd           hh     :   mm
+    var regex = /^\d{4}-(0[1-9]|1[0-2])-([0-2]\d|3[01]) ([01]\d|2[0-3]):[0-5]\d$/;
+    return regex.test(date);
+}
+
 // Returns true if date is valid
 // This is not really pretty but "new Date()" automatically casts to a valid one so
 // this is the only solution I could come up with
@@ -253,23 +261,17 @@ window.validateDate = function(_date) {
     return !(date == "Invalid Date");
 }
 
-// Returns true if format is yyyy-mm-dd hh:mm
-window.validateDateFormat = function(date) {
-    //            yyyy -       MM      -       dd           hh     :   mm
-    var regex = /^\d{4}-(0[1-9]|1[0-2])-([0-2]\d|3[01]) ([01]\d|2[0-3]):[0-5]\d$/;
-    return regex.test(date);
+// Returns errorHandler if startAt is before finishedAt else undefined
+function validateStartAtBeforeFinishedAt(route) {
+    // Also checks if startAt and finishedAt are defined at all
+    if (route.startAt && route.finishedAt && route.startAt > route.finishedAt) {
+        return 'error_handler_comparison_dates';
+    }
 }
 
 // Returns boolean: true if no errors occurred
 function validateRouteData(listOfErrors) {
     return (listOfErrors.length === 0);
-}
-
-// Returns errorHandler if startAt is before finishedAt else undefined
-function validateStartAtBeforeFinishedAt(route) {
-    if (route.startAt && route.finishedAt && route.startAt > route.finishedAt) {
-        return 'error_handler_comparison_dates';
-    }
 }
 
 
@@ -281,6 +283,7 @@ function errorHandlerPost() {
 }
 
 var locale = 'de';
+// Set the error handlers for different languages, atm we only support German but here is the place to add new ones
 var i18n = {
     'de': {
         'error_handler_route_name': "Die Route kann ohne Namen nicht gespeichert werden.",
@@ -290,6 +293,7 @@ var i18n = {
         'error_handler_comparison_dates': "Der Startzeitpunkt muss vor dem Endzeitpunkt der Fahrt liegen."
     }
 }
+// Translates the error handler (key) to the right String depending on wanted language
 var translate = function(key) {
     return i18n[locale][key];
 }
